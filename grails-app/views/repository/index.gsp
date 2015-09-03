@@ -8,8 +8,20 @@
 
 <body>
 <h1>Repositories</h1>
-<g:each in="${repos}" var="repo">
-    <g:link action="tags" id="${repo}">${repo}</g:link><br/>
-</g:each>
+<table border="1">
+    <tr><th>Repo</th><th>Tags</th></tr>
+    <g:each in="${repos}" var="repo">
+        <g:if test="${repo.tags}">
+            <tr>
+                <td>
+                    <g:link action="tags" id="${repo.name}">${repo.name}</g:link>
+                </td>
+                <td>
+                    ${repo.tags}
+                </td>
+            </tr>
+        </g:if>
+    </g:each>
+</table>
 </body>
 </html>

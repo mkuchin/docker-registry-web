@@ -9,9 +9,9 @@
 <body>
 <h1>Image history</h1>
 <table border="1">
-    <tr><th>id</th><th>cmd</th><th>size</th></tr>
+    <tr><th>image</th><th>cmd</th><th>size</th></tr>
     <g:each in="${history}" var="image">
-        <tr><td>${image.config.Image}</td>
+        <tr><td>${image.id.substring(0, 11)}</td>
             <td>${raw(image.container_config.Cmd.last().replaceAll('&&', '&&<br>'))}</td>
             <td>${image.Size}</td></tr>
     </g:each>
