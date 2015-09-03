@@ -99,9 +99,13 @@ environments {
 log4j.main = {
   // Example of changing the log pattern for the default console appender:
   //
-  //appenders {
-  //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-  //}
+  appenders {
+    console name: 'stdout'
+  }
+
+  root {
+    info 'stdout'
+  }
 
   error 'org.codehaus.groovy.grails.web.servlet',        // controllers
       'org.codehaus.groovy.grails.web.pages',          // GSP
@@ -115,3 +119,8 @@ log4j.main = {
       'org.hibernate',
       'net.sf.ehcache.hibernate'
 }
+
+//use 172.17.0.1 inside docker containter
+registry.url = "http://localhost:5000/v2/"
+
+grails.server.port.http = 8090
