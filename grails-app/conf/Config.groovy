@@ -122,5 +122,3 @@ log4j.main = {
 
 //use 172.17.0.1 inside docker containter
 registry.url = "http://localhost:5000/v2/"
-
-grails.server.port.http = 8090
