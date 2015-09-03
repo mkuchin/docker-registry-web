@@ -1,6 +1,5 @@
 package docker.registry.web
 
-import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.springframework.beans.factory.annotation.Value
 
@@ -35,7 +34,7 @@ class RepositoryController {
     def res = restService.get("${params.name}/manifests/${params.id}")
     def history = res.history.v1Compatibility.collect { jsonValue ->
       def json = new JsonSlurper().parseText(jsonValue)
-      log.info json as JSON
+      //log.info json as JSON
       json
     }
     [history: history]
