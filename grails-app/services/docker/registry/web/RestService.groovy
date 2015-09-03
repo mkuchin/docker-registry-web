@@ -16,7 +16,7 @@ class RestService {
     def rest = new RestBuilder()
     def res = rest.head("${registryUrl}/${path}")
     def size = res.responseEntity.headers.getFirst('Content-Length')
-    size as BigDecimal
+    size as BigInteger
   }
 
   def delete(String path) {

@@ -14,11 +14,12 @@
         <g:if test="${repo.tags}">
             <tr>
                 <td>
-                    <g:link action="tags" id="${repo.name}">${repo.name}</g:link>
+                    <g:link action="tags" id="${URLEncoder.encode(repo.name, 'UTF-8')}">${repo.name}</g:link>
                 </td>
                 <td>
                     ${repo.tags}
                 </td>
+                <td>${repo.size}</td>
             </tr>
         </g:if>
     </g:each>

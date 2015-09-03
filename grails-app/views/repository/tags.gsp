@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="org.apache.commons.io.FileUtils" contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <html>
@@ -11,9 +11,9 @@
 <table border="1">
     <tr><th>Tag</th><th>Layers</th><th>Size</th><th>Delete</th></tr>
     <g:each in="${tags}" var="tag">
-        <g:if test="${tag.found}">
+        <g:if test="${tag.exists}">
         <tr><td><g:link action="tag" params="[name: params.id]" id="${tag.name}">${tag.name}</g:link></td>
-            <td>${tag.data.fsLayers?.size()}</td><td>${tag.size}</td>
+            <td>${tag.data.fsLayers.size()}</td><td>${FileUtils.byteCountToDisplaySize(tag.size)}</td>
             <td><g:link action="delete" params="[name: params.id]" id="${tag.name}">Delete</g:link></td>
         </tr>
         </g:if>
