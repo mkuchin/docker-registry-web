@@ -125,6 +125,6 @@ grails.sitemesh.default.layout = "main"
 registry {
   host = System.env.REGISTRY_HOST
   port = System.env.REGISTRY_PORT
-  name = host + (port != 80 ? ":$port" : '')
+  name = "${host}${port != 80 ? ":$port".toString() : ''}"
 }
-registry.url = "http://${registry.name}/v2"
+registry.url = "http://${System.env.REGISTRY_HOST}:${System.env.REGISTRY_PORT}/v2"
