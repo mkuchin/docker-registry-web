@@ -23,14 +23,20 @@
 
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
-                <tr><th>Id</th><th>Tag</th><th>Layers</th><th>Size</th><th>Delete</th></tr>
+                <tr><th>Id</th><th>Tag</th><th>Layers</th><th>Size</th>
+                    <g:if test="${!grailsApplication.config.registry.readonly}">
+                        <th>Delete</th>
+                    </g:if>
+                </tr>
                 <g:each in="${tags}" var="tag">
                     <g:if test="${tag.exists}">
                         <tr><td>${tag.id}</td>
-                            <td><g:link action="tag" params="[name: params.id]"
-                                        id="${tag.name}">${tag.name}</g:link></td>
+                            <td><g:link action="tag" params="[name: tag.name]"
+                                        id="${params.id}">${tag.name}</g:link></td>
                             <td>${tag.data.fsLayers.size()}</td><td><g:formatSize value="${tag.size}"/></td>
+                            <g:if test="${!grailsApplication.config.registry.readonly}">
                             <td><g:link action="delete" params="[name: params.id]" id="${tag.name}">Delete</g:link></td>
+                            </g:if>
                         </tr>
                     </g:if>
                 </g:each>

@@ -7,7 +7,7 @@ class UrlMappings {
       }
     }
 
-    "/$action?/$id?"(controller: "repository")
+    "/$action?/$id?/$name?"(controller: "repository")
     "500"(view: '/error')
   }
 }

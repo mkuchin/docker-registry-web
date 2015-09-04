@@ -4,8 +4,9 @@ import groovy.json.JsonSlurper
 import org.springframework.beans.factory.annotation.Value
 
 class RepositoryController {
-  @Value('${registry.url}')
-  String registryUrl
+  @Value('${registry.readonly}')
+  boolean readonly
+
 
   def restService
 
@@ -45,8 +46,8 @@ class RepositoryController {
   }
 
   def tag() {
-    def name = URLDecoder.decode(params.name, 'UTF-8')
-    def res = restService.get("${name}/manifests/${params.id}").json
+    def name = URLDecoder.decode(params.id, 'UTF-8')
+    def res = restService.get("${name}/manifests/${params.name}").json
     def history = res.history.v1Compatibility.collect { jsonValue ->
       def json = new JsonSlurper().parseText(jsonValue)
       //log.info json as JSON
@@ -56,21 +57,23 @@ class RepositoryController {
   }
 
   def delete() {
-    def name = params.name
-    def tag = params.id
-    def manifest = restService.get("${name}/manifests/${tag}")
-    def digest = manifest.responseEntity.headers.getFirst('Docker-Content-Digest')
-    log.info digest
-    /*
+    if (!readonly) {
+      def name = params.name
+      def tag = params.id
+      def manifest = restService.get("${name}/manifests/${tag}")
+      def digest = manifest.responseEntity.headers.getFirst('Docker-Content-Digest')
+      log.info digest
+      /*
     def blobSums = manifest.json.fsLayers?.blobSum
     blobSums.each { digest ->
       log.info "Deleting blob: ${digest}"
       restService.delete("${name}/blobs/${digest}")
     }
     */
-    log.info "Deleting manifest"
-    restService.delete("${name}/manifests/${digest}")
-
+      log.info "Deleting manifest"
+      restService.delete("${name}/manifests/${digest}")
+    } else
+      log.warn 'Readonly mode!'
     redirect action: 'tags', id: name
   }
 }
