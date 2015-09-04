@@ -1,4 +1,4 @@
-<%@ page import="org.apache.commons.io.FileUtils" contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <html>
@@ -13,10 +13,10 @@
     <g:each in="${history}" var="image">
         <tr><td>${image.id.substring(0, 11)}</td>
             <td>${raw(image.container_config.Cmd.last().replaceAll('&&', '&&<br>'))}</td>
-            <td>${FileUtils.byteCountToDisplaySize(image.Size)}</td></tr>
+            <td><g:formatSize value="${image.Size}"/></td></tr>
     </g:each>
 </table>
 
-<h2>Total size: ${FileUtils.byteCountToDisplaySize(totalSize)}</h2>
+<h2>Total size: <g:formatSize value="${totalSize}"/></h2>
 </body>
 </html>

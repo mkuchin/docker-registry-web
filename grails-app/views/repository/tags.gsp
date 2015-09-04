@@ -1,4 +1,4 @@
-<%@ page import="org.apache.commons.io.FileUtils" contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <html>
@@ -14,7 +14,7 @@
         <g:if test="${tag.exists}">
             <tr><td>${tag.id}</td>
                 <td><g:link action="tag" params="[name: params.id]" id="${tag.name}">${tag.name}</g:link></td>
-            <td>${tag.data.fsLayers.size()}</td><td>${FileUtils.byteCountToDisplaySize(tag.size)}</td>
+                <td>${tag.data.fsLayers.size()}</td><td><g:formatSize value="${tag.size}"/></td>
             <td><g:link action="delete" params="[name: params.id]" id="${tag.name}">Delete</g:link></td>
         </tr>
         </g:if>
