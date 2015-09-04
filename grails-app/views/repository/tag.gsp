@@ -16,5 +16,7 @@
             <td>${FileUtils.byteCountToDisplaySize(image.Size)}</td></tr>
     </g:each>
 </table>
+
+<h2>Total size: ${FileUtils.byteCountToDisplaySize(totalSize)}</h2>
 </body>
 </html>

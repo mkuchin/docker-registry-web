@@ -19,7 +19,6 @@
                 <td>
                     ${repo.tags}
                 </td>
-                <td>${repo.size}</td>
             </tr>
         </g:if>
     </g:each>

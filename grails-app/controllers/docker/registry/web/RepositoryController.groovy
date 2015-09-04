@@ -31,13 +31,15 @@ class RepositoryController {
       def manifest = restService.get("${name}/manifests/${tag}")
       def exists = manifest.statusCode.'2xxSuccessful'
       BigInteger size = 0
+      def topLayer
       if (deep && exists) {
+        topLayer = new JsonSlurper().parseText(manifest.json.history.first().v1Compatibility)
         size = manifest.json.fsLayers.sum { layer ->
           def digest = layer.blobSum
           restService.headLength("${name}/blobs/${digest}") ?: 0
         }
       }
-      [name: tag, data: manifest.json, size: size, exists: exists]
+      [name: tag, data: manifest.json, size: size, exists: exists, id: topLayer?.id?.substring(0, 11)]
     }
     tags
   }
@@ -50,7 +52,7 @@ class RepositoryController {
       //log.info json as JSON
       json
     }
-    [history: history]
+    [history: history, totalSize: history.sum { it.Size as BigInteger }]
   }
 
   def delete() {

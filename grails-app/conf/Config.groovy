@@ -121,4 +121,4 @@ log4j.main = {
 }
 
 //use 172.17.0.1 inside docker containter
-registry.url = "http://localhost:5000/v2/"
+registry.url = "http://${System.env.REGISTRY_HOST}:${System.env.REGISTRY_PORT}/v2"
