@@ -18,11 +18,34 @@
 </head>
 
 <body>
-<div id="grailsLogo" role="banner"><a href="http://grails.org"><asset:image src="grails_logo.png" alt="Grails"/></a>
-</div>
-<g:layoutBody/>
-<div class="footer" role="contentinfo"></div>
+<!-- navbar -->
 
-<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+                    class="icon-bar"></span><span class="icon-bar"></span>
+            </button>  <g:link class="navbar-brand" controller="repository" action="index">Web Registry</g:link>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <%--
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="#">Link</a>
+                </li>
+            </ul>
+            --%>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container">
+    <g:layoutBody/>
+</div>
 </body>
 </html>

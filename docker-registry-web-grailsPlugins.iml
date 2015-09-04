@@ -5,6 +5,7 @@
       <configuration>
         <webroots>
           <root url="file://$MODULE_DIR$/target/work/plugins/jquery-1.11.1/web-app" relative="/" />
+          <root url="file://$MODULE_DIR$/target/work/plugins/twitter-bootstrap-3.3.4/web-app" relative="/" />
         </webroots>
         <sourceRoots />
       </configuration>
@@ -42,6 +43,10 @@
     <content url="file://$MODULE_DIR$/target/work/plugins/tomcat-7.0.55.2">
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/tomcat-7.0.55.2/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/tomcat-7.0.55.2/src/groovy" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/twitter-bootstrap-3.3.4">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/twitter-bootstrap-3.3.4/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/twitter-bootstrap-3.3.4/grails-app/taglib" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/target/work/plugins/webxml-1.4.1">
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/webxml-1.4.1/src/groovy" isTestSource="false" />

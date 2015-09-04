@@ -1,22 +1,37 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
-<html>
 <head>
     <title>Image history</title>
 </head>
 
 <body>
-<h1>Image history</h1>
-<table border="1">
-    <tr><th>image</th><th>cmd</th><th>size</th></tr>
-    <g:each in="${history}" var="image">
-        <tr><td>${image.id.substring(0, 11)}</td>
-            <td>${raw(image.container_config.Cmd.last().replaceAll('&&', '&&<br>'))}</td>
-            <td><g:formatSize value="${image.Size}"/></td></tr>
-    </g:each>
-</table>
+<div class="row">
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li><g:link action="index">Home</g:link></li>
+            <li><g:link action="tags" id="${params.name}">${params.name}</g:link></li>
+            <li class="active">${params.id}</li>
+        </ol>
 
-<h2>Total size: <g:formatSize value="${totalSize}"/></h2>
+        <div class="page-header"><h1>Image history</h1></div>
+        <dl>
+            <dt>Image</dt>
+            <dd>${grailsApplication.config.registry.name}/${params.name}:${params.id}</dd>
+        </dl>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <tr><th>Image</th><th>Cmd</th><th>Size</th></tr>
+                <g:each in="${history}" var="image">
+                    <tr><td>${image.id.substring(0, 11)}</td>
+                        <td>${raw(image.container_config.Cmd.last().replaceAll('&&', '&&<br>'))}</td>
+                        <td><g:formatSize value="${image.Size}"/></td></tr>
+                </g:each>
+            </table>
+        </div>
+        <h5>Total size: <g:formatSize value="${totalSize}"/></h5>
+    </div>
+</div>
 </body>
 </html>

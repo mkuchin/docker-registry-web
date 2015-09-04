@@ -1,27 +1,39 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
-<html>
 <head>
     <title>Repositories</title>
 </head>
 
 <body>
-<h1>Repositories</h1>
-<table border="1">
-    <tr><th>Repo</th><th>Tags</th></tr>
-    <g:each in="${repos}" var="repo">
-        <g:if test="${repo.tags}">
-            <tr>
-                <td>
-                    <g:link action="tags" id="${URLEncoder.encode(repo.name, 'UTF-8')}">${repo.name}</g:link>
-                </td>
-                <td>
-                    ${repo.tags}
-                </td>
-            </tr>
-        </g:if>
-    </g:each>
-</table>
+<div class="row">
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li class="active">Home</li>
+        </ol>
+
+        <div class="page-header"><h1>Repositories</h1></div>
+        <dl>
+            <dt>Registry</dt>
+            <dd>${grailsApplication.config.registry.name}</dd>
+        </dl>
+        <table class="table table-bordered">
+            <tr><th>Repository</th><th>Tags</th></tr>
+            <g:each in="${repos}" var="repo">
+                <g:if test="${repo.tags}">
+                    <tr>
+                        <td>
+                            <g:link action="tags"
+                                    id="${URLEncoder.encode(repo.name, 'UTF-8')}">${repo.name}</g:link>
+                        </td>
+                        <td>
+                            ${repo.tags}
+                        </td>
+                    </tr>
+                </g:if>
+            </g:each>
+        </table>
+    </div>
+</div>
 </body>
 </html>
