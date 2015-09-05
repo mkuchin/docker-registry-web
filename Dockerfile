@@ -1,13 +1,16 @@
 FROM    ubuntu:14.04
 
 ENV DEBIAN_FRONTEND noninteractive
+#prevent apt from installing recommended packages
+RUN echo 'APT::Install-Recommends "false";' > /etc/apt/apt.conf.d/docker-no-recommends && \
+    echo 'APT::Install-Suggests "false";' >> /etc/apt/apt.conf.d/docker-no-recommends
+
 # Install java and tomcat
-RUN     apt-get update && apt-get install -y tomcat7 openjdk-7-jdk curl
+RUN     apt-get update && apt-get install -y tomcat7 openjdk-7-jdk curl unzip
 RUN     rm -rf /var/lib/tomcat7/webapps/*
 ENV     JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64/
 
 # Install gvm and grails
-RUN apt-get install unzip
 RUN curl -s get.gvmtool.net | bash
 RUN /bin/bash -c "source /root/.gvm/bin/gvm-init.sh && gvm install grails 2.4.5 && grails create-app temp && cd temp && grails war && cd .. && rm -rf temp"
 # Building app
