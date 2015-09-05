@@ -80,7 +80,7 @@ grails.project.dependency.resolution = {
   }
 }
 
-grails.server.port.http = 8090
+grails.server.port.http = 8080
 
 grails.tomcat.jvmArgs = [
     "-Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true"

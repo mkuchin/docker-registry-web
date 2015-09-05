@@ -10,8 +10,8 @@
     <div class="col-md-12">
         <ol class="breadcrumb">
             <li><g:link action="index">Home</g:link></li>
-            <li><g:link action="tags" id="${params.name}">${params.name}</g:link></li>
-            <li class="active">${params.id}</li>
+            <li><g:link action="tags" id="${params.id}">${params.id}</g:link></li>
+            <li class="active">${params.name}</li>
         </ol>
 
         <div class="page-header"><h1>Image history</h1></div>
