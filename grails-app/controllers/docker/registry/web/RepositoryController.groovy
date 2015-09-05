@@ -46,8 +46,6 @@ class RepositoryController {
   }
 
   def tag() {
-    println readonly.getClass()
-    println readonly
     def name = URLDecoder.decode(params.id, 'UTF-8')
     def res = restService.get("${name}/manifests/${params.name}").json
     def history = res.history.v1Compatibility.collect { jsonValue ->
