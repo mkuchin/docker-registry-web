@@ -127,6 +127,6 @@ registry {
   host = System.env.REGISTRY_HOST ?: 'localhost'
   port = System.env.REGISTRY_PORT ?: '5000'
   name = "${host}${port != 80 ? ":$port".toString() : ''}"
-  readonly = System.env.READONLY ?: false
+  readonly = System.env.READONLY == 'true'
 }
 registry.url = "http://${System.env.REGISTRY_HOST}:${System.env.REGISTRY_PORT}/v2"

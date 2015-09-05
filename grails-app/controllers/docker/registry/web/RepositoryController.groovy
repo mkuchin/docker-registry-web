@@ -46,6 +46,8 @@ class RepositoryController {
   }
 
   def tag() {
+    println readonly.getClass()
+    println readonly
     def name = URLDecoder.decode(params.id, 'UTF-8')
     def res = restService.get("${name}/manifests/${params.name}").json
     def history = res.history.v1Compatibility.collect { jsonValue ->
@@ -57,9 +59,9 @@ class RepositoryController {
   }
 
   def delete() {
+    def name = params.name
+    def tag = params.id
     if (!readonly) {
-      def name = params.name
-      def tag = params.id
       def manifest = restService.get("${name}/manifests/${tag}")
       def digest = manifest.responseEntity.headers.getFirst('Docker-Content-Digest')
       log.info digest
