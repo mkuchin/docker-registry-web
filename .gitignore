@@ -81,3 +81,4 @@ crashlytics-build.properties
 # "temporary" build files
 /target
 
+registry

@@ -7,7 +7,9 @@ RUN echo 'APT::Install-Recommends "false";' > /etc/apt/apt.conf.d/docker-no-reco
 
 # Install java and tomcat
 RUN     apt-get update && apt-get install -y tomcat7 openjdk-7-jdk && \
-        rm -rf /var/lib/tomcat7/webapps/*
+        rm -rf /var/lib/tomcat7/webapps/* && \
+        rm -rf /var/lib/apt/lists/*
+
 ENV     JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 ENV     CATALINA_HOME /usr/share/tomcat7
 ENV     CATALINA_BASE /var/lib/tomcat7
