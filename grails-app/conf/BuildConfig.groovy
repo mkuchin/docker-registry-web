@@ -47,6 +47,14 @@ grails.project.dependency.resolution = {
     //mavenRepo "http://repository.jboss.com/maven2/"
   }
 
+  environments {
+    development {
+      plugins {
+        build ":tomcat:7.0.55.2" // or ":tomcat:8.0.20"
+      }
+    }
+  }
+
   dependencies {
     // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
     // runtime 'mysql:mysql-connector-java:5.1.29'
@@ -60,8 +68,8 @@ grails.project.dependency.resolution = {
     //build ":tomcat:7.0.55.2" // or ":tomcat:8.0.20"
 
     // plugins for the compile step
-    compile ":scaffolding:2.1.2"
-    compile ':cache:1.1.8'
+    //compile ":scaffolding:2.1.2"
+    //compile ':cache:1.1.8'
     compile ":asset-pipeline:2.1.5"
 
     // plugins needed at runtime but not for compilation
