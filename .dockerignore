@@ -1,0 +1,8 @@
+target
+
+*.ipr
+*.iml
+*.iws
+
+Dockerfile
+README.md

@@ -6,22 +6,27 @@ RUN echo 'APT::Install-Recommends "false";' > /etc/apt/apt.conf.d/docker-no-reco
     echo 'APT::Install-Suggests "false";' >> /etc/apt/apt.conf.d/docker-no-recommends
 
 # Install java and tomcat
-RUN     apt-get update && apt-get install -y tomcat7 openjdk-7-jdk curl unzip
-RUN     rm -rf /var/lib/tomcat7/webapps/*
+RUN     apt-get update && apt-get install -y tomcat7 openjdk-7-jdk && \
+        rm -rf /var/lib/tomcat7/webapps/*
 ENV     JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64/
 
-# Install gvm and grails
-RUN curl -s get.gvmtool.net | bash
-RUN /bin/bash -c "source /root/.gvm/bin/gvm-init.sh && gvm install grails 2.4.5 && grails create-app temp && cd temp && grails war && cd .. && rm -rf temp"
-# Building app
+# Run grails wrapper to install grails and project dependencies
 WORKDIR /usr/local/app
-ADD . ./
-RUN /bin/bash -c "source /root/.gvm/bin/gvm-init.sh && grails war ROOT.war" && \
-    cp ROOT.war /var/lib/tomcat7/webapps/ && \
-    rm -rf /usr/local/app
-ENV CATALINA_OPTS=" -Djava.security.egd=file:/dev/./urandom"
-ENV CATALINA_HOME /usr/share/tomcat7/
+COPY     grailsw application.properties ./
+COPY     wrapper ./wrapper
+COPY     grails-app/conf/BuildConfig.groovy ./grails-app/conf/
+RUN     ./grailsw clean
+
+# Building app
+ENV CATALINA_HOME /usr/share/tomcat7
 ENV CATALINA_BASE /var/lib/tomcat7
+
+ADD . ./
+RUN ./grailsw war ROOT.war && \
+    cp ROOT.war $CATALINA_BASE/webapps/ && \
+    rm -rf /usr/local/app
+
+ENV CATALINA_OPTS=" -Djava.security.egd=file:/dev/./urandom"
 ENV PATH $CATALINA_HOME/bin:$PATH
 ENV REGISTRY_HOST=localhost
 ENV REGISTRY_PORT=5000
