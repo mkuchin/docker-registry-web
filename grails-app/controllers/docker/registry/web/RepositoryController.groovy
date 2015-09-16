@@ -19,7 +19,7 @@ class RepositoryController {
   }
 
   def tags() {
-    def name = URLDecoder.decode(params.id, 'UTF-8')
+    def name = params.id.decodeURL()
     def tags = getTags(name, true)
     if (!tags.count { it.exists })
       redirect action: 'index'
@@ -46,7 +46,7 @@ class RepositoryController {
   }
 
   def tag() {
-    def name = URLDecoder.decode(params.id, 'UTF-8')
+    def name = params.id.decodeURL()
     def res = restService.get("${name}/manifests/${params.name}").json
     def history = res.history.v1Compatibility.collect { jsonValue ->
       def json = new JsonSlurper().parseText(jsonValue)
@@ -57,12 +57,12 @@ class RepositoryController {
   }
 
   def delete() {
-    def name = params.name
+    def name = params.name.decodeURL()
     def tag = params.id
     if (!readonly) {
       def manifest = restService.get("${name}/manifests/${tag}")
       def digest = manifest.responseEntity.headers.getFirst('Docker-Content-Digest')
-      log.info digest
+      log.info "Manifest digest: $digest"
       /*
     def blobSums = manifest.json.fsLayers?.blobSum
     blobSums.each { digest ->

@@ -10,7 +10,7 @@
     <div class="col-md-12">
         <ol class="breadcrumb">
             <li><g:link action="index">Home</g:link></li>
-            <li class="active">${params.id}</li>
+            <li class="active">${params.id.decodeURL()}</li>
         </ol>
 
         <div class="page-header">
@@ -18,7 +18,7 @@
         </div>
         <dl>
             <dt>Repository</dt>
-            <dd>${grailsApplication.config.registry.name}/${params.id}</dd>
+            <dd>${grailsApplication.config.registry.name}/${params.id.decodeURL()}</dd>
         </dl>
 
         <div class="table-responsive">

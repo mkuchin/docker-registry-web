@@ -24,7 +24,7 @@
                     <tr>
                         <td>
                             <g:link action="tags"
-                                    id="${URLEncoder.encode(repo.name, 'UTF-8')}">${repo.name}</g:link>
+                                    id="${repo.name.encodeAsURL()}">${repo.name}</g:link>
                         </td>
                         <td>
                             ${repo.tags}

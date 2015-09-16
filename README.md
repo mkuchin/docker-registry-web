@@ -24,6 +24,6 @@ Download example [docker-compose.yml](https://raw.githubusercontent.com/mkuchin/
     docker-compose up
     
 ### Environment variables
-* REGISTRY_HOST - hostname of docker registry, if registry running in docket should be link name or point to container internal ip address
+* REGISTRY_HOST - hostname of docker registry, if registry running in docker should be link name or point to container internal ip address
 * REGISTRY_PORT - port of docker registry
 * READONLY = true|false - readonly mode
