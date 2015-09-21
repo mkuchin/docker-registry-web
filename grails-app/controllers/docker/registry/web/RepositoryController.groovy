@@ -74,6 +74,6 @@ class RepositoryController {
       restService.delete("${name}/manifests/${digest}")
     } else
       log.warn 'Readonly mode!'
-    redirect action: 'tags', id: name
+    redirect action: 'tags', id: params.name
   }
 }
