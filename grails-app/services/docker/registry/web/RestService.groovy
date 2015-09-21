@@ -6,10 +6,14 @@ import org.springframework.beans.factory.annotation.Value
 class RestService {
   @Value('${registry.url}')
   String registryUrl
+  @Value('${registry.auth}')
+  String registryAuth
 
   def get(String path) {
     def rest = new RestBuilder()
-    rest.get("${registryUrl}/${path}")
+    rest.get("${registryUrl}/${path}"){
+    auth "Basic ${registryAuth}"
+    }
   }
 
   def headLength(String path) {

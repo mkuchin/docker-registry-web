@@ -130,3 +130,4 @@ registry {
   readonly = System.env.READONLY == 'true'
 }
 registry.url = "${System.env.REGISTRY_HOST}:${System.env.REGISTRY_PORT}/v2"
+registry.basic = "${System.env.REGISTRY_AUTH}"
