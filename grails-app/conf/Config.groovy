@@ -129,4 +129,3 @@ registry {
   name = "${host}${port != 80 ? ":$port".toString() : ''}"
   readonly = System.env.READONLY == 'true'
 }
-registry.basic = "${System.env.REGISTRY_AUTH}"
