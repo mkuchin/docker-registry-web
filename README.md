@@ -26,4 +26,5 @@ Download example [docker-compose.yml](https://raw.githubusercontent.com/mkuchin/
 ### Environment variables
 * REGISTRY_HOST - hostname of docker registry, if registry running in docker should be link name or point to container internal ip address
 * REGISTRY_PORT - port of docker registry
+* TRUST_ANY_SSL = true|false - set to true, if you are using self signed certificate for registry
 * READONLY = true|false - readonly mode

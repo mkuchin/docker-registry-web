@@ -129,4 +129,3 @@ registry {
   name = "${host}${port != 80 ? ":$port".toString() : ''}"
   readonly = System.env.READONLY == 'true'
 }
-registry.url = "http://${System.env.REGISTRY_HOST}:${System.env.REGISTRY_PORT}/v2"

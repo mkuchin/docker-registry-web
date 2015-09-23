@@ -4,8 +4,24 @@ import grails.plugins.rest.client.RestBuilder
 import org.springframework.beans.factory.annotation.Value
 
 class RestService {
-  @Value('${registry.url}')
+  @Value('${registry.host}')
+  String host
+
+  @Value('${registry.port}')
+  String port
+
   String registryUrl
+
+  def check(def url) {
+    def rest = new RestBuilder()
+    try {
+      def status = rest.get(url).status
+      return status == 200
+    } catch (e) {
+      log.warn e
+      return false
+    }
+  }
 
   def get(String path) {
     def rest = new RestBuilder()
@@ -23,5 +39,22 @@ class RestService {
     def rest = new RestBuilder()
     def res = rest.delete("${registryUrl}/${path}")
     log.info res.statusCode
+  }
+
+  void init() {
+    //auto detect registry protocol
+    def protoList = ['http', 'https']
+    for (proto in protoList) {
+      def url = "$proto://${host}:${port}/v2"
+      log.info "Trying to connect $url"
+      if (check(url)) {
+        registryUrl = url
+        break
+      }
+    }
+    if (!registryUrl)
+      throw new RuntimeException("Can't connect to registry")
+
+    log.info "Registry URL detected: $registryUrl"
   }
 }
