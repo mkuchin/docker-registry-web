@@ -11,6 +11,8 @@ class RestService {
   String port
 
   String registryUrl
+  @Value('${registry.auth}')
+  String registryAuth
 
   def check(def url) {
     def rest = new RestBuilder()
@@ -25,7 +27,9 @@ class RestService {
 
   def get(String path) {
     def rest = new RestBuilder()
-    rest.get("${registryUrl}/${path}")
+    rest.get("${registryUrl}/${path}"){
+    auth "Basic ${registryAuth}"
+    }
   }
 
   def headLength(String path) {
