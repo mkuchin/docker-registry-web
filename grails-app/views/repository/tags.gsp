@@ -23,7 +23,7 @@
 
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
-                <tr><th>Id</th><th>Tag</th><th>Layers</th><th>Size</th>
+                <tr><th>Id</th><th>Tag</th><th>Created</th><th>Layers</th><th>Size</th>
                     <g:if test="${!grailsApplication.config.registry.readonly}">
                         <th>Delete</th>
                     </g:if>
@@ -33,6 +33,7 @@
                         <tr><td>${tag.id}</td>
                             <td><g:link action="tag" params="[name: tag.name]"
                                         id="${params.id}">${tag.name}</g:link></td>
+                            <td><prettytime:display date="${tag.created}" /><br /><small>${tag.createdStr}</small></td>
                             <td>${tag.data.fsLayers.size()}</td><td><g:formatSize value="${tag.size}"/></td>
                             <g:if test="${!grailsApplication.config.registry.readonly}">
                             <td><g:link action="delete" params="[name: params.id]" id="${tag.name}">Delete</g:link></td>
