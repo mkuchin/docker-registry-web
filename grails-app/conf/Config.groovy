@@ -126,6 +126,6 @@ grails.sitemesh.default.layout = "main"
 registry {
   host = System.env.REGISTRY_HOST ?: 'localhost'
   port = System.env.REGISTRY_PORT ?: '5000'
-  name = "${host}${port != 80 ? ":$port".toString() : ''}"
+  name = System.env.REGISTRY_NAME ?: "${host}${port != 80 ? ":$port".toString() : ''}"
   readonly = System.env.READONLY == 'true'
 }
