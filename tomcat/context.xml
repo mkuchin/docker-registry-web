@@ -1,0 +1,4 @@
+<Context>
+    <Valve className="org.apache.catalina.valves.RemoteIpValve" internalProxies=".*"
+           protocolHeader="x-forwarded-proto"/>
+</Context>
