@@ -13,6 +13,7 @@ class RestService {
   String registryUrl
 
   Closure requestCustomizer
+  Closure v2header
 
   def check(String url) {
     def rest = new RestBuilder()
@@ -26,9 +27,14 @@ class RestService {
     }
   }
 
-  def get(String path) {
+  def get(String path, boolean v2 = false) {
     def rest = new RestBuilder()
-    rest.get("${registryUrl}/${path}" as String, requestCustomizer)
+
+    def customizer = requestCustomizer
+    if (v2)
+      customizer >>= v2header
+
+    rest.get("${registryUrl}/${path}" as String, customizer)
   }
 
   def headLength(String path) {
@@ -45,6 +51,9 @@ class RestService {
   }
 
   void init() {
+    //v2 manifest header to get correct digest for docker 1.10
+    v2header = { header 'Accept', 'application/vnd.docker.distribution.manifest.v2+json' }
+
     //set requestCustomizer if REGISTRY_AUTH is set
     String registryAuth = System.env.REGISTRY_AUTH
     if (registryAuth) {
@@ -52,7 +61,8 @@ class RestService {
       requestCustomizer = {
         auth("Basic ${registryAuth}")
       }
-    }
+    } else
+      requestCustomizer = {}
 
     //auto detect registry protocol
     def protoList = ['http', 'https']

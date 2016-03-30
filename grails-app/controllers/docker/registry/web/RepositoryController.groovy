@@ -79,7 +79,7 @@ class RepositoryController {
     def name = params.name.decodeURL()
     def tag = params.id
     if (!readonly) {
-      def manifest = restService.get("${name}/manifests/${tag}")
+      def manifest = restService.get("${name}/manifests/${tag}", true)
       def digest = manifest.responseEntity.headers.getFirst('Docker-Content-Digest')
       log.info "Manifest digest: $digest"
       /*
@@ -91,6 +91,7 @@ class RepositoryController {
     */
       log.info "Deleting manifest"
       restService.delete("${name}/manifests/${digest}")
+      //todo: show error/success
     } else
       log.warn 'Readonly mode!'
     redirect action: 'tags', id: params.name
