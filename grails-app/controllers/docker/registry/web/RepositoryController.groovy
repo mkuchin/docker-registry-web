@@ -12,8 +12,8 @@ class RepositoryController {
 
   def index() {
     def repos = restService.get('_catalog').json.repositories.collect { name ->
-      def tags = getTags(name, false)
-      [name: name, tags: tags.count { it.exists }]
+      def tagsCount = getTagCount(name)
+      [name: name, tags: tagsCount ]
     }
     [repos: repos]
   }
@@ -25,6 +25,16 @@ class RepositoryController {
       redirect action: 'index'
     [tags: tags]
   }
+
+  private def getTagCount(name) {
+    def resp = restService.get("${name}/tags/list").json
+    def tagsCount = 0
+    try {
+        tagsCount = resp.tags.size()
+    } catch(e) {}
+    tagsCount
+  }
+
 
   private def getTags(name, boolean deep = true) {
     def resp = restService.get("${name}/tags/list").json
