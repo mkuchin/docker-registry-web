@@ -18,7 +18,6 @@ class RestService {
 
   @Cacheable(value = "blobs", key = "#name + '/' + #digest")
   BigInteger getBlobSize(String name, String digest) {
-    log.info("size for $name $digest")
     headLength("${name}/blobs/${digest}") ?: 0
   }
 
