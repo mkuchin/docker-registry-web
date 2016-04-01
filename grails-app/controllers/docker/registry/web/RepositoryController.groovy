@@ -72,7 +72,13 @@ class RepositoryController {
       //log.info json as JSON
       json
     }
-    [history: history, totalSize: history.sum { it.Size != null ? it.Size as BigInteger : 0}]
+
+    def blobs = res.fsLayers.collect { it.blobSum }
+
+    history.eachWithIndex { entry, i ->
+      entry.size = entry.Size ?: restService.headLength("${name}/blobs/${blobs[i]}")
+    }
+    [history: history, totalSize: history.sum { it.size }]
   }
 
   def delete() {

@@ -26,7 +26,7 @@
                 <g:each in="${history}" var="image">
                     <tr><td>${image.id.substring(0, 11)}</td>
                         <td>${raw(image.container_config.Cmd.last().replaceAll('&&', '&&<br>'))}</td>
-                        <td><g:formatSize value="${image.Size}"/></td></tr>
+                        <td><g:formatSize value="${image.size}"/></td></tr>
                 </g:each>
             </table>
         </div>
