@@ -2,6 +2,7 @@ package docker.registry.web
 
 import grails.plugins.rest.client.RestBuilder
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.cache.annotation.Cacheable
 
 class RestService {
   @Value('${registry.host}')
@@ -14,6 +15,12 @@ class RestService {
 
   Closure requestCustomizer
   Closure v2header
+
+  @Cacheable(value = "blobs", key = "#name + '/' + #digest")
+  BigInteger getBlobSize(String name, String digest) {
+    log.info("size for $name $digest")
+    headLength("${name}/blobs/${digest}") ?: 0
+  }
 
   def check(String url) {
     def rest = new RestBuilder()

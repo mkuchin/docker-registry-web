@@ -78,6 +78,7 @@ grails.project.dependency.resolution = {
     runtime ":jquery:1.11.1"
 
     compile ":rest-client-builder:2.1.1"
+    compile "org.grails.plugins:cache:1.1.8"
 
     // Uncomment these to enable additional asset-pipeline capabilities
     //compile ":sass-asset-pipeline:1.9.0"

@@ -47,7 +47,7 @@ class RepositoryController {
         topLayer = new JsonSlurper().parseText(manifest.json.history.first().v1Compatibility)
         size = manifest.json.fsLayers.sum { layer ->
           def digest = layer.blobSum
-          restService.headLength("${name}/blobs/${digest}") ?: 0
+          restService.getBlobSize(name, digest)
         }
       }
 
@@ -76,7 +76,7 @@ class RepositoryController {
     def blobs = res.fsLayers.collect { it.blobSum }
 
     history.eachWithIndex { entry, i ->
-      entry.size = entry.Size ?: restService.headLength("${name}/blobs/${blobs[i]}")
+      entry.size = entry.Size ?: restService.getBlobSize(name, blobs[i])
     }
     [history: history, totalSize: history.sum { it.size }]
   }
