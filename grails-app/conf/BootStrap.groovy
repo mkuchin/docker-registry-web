@@ -12,7 +12,7 @@ class BootStrap {
       log.info "Trusting any SSL certificate"
       TrustAnySSL.init()
     }
-    restService.init()
+    //restService.init()
   }
   def destroy = {
   }
