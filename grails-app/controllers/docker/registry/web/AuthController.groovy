@@ -19,7 +19,7 @@ class AuthController {
 
     def token = System.env.TOKEN ?: defaultToken
 
-    def json = [token: token, expires_in: '3600', issued_at: now]
+    def json = [token: token, expires_in: 3600, issued_at: now]
     log.info "Auth response: $json"
     render(contentType: 'application/json') {
       json
