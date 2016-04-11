@@ -10,6 +10,7 @@ class RepositoryController {
 
   def restService
 
+  //{"Type":"registry","Name":"catalog","Action":"*"}
   def index() {
     def repos = restService.get('_catalog').json.repositories.collect { name ->
       def tagsCount = getTagCount(name)
