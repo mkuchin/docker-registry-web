@@ -22,8 +22,9 @@ class AuthController {
     //scope examples:
     //repository:hub/search_api:pull
     //registry:catalog:*
+    //repository:hello-world:push,pull
     def scopeList = params.scope.split(':')
-    def scope = [type: scopeList[0], name: scopeList[1], action: scopeList[2]]
+    def scope = [type: scopeList[0], name: scopeList[1], actions: scopeList[2].split(',')]
     def subject = params.account
 
 
@@ -33,7 +34,7 @@ class AuthController {
     //access examples:
     // [[type: "registry", name:"catalog", actions:['*']]]
     // [[type: "repository", name: "hello-world", actions:["push", "pull"]]]
-    def access = [[type: scope.type, name: scope.name, actions: [scope.action]]]
+    def access = [scope]
     log.info "Request scope: $scope"
     log.info "Access list: ${access}"
     def token = tokenService.generate(subject, access)
