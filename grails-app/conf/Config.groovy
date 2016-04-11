@@ -128,4 +128,5 @@ registry {
   port = System.env.REGISTRY_PORT ?: '5000'
   name = System.env.REGISTRY_NAME ?: "${host}${port != 80 ? ":$port".toString() : ''}"
   readonly = System.env.READONLY == 'true'
+  keyFile = System.env.AUTH_KEYFILE
 }
