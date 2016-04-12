@@ -11,9 +11,9 @@ class RepositoryController {
 
   //{"Type":"registry","Name":"catalog","Action":"*"}
   def index() {
-    def repos = restService.get('_catalog').json.repositories.collect { name ->
-      def tagsCount = getTagCount(name)
-      [name: name, tags: tagsCount ]
+    def repos = restService.get('_catalog', restService.generateAccess('catalog', '*', 'registry')).json.repositories.collect { name ->
+      def tagsCount = getTagList(name).size()
+      [name: name, tags: tagsCount]
     }
     [repos: repos]
   }
@@ -26,21 +26,12 @@ class RepositoryController {
     [tags: tags]
   }
 
-  private def getTagCount(name) {
-    def resp = restService.get("${name}/tags/list").json
-    def tagsCount = 0
-    try {
-        tagsCount = resp.tags.size()
-    } catch(e) {}
-    tagsCount
-  }
-
 
   private def getTags(name) {
     def resp = restService.get("${name}/tags/list").json
     def tags = resp.tags.findAll { it }.collect { tag ->
 
-      def manifest = restService.get("${name}/manifests/${tag}")
+      def manifest = restService.get("${name}/manifests/${tag}", restService.generateAccess(name))
       def exists = manifest.statusCode.'2xxSuccessful'
       def topLayer
       def size = 0
@@ -88,11 +79,15 @@ class RepositoryController {
 
   }
 
+  private List getTagList(name) {
+    restService.get("${name}/tags/list", restService.generateAccess(name)).json?.tags ?: []
+  }
+
   def tag() {
     def name = params.id.decodeURL()
-
     def tag = params.name
-    def res = restService.get("${name}/manifests/${tag}").json
+    def res = restService.get("${name}/manifests/${tag}", restService.generateAccess(name)).json
+    def res = restService.get("${name}/manifests/${params.name}", restService.generateAccess(name)).json
     def history = res.history.v1Compatibility.collect { jsonValue ->
       def json = new JsonSlurper().parseText(jsonValue)
       [id: json.id.substring(0, 11), cmd: json.container_config.Cmd.last().replaceAll('&&', '&&\n')]
@@ -112,7 +107,7 @@ class RepositoryController {
     def name = params.name.decodeURL()
     def tag = params.id
     if (!readonly) {
-      def manifest = restService.get("${name}/manifests/${tag}", true)
+      def manifest = restService.get("${name}/manifests/${tag}", restService.generateAccess(name, '*'), true)
       def digest = manifest.responseEntity.headers.getFirst('Docker-Content-Digest')
       log.info "Manifest digest: $digest"
       /*

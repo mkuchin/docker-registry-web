@@ -1,11 +1,10 @@
 package docker.registry.web
 
+import grails.plugin.cache.Cacheable
 import grails.plugins.rest.client.RequestCustomizer
 import grails.plugins.rest.client.RestResponse
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
 
 class RestService {
   @Value('${registry.host}')
@@ -17,9 +16,19 @@ class RestService {
   String registryUrl
 
   def tokenService
+  def grailsCacheManager
   def headers = [:]
   //v2 manifest header to get correct digest for docker 1.10
   def v2header = ['Accept': 'application/vnd.docker.distribution.manifest.v2+json']
+
+  List generateAccess(String name, String action = 'pull', String type = 'repository') {
+    [[type: type, name: name, actions: [action]]]
+  }
+
+  @Cacheable(value = "blobs", key = "#name + '/' + #digest")
+  BigInteger getBlobSize(String name, String digest) {
+    headLength("${name}/blobs/${digest}", generateAccess(name)) ?: 0
+  }
 
   def check(String url) {
     try {
@@ -32,12 +41,18 @@ class RestService {
     }
   }
 
-  def get(String path, boolean v2 = false) {
-    request(HttpMethod.GET, "${registryUrl}/${path}" as String, v2 ? headers : headers + v2header)
+  def get(String path, List access = [], boolean v2 = false) {
+    request(HttpMethod.GET, "${registryUrl}/${path}" as String, v2 ? headers + v2header : headers, access)
   }
 
-  def delete(String path) {
-    def res = request(HttpMethod.DELETE, "${registryUrl}/${path}", headers)
+  def headLength(String path, List access) {
+    def res = request(HttpMethod.HEAD, "${registryUrl}/${path}", headers, access)
+    def size = res.responseEntity.headers.getFirst('Content-Length')
+    size as BigInteger
+  }
+
+  def delete(String path, List access) {
+    def res = request(HttpMethod.DELETE, "${registryUrl}/${path}", headers, access)
     log.info res.statusCode
   }
 
@@ -65,33 +80,10 @@ class RestService {
     log.info "Registry URL detected: $registryUrl"
   }
 
-  def request(HttpMethod method, String url, Map headers) {
-    RestResponse result = requestInternal(headers, method, url)
-    if (result.statusCode == HttpStatus.UNAUTHORIZED) {
-      def json = result.json
-      log.info "Auth requested: $json"
-      //{"errors":[{"code":"UNAUTHORIZED","message":"authentication required","detail":[{"Type":"registry","Name":"catalog","Action":"*"}]}]}
-
-      //default access
-      def access = [[type: "registry", name: "catalog", actions: ['*']]]
-
-      def detail = json.errors[0].detail
-      log.info "Detail: $detail"
-      if (detail) {
-        String type = detail.Type
-        String name = detail.Name
-        String action = detail.Action
-        List actions = action.split(',')
-        access = [[type: type, name: name, actions: actions]]
-      }
-
-      log.info "Access: $access"
-      String token = tokenService.generate('root', access).token
-      log.info "Token generated: $token"
-      headers['Authorization'] = "Bearer $token"
-      result = requestInternal(headers, method, url)
-      log.info "Response status after auth: $result.statusCode"
-    }
+  def request(HttpMethod method, String url, Map headers, List access = []) {
+    def token = tokenService.generate('root', access).token
+    def authHeaders = token ? ['Authorization': "Bearer $token"] : [:]
+    RestResponse result = requestInternal(headers + authHeaders, method, url)
     return result
   }
 

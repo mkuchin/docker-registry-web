@@ -1,6 +1,7 @@
 package docker.registry.web
 
 import grails.converters.JSON
+import grails.plugin.cache.Cacheable
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.springframework.beans.factory.annotation.Value
 
@@ -55,7 +56,8 @@ class TokenService {
     encoded.tr('+/', '-_').replaceAll('=+$', '')
   }
 
-  String generate(String subject, List access) {
+  @Cacheable("tokens")
+  Map generate(String subject, List access) {
     int time = System.currentTimeMillis() / 1000
     def headerMap = [alg: "RS256", typ: "JWT", kid: keyDigest]
     def payloadMap = [

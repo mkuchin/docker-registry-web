@@ -18,6 +18,8 @@ class AuthController {
     //repository:hub/search_api:pull
     //registry:catalog:*
     //repository:hello-world:push,pull
+    //repository:docker-registry-web:* - delete request
+
     def scopeList = params.scope.split(':')
     def scope = [type: scopeList[0], name: scopeList[1], actions: scopeList[2].split(',')]
     def subject = params.account
