@@ -9,6 +9,7 @@ import java.security.KeyPair
 import java.security.PrivateKey
 import java.security.Security
 import java.security.Signature
+import java.text.SimpleDateFormat
 
 class TokenService {
 
@@ -74,6 +75,11 @@ class TokenService {
     log.info "Payload: $payloadMap"
 
     def signature = sign(header, payload, keyPair.private)
-    "${header}.${payload}.${signature}"
+
+    def dateFormat = new SimpleDateFormat("YYYY-MM-dd'T'HH:mm:ss'Z'")
+    dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"))
+    def now = dateFormat.format(new Date())
+
+    [token: "${header}.${payload}.${signature}", expires_in: 3600, issued_at: now]
   }
 }
