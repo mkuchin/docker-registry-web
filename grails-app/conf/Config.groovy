@@ -122,7 +122,17 @@ log4j.main = {
 
 grails.app.context = "/"
 grails.sitemesh.default.layout = "main"
-//use 172.17.0.1 inside docker containter
+
+/*
+grails.cache.config = {
+ cache {
+   name 'tokens'
+ }
+  cache {
+    name 'blobs'
+  }
+}
+*/
 registry {
   host = System.env.REGISTRY_HOST ?: 'localhost'
   port = System.env.REGISTRY_PORT ?: '5000'
