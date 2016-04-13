@@ -80,7 +80,7 @@ class RepositoryController {
     def name = params.name.decodeURL()
     def tag = params.id
     if (!readonly) {
-      def manifest = restService.get("${name}/manifests/${tag}", restService.generateAccess(name, '*'), true)
+      def manifest = restService.get("${name}/manifests/${tag}", restService.generateAccess(name, 'pull'), true)
       def digest = manifest.responseEntity.headers.getFirst('Docker-Content-Digest')
       log.info "Manifest digest: $digest"
       /*
@@ -91,7 +91,7 @@ class RepositoryController {
     }
     */
       log.info "Deleting manifest"
-      restService.delete("${name}/manifests/${digest}")
+      restService.delete("${name}/manifests/${digest}", restService.generateAccess(name, '*'))
       //todo: show error/success
     } else
       log.warn 'Readonly mode!'
