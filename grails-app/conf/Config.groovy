@@ -123,16 +123,15 @@ log4j.main = {
 grails.app.context = "/"
 grails.sitemesh.default.layout = "main"
 
-/*
 grails.cache.config = {
- cache {
-   name 'tokens'
- }
   cache {
-    name 'blobs'
+    name 'tokens'
+    eternal false
+    maxElementsInMemory 10000
+    timeToLiveSeconds 3600
   }
 }
-*/
+
 registry {
   host = System.env.REGISTRY_HOST ?: 'localhost'
   port = System.env.REGISTRY_PORT ?: '5000'
