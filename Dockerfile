@@ -44,4 +44,4 @@ WORKDIR $CATALINA_BASE
 COPY tomcat/context.xml $CATALINA_BASE/conf/
 
 EXPOSE  8080
-CMD ["/bin/bash", "-c", "set -e && catalina.sh", "run"]
+CMD ["/bin/bash", "-c", "set -e && catalina.sh run"]
