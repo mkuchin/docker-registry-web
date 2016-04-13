@@ -16,7 +16,6 @@ class RestService {
   String registryUrl
 
   def tokenService
-  def grailsCacheManager
   def headers = [:]
   //v2 manifest header to get correct digest for docker 1.10
   def v2header = ['Accept': 'application/vnd.docker.distribution.manifest.v2+json']

@@ -81,6 +81,7 @@ grails.project.dependency.resolution = {
 
     compile ":rest-client-builder:2.1.1"
     compile "org.grails.plugins:cache:1.1.8"
+    compile "org.grails.plugins:cache-ehcache:1.0.5"
 
     // Uncomment these to enable additional asset-pipeline capabilities
     //compile ":sass-asset-pipeline:1.9.0"
