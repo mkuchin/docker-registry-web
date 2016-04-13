@@ -7,6 +7,7 @@ class AuthController {
   def index() {
     log.info("Auth params: $params")
     def auth = ''
+    //todo: anonymous users, no auth
     try {
       auth = request.getHeader('Authorization').split(' ')[1]
     } catch (e) {
@@ -20,23 +21,65 @@ class AuthController {
     //repository:hello-world:push,pull
     //repository:docker-registry-web:* - delete request
 
-    def scopeList = params.scope.split(':')
-    def scope = [type: scopeList[0], name: scopeList[1], actions: scopeList[2].split(',')]
+    //empty scope for login/ping
+    def scope = []
+    if (params.scope) {
+      def scopeList = params.scope.split(':')
+      scope = [type: scopeList[0], name: scopeList[1], actions: scopeList[2].split(',')]
+    }
     def subject = params.account
 
-
+    boolean valid = false
+    def token
+    if (auth) {
+      def credentials = new String(auth.decodeBase64()).split(':')
+      if (credentials.size() == 3 && credentials[0] == 'token') {
+        def id = credentials[1] as long
+        def password = credentials[2]
+        log.info("Found token id=${id}")
+        token = AuthToken.get(id)
+        if (token) {
+          def hash = password.encodeAsPassword()
+          valid = hash == token.password
+        }
+        log.info("Password valid: $valid")
+        if (!valid)
+          log.info "Expected ${password}, recieved ${hash}"
+      }
+    }
 
     //access examples:
     // [[type: "registry", name:"catalog", actions:['*']]]
     // [[type: "repository", name: "hello-world", actions:["push", "pull"]]]
-    def access = [scope]
-    log.info "Request scope: $scope"
-    log.info "Access list: ${access}"
-    def tokenJson = tokenService.generate(subject, access)
+    if (valid) {
+      log.info "Requested scope: $scope"
+      def actions = []
+      if (scope) {
+        def typeValid = scope.type == 'repository'
+        def repository = Repository.findByName(scope.name)
+        if (typeValid && repository) {
+          def repoToken = RepositoryToken.findByRepositoryAndToken(repository, token)
+          if (repoToken) {
+            log.info "Granting permission: r=${token.read}, w=${token.write}"
+            if (token.read)
+              actions.add('pull')
+            if (token.write)
+              actions.add('push')
+          }
+        }
+        log.info "actions = ${actions}"
+        scope.actions = actions
+      }
+      def access = [scope]
+      log.info "Access list: ${access}"
+      def tokenJson = tokenService.generate(subject, access)
 
-    log.info "Auth response: $tokenJson"
-    render(contentType: 'application/json') {
-      tokenJson
+      log.info "Auth response: $tokenJson"
+      render(contentType: 'application/json') {
+        tokenJson
+      }
+    } else {
+      render(status: 401, text: 'No auth')
     }
   }
 }
