@@ -71,7 +71,7 @@ class AuthController {
         scope.actions = actions
       }
       // access [[]] not working
-      def access = scope ? [] : [scope]
+      def access = scope ? [scope] : []
       log.info "Access list: ${access}"
       def tokenJson = tokenService.generate(subject, access)
 
