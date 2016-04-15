@@ -1,56 +1,43 @@
 package docker.registry.api
 
-import docker.registry.web.AuthToken
-import docker.registry.web.Repository
-import docker.registry.web.RepositoryToken
+import docker.registry.AccessControl
+import docker.registry.acl.AccessLevel
+
 
 class AuthController {
 
   def tokenService
+  def authService
 
   def index() {
     log.info("Auth params: $params")
-    def auth = ''
+    def aclList
+    def valid = false
     //todo: anonymous users, no auth
     try {
-      auth = request.getHeader('Authorization').split(' ')[1]
+      def auth = request.getHeader('Authorization').split(' ')[1]
+      log.info "Auth: $auth"
+      def service = params.service
+      def userPass = new String(auth.decodeBase64()).split(':')
+      aclList = authService.login(userPass[0], userPass[1])
+      valid = true
     } catch (e) {
-      log.error "Error parsing auth header", e
+      log.error "Auth error", e
     }
-    log.info "Auth: $auth"
-    def service = params.service
+
     //scope examples:
     //repository:hub/search_api:pull
     //registry:catalog:*
     //repository:hello-world:push,pull
     //repository:docker-registry-web:* - delete request
-
     //empty scope for login/ping
-    def scope = []
+
+    def scope = [:]
     if (params.scope) {
       def scopeList = params.scope.split(':')
       scope = [type: scopeList[0], name: scopeList[1], actions: scopeList[2].split(',')]
     }
     def subject = params.account
-
-    boolean valid = false
-    def token
-    if (auth) {
-      def credentials = new String(auth.decodeBase64()).split(':')
-      if (credentials.size() == 3 && credentials[0] == 'token') {
-        def id = credentials[1] as long
-        def password = credentials[2]
-        log.info("Found token id=${id}")
-        token = AuthToken.get(id)
-        if (token) {
-          def hash = password.encodeAsPassword()
-          valid = hash == token.password
-        }
-        log.info("Password valid: $valid")
-        if (!valid)
-          log.info "Expected ${password}, recieved ${hash}"
-      }
-    }
 
     //access examples:
     // [[type: "registry", name:"catalog", actions:['*']]]
@@ -58,24 +45,27 @@ class AuthController {
     if (valid) {
       log.info "Requested scope: $scope"
       def actions = []
-      if (scope) {
+      if (aclList && scope) {
+        //todo: catalog role for type=catalog request
         def typeValid = scope.type == 'repository'
-        def repository = Repository.findByName(scope.name)
-        if (typeValid && repository) {
-          def repoToken = RepositoryToken.findByRepositoryAndToken(repository, token)
-          if (repoToken) {
-            log.info "Granting permission: r=${token.read}, w=${token.write}"
-            if (token.read)
-              actions.add('pull')
-            if (token.write)
-              actions.add('push')
-          }
-        }
-        log.info "actions = ${actions}"
-        scope.actions = actions
+        String name = scope.name
+        String ip = request.getRemoteAddr()
+        log.info("Repo name=${name}, ip=${ip}")
+        //check acls
+        def level = aclList.collect { AccessControl acl ->
+          if (name.startsWith(acl.name) && ip.startsWith(acl.ip))
+            return acl.level
+          else
+            return AccessLevel.NONE
+        }.max()
+        log.info "Granting permission: $level"
+        actions = level.actions
       }
-      // access [[]] not working
-      def access = scope ? [scope] : []
+      log.info "actions = ${actions}"
+      scope.actions = actions
+
+      // actions [[]] not working
+      def access = [scope]
       log.info "Access list: ${access}"
       def tokenJson = tokenService.generate(subject, access)
 
