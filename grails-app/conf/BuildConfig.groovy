@@ -92,6 +92,7 @@ grails.project.dependency.resolution = {
 
     // for formatting relative timestamps
     compile ":pretty-time:2.1.3.Final-1.0.1"
+    compile "org.grails.plugins:spring-security-core:2.0.0"
   }
 }
 

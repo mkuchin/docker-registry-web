@@ -122,6 +122,8 @@ log4j.main = {
 
 grails.app.context = "/"
 grails.sitemesh.default.layout = "main"
+grails.databinding.convertEmptyStringsToNull = false
+
 
 grails.cache.config = {
   cache {
@@ -131,6 +133,31 @@ grails.cache.config = {
     timeToLiveSeconds 3600
   }
 }
+
+// Added by the Spring Security Core plugin:
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'docker.registry.User'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'docker.registry.UserRole'
+grails.plugin.springsecurity.authority.className = 'docker.registry.Role'
+
+//todo: configure anonymous access with config
+//permit anybody to do anything
+grails.plugin.springsecurity.rejectIfNoRule = false
+grails.plugin.springsecurity.fii.rejectPublicInvocations = false
+
+//todo: create role for ui, deny all
+
+//grails.plugin.springsecurity.controllerAnnotations.staticRules = [
+//    '/':                ['permitAll'],
+//    '/index':           ['permitAll'],
+//    '/index.gsp':       ['permitAll'],
+//    '/assets/**':       ['permitAll'],
+//    '/**/js/**':        ['permitAll'],
+//    '/**/css/**':       ['permitAll'],
+//    '/**/images/**':    ['permitAll'],
+//    '/**/favicon.ico':  ['permitAll']
+//]
+
+
 
 registry {
   host = System.env.REGISTRY_HOST ?: 'localhost'
