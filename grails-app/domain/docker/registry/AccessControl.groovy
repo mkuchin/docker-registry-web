@@ -11,6 +11,7 @@ class AccessControl {
   String ip
   String name
   AccessLevel level
+  String comment = ''
   static constraints = {
   }
 }

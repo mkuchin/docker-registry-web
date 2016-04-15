@@ -11,19 +11,10 @@ class AuthController {
 
   def index() {
     log.info("Auth params: $params")
-    def aclList
-    def valid = false
+
     //todo: anonymous users, no auth
-    try {
-      def auth = request.getHeader('Authorization').split(' ')[1]
-      log.info "Auth: $auth"
-      def service = params.service
-      def userPass = new String(auth.decodeBase64()).split(':')
-      aclList = authService.login(userPass[0], userPass[1])
-      valid = true
-    } catch (e) {
-      log.error "Auth error", e
-    }
+    def authResult = authService.login(request)
+    def service = params.service
 
     //scope examples:
     //repository:hub/search_api:pull
@@ -42,12 +33,14 @@ class AuthController {
     //access examples:
     // [[type: "registry", name:"catalog", actions:['*']]]
     // [[type: "repository", name: "hello-world", actions:["push", "pull"]]]
-    if (valid) {
+    if (authResult.valid) {
+      def aclList = authResult.acls
       log.info "Requested scope: $scope"
       def actions = []
-      if (aclList && scope) {
+      def typeValid = scope.type == 'repository'
+      if (aclList && scope && typeValid) {
         //todo: catalog role for type=catalog request
-        def typeValid = scope.type == 'repository'
+        log.info "checking acls: $aclList"
         String name = scope.name
         String ip = request.getRemoteAddr()
         log.info("Repo name=${name}, ip=${ip}")
