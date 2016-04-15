@@ -7,3 +7,6 @@ Web UI for private docker registry v2.
 ### Docker pull command
     
     docker pull hyper/docker-registry-web:auth-experimental
+
+
+user -> * group(permissions) -> * namespace -> * repo

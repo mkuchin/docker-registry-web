@@ -1,4 +1,8 @@
-package docker.registry.web
+package docker.registry.api
+
+import docker.registry.web.AuthToken
+import docker.registry.web.Repository
+import docker.registry.web.RepositoryToken
 
 class AuthController {
 
