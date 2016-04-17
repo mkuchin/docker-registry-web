@@ -26,7 +26,7 @@
                 <g:each in="${history}" var="image">
                     <tr><td>${image.id}</td>
                         <td>${raw(image.cmd)}</td>
-                        <td><g:formatSize value="${image.size}"/></td></tr>
+                        <td class="text-nowrap"><g:formatSize value="${image.size}"/></td></tr>
                 </g:each>
             </table>
         </div>

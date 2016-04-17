@@ -37,14 +37,17 @@ class RepositoryController {
 
   private def getTags(name) {
     def resp = restService.get("${name}/tags/list").json
-    def tags = resp.tags.collect { tag ->
+    def tags = resp.tags.findAll { it }.collect { tag ->
+
       def manifest = restService.get("${name}/manifests/${tag}")
-      def layers = getLayers(name, tag)
       def exists = manifest.statusCode.'2xxSuccessful'
-      def size = layers.collect { it.value }.sum()
       def topLayer
+      def size = 0
+      def layers
       if (exists) {
         topLayer = new JsonSlurper().parseText(manifest.json.history.first().v1Compatibility)
+        layers = getLayers(name, tag)
+        size = layers.collect { it.value }.sum()
       }
 
       // docker uses ISO8601 dates w/ fractional seconds (i.e. yyyy-MM-ddTHH:mm:ss.ssssssssZ),
@@ -55,7 +58,7 @@ class RepositoryController {
         createdDate = Date.parse("yyyy-MM-dd'T'HH:mm:ss", createdStr)
       }
 
-      [name: tag, count: layers.size(), size: size, exists: exists, id: topLayer?.id?.substring(0, 11), created: createdDate, createdStr: createdStr]
+      [name: tag, count: layers?.size(), size: size, exists: exists, id: topLayer?.id?.substring(0, 11), created: createdDate, createdStr: createdStr]
     }
     tags
   }
