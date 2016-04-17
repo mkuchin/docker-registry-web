@@ -60,24 +60,31 @@ class RepositoryController {
 
       [name: tag, count: layers?.size(), size: size, exists: exists, id: topLayer?.id?.substring(0, 11), created: createdDate, createdStr: createdStr]
     }
-    tags
+    tags.sort { it.created }.reverse()
   }
 
   private def getLayers(String name, String tag) {
     def json = restService.get("${name}/manifests/${tag}", true).json
-    //example response
-    /*
-    {
-   ...
-   "layers": [
-      {
-         "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
-         "size": 601,
-         "digest": "sha256:03f4658f8b782e12230c1783426bd3bacce651ce582a4ffb6fbbfa2079428ecb"
-      },
-      ...]}
-     */
-    json.layers.collectEntries { [it.digest, it.size] }
+
+    if (json.schemaVersion == 2)
+      return json.layers.collectEntries { [it.digest, it.size] }
+    else {
+      //fallback to manifest schema v1
+      def history = json.history.v1Compatibility.collect { jsonValue ->
+        new JsonSlurper().parseText(jsonValue)
+      }
+
+      def digests = json.fsLayers.collect { it.blobSum }
+      history.eachWithIndex { entry, i ->
+        entry.digest = digests[i]
+        entry.size = entry.Size ?: 0
+      }
+
+      return history.collectEntries {
+        [it.digest, it.size]
+      }
+    }
+
   }
 
   def tag() {
