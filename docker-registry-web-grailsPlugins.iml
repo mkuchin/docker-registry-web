@@ -6,6 +6,7 @@
         <webroots>
           <root url="file://$MODULE_DIR$/target/work/plugins/jquery-1.11.1/web-app" relative="/" />
           <root url="file://$MODULE_DIR$/target/work/plugins/twitter-bootstrap-3.3.4/web-app" relative="/" />
+          <root url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0.0/grails-app/views" relative="/" />
         </webroots>
         <sourceRoots />
       </configuration>
@@ -16,6 +17,9 @@
         <naming-strategy-map />
       </configuration>
     </facet>
+    <facet type="Spring" name="Spring">
+      <configuration />
+    </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
@@ -24,15 +28,39 @@
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/asset-pipeline-2.1.5/grails-app/services" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/asset-pipeline-2.1.5/grails-app/taglib" isTestSource="false" />
     </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/cache-1.1.8">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/cache-1.1.8/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/cache-1.1.8/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/cache-1.1.8/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/cache-1.1.8/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/cache-ehcache-1.0.5">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/cache-ehcache-1.0.5/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/cache-ehcache-1.0.5/src/groovy" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/hibernate4-4.3.8.1">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/hibernate4-4.3.8.1/src/java" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$/target/work/plugins/jquery-1.11.1">
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/jquery-1.11.1/src/groovy" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/jquery-1.11.1/grails-app/services" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/jquery-1.11.1/grails-app/taglib" isTestSource="false" />
     </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/pretty-time-2.1.3.Final-1.0.1">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/pretty-time-2.1.3.Final-1.0.1/grails-app/taglib" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$/target/work/plugins/rest-client-builder-2.1.1" />
-    <content url="file://$MODULE_DIR$/target/work/plugins/tomcat-7.0.55.2">
-      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/tomcat-7.0.55.2/src/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/tomcat-7.0.55.2/src/groovy" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0.0">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0.0/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0.0/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0.0/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0.0/grails-app/controllers" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0.0/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/spring-security-core-2.0.0/grails-app/taglib" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/target/work/plugins/tomcat-8.0.30">
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/tomcat-8.0.30/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/tomcat-8.0.30/src/groovy" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/target/work/plugins/twitter-bootstrap-3.3.4">
       <sourceFolder url="file://$MODULE_DIR$/target/work/plugins/twitter-bootstrap-3.3.4/grails-app/i18n" isTestSource="false" />
