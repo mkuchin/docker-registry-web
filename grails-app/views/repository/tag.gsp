@@ -25,7 +25,7 @@
                 <tr><th>Image</th><th>Cmd</th><th>Size</th></tr>
                 <g:each in="${history}" var="image">
                     <tr><td>${image.id}</td>
-                        <td><pre>${raw(image)}</pre></td>
+                        <td>${raw(image.cmd)}</td>
                         <td><g:formatSize value="${image.size}"/></td></tr>
                 </g:each>
             </table>

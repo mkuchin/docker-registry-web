@@ -41,7 +41,7 @@ class RepositoryController {
       def manifest = restService.get("${name}/manifests/${tag}")
       def layers = getLayers(name, tag)
       def exists = manifest.statusCode.'2xxSuccessful'
-      def size = layers.sum { it.size }
+      def size = layers.collect { it.value }.sum()
       def topLayer
       if (exists) {
         topLayer = new JsonSlurper().parseText(manifest.json.history.first().v1Compatibility)
@@ -61,7 +61,7 @@ class RepositoryController {
   }
 
   private def getLayers(String name, String tag) {
-    def json = restService.get("${name}/manifests/${tag}", true)
+    def json = restService.get("${name}/manifests/${tag}", true).json
     //example response
     /*
     {
@@ -74,7 +74,7 @@ class RepositoryController {
       },
       ...]}
      */
-    json.layers.collect { [digest: it.digest, size: it.size] }
+    json.layers.collectEntries { [it.digest, it.size] }
   }
 
   def tag() {
@@ -87,9 +87,11 @@ class RepositoryController {
       [id: json.id.substring(0, 11), cmd: json.container_config.Cmd.last().replaceAll('&&', '&&\n')]
     }
 
-    def layers = getLayers(name, tag).reverse()
+    def blobs = res.fsLayers.collect { it.blobSum }
+    def layers = getLayers(name, tag)
     history.eachWithIndex { entry, i ->
-      entry.size = layers[i]
+      def digest = blobs[i]
+      entry.size = layers[digest] ?: 0
     }
 
     [history: history, totalSize: history.sum { it.size }]
