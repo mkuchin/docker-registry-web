@@ -28,7 +28,7 @@ class RepositoryController {
 
 
   private def getTags(name) {
-    def resp = restService.get("${name}/tags/list").json
+    def resp = restService.get("${name}/tags/list", restService.generateAccess(name)).json
     def tags = resp.tags.findAll { it }.collect { tag ->
 
       def manifest = restService.get("${name}/manifests/${tag}", restService.generateAccess(name))
@@ -56,7 +56,7 @@ class RepositoryController {
   }
 
   private def getLayers(String name, String tag) {
-    def json = restService.get("${name}/manifests/${tag}", true).json
+    def json = restService.get("${name}/manifests/${tag}", restService.generateAccess(name), true).json
 
     if (json.schemaVersion == 2)
       return json.layers.collectEntries { [it.digest, it.size] }
@@ -76,7 +76,6 @@ class RepositoryController {
         [it.digest, it.size]
       }
     }
-
   }
 
   private List getTagList(name) {

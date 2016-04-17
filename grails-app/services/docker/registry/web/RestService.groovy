@@ -1,6 +1,5 @@
 package docker.registry.web
 
-import grails.plugin.cache.Cacheable
 import grails.plugins.rest.client.RequestCustomizer
 import grails.plugins.rest.client.RestResponse
 import org.springframework.beans.factory.annotation.Value
@@ -24,11 +23,6 @@ class RestService {
     [[type: type, name: name, actions: [action]]]
   }
 
-  @Cacheable(value = "blobs", key = "#name + '/' + #digest")
-  BigInteger getBlobSize(String name, String digest) {
-    headLength("${name}/blobs/${digest}", generateAccess(name)) ?: 0
-  }
-
   def check(String url) {
     try {
       def status = request(HttpMethod.GET, url, headers).status
@@ -42,12 +36,6 @@ class RestService {
 
   def get(String path, List access = [], boolean v2 = false) {
     request(HttpMethod.GET, "${registryUrl}/${path}" as String, v2 ? headers + v2header : headers, access)
-  }
-
-  def headLength(String path, List access) {
-    def res = request(HttpMethod.HEAD, "${registryUrl}/${path}", headers, access)
-    def size = res.responseEntity.headers.getFirst('Content-Length')
-    size as BigInteger
   }
 
   def delete(String path, List access) {
