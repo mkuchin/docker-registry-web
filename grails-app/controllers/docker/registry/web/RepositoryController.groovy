@@ -7,7 +7,6 @@ class RepositoryController {
   @Value('${registry.readonly}')
   boolean readonly
 
-
   def restService
 
   def index() {
@@ -20,7 +19,7 @@ class RepositoryController {
 
   def tags() {
     def name = params.id.decodeURL()
-    def tags = getTags(name, true)
+    def tags = getTags(name)
     if (!tags.count { it.exists })
       redirect action: 'index'
     [tags: tags]
@@ -36,19 +35,16 @@ class RepositoryController {
   }
 
 
-  private def getTags(name, boolean deep = true) {
+  private def getTags(name) {
     def resp = restService.get("${name}/tags/list").json
     def tags = resp.tags.collect { tag ->
       def manifest = restService.get("${name}/manifests/${tag}")
+      def layers = getLayers(name, tag)
       def exists = manifest.statusCode.'2xxSuccessful'
-      BigInteger size = 0
+      def size = layers.sum { it.size }
       def topLayer
-      if (deep && exists) {
+      if (exists) {
         topLayer = new JsonSlurper().parseText(manifest.json.history.first().v1Compatibility)
-        size = manifest.json.fsLayers.sum { layer ->
-          def digest = layer.blobSum
-          restService.getBlobSize(name, digest)
-        }
       }
 
       // docker uses ISO8601 dates w/ fractional seconds (i.e. yyyy-MM-ddTHH:mm:ss.ssssssssZ),
@@ -59,25 +55,43 @@ class RepositoryController {
         createdDate = Date.parse("yyyy-MM-dd'T'HH:mm:ss", createdStr)
       }
 
-      [name: tag, data: manifest.json, size: size, exists: exists, id: topLayer?.id?.substring(0, 11), created: createdDate, createdStr: createdStr]
+      [name: tag, count: layers.size(), size: size, exists: exists, id: topLayer?.id?.substring(0, 11), created: createdDate, createdStr: createdStr]
     }
     tags
   }
 
+  private def getLayers(String name, String tag) {
+    def json = restService.get("${name}/manifests/${tag}", true)
+    //example response
+    /*
+    {
+   ...
+   "layers": [
+      {
+         "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+         "size": 601,
+         "digest": "sha256:03f4658f8b782e12230c1783426bd3bacce651ce582a4ffb6fbbfa2079428ecb"
+      },
+      ...]}
+     */
+    json.layers.collect { [digest: it.digest, size: it.size] }
+  }
+
   def tag() {
     def name = params.id.decodeURL()
-    def res = restService.get("${name}/manifests/${params.name}").json
+
+    def tag = params.name
+    def res = restService.get("${name}/manifests/${tag}").json
     def history = res.history.v1Compatibility.collect { jsonValue ->
       def json = new JsonSlurper().parseText(jsonValue)
-      //log.info json as JSON
-      json
+      [id: json.id.substring(0, 11), cmd: json.container_config.Cmd.last().replaceAll('&&', '&&\n')]
     }
 
-    def blobs = res.fsLayers.collect { it.blobSum }
-
+    def layers = getLayers(name, tag).reverse()
     history.eachWithIndex { entry, i ->
-      entry.size = entry.Size ?: restService.getBlobSize(name, blobs[i])
+      entry.size = layers[i]
     }
+
     [history: history, totalSize: history.sum { it.size }]
   }
 

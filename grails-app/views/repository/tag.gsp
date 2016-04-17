@@ -24,8 +24,8 @@
             <table class="table table-bordered table-hover">
                 <tr><th>Image</th><th>Cmd</th><th>Size</th></tr>
                 <g:each in="${history}" var="image">
-                    <tr><td>${image.id.substring(0, 11)}</td>
-                        <td>${raw(image.container_config.Cmd.last().replaceAll('&&', '&&<br>'))}</td>
+                    <tr><td>${image.id.}</td>
+                        <td><pre>${raw(image)}</pre></td>
                         <td><g:formatSize value="${image.size}"/></td></tr>
                 </g:each>
             </table>
