@@ -3,7 +3,7 @@ package docker.registry.web
 
 class SizeFormat {
   private static final String suffixes = "KMGTPE"
-  private static int unit = 1024
+  private static int unit = 1000
 
   static String format(BigInteger bytes) {
     if (bytes < unit)
