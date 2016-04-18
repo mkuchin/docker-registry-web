@@ -11,7 +11,7 @@ class SizeFormatSpec extends Specification {
     applyTemplate('<g:formatSize value="${3000}"/>') == '3 KB'
     applyTemplate('<g:formatSize value="${245}"/>') == '245 B'
     applyTemplate('<g:formatSize value="${1048576}"/>') == '1.0 MB'
-    applyTemplate('<g:formatSize value="${1370945784}"/>') == '1.3 GB'
+    applyTemplate('<g:formatSize value="${1370945784}"/>') == '1.4 GB'
 
   }
 }
