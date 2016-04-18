@@ -59,7 +59,7 @@ class RepositoryController {
     def json = restService.get("${name}/manifests/${tag}", restService.generateAccess(name), true).json
 
     if (json.schemaVersion == 2)
-      return json.layers.collectEntries { [it.digest, it.size] }
+      return json.layers.collectEntries { [it.digest, it.size as BigInteger] }
     else {
       //fallback to manifest schema v1
       def history = json.history.v1Compatibility.collect { jsonValue ->
@@ -73,7 +73,7 @@ class RepositoryController {
       }
 
       return history.collectEntries {
-        [it.digest, it.size]
+        [it.digest, it.size as BigInteger]
       }
     }
   }
