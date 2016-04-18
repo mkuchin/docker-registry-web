@@ -49,7 +49,7 @@
                         <tr><td>${tag.id}</td>
                             <td><g:link action="tag" params="[name: tag.name]"
                                         id="${params.id}">${tag.name}</g:link></td>
-                            <td data-sort="${tag.createdStr}"><abbr title="${tag.createdStr}"><prettytime:display
+                            <td data-sort="${tag.unixTime}"><abbr title="${tag.createdStr}"><prettytime:display
                                     date="${tag.created}"/></abbr></td>
                             <td>${tag.count}</td>
                             <td data-sort="${tag.size}"><g:formatSize value="${tag.size}"/></td>
