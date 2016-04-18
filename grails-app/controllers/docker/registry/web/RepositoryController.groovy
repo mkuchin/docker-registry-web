@@ -54,13 +54,15 @@ class RepositoryController {
       // which seem to confuse the Date parser, so truncate the timestamp and always assume UTC tz.
       def createdStr = topLayer?.created?.substring(0,19)
       def createdDate
+      long unixTime = 0
       if (createdStr) {
         createdDate = Date.parse("yyyy-MM-dd'T'HH:mm:ss", createdStr)
+        unixTime = createdDate.time
       }
 
-      [name: tag, count: layers?.size(), size: size, exists: exists, id: topLayer?.id?.substring(0, 11), created: createdDate, createdStr: createdStr]
+      [name: tag, count: layers?.size(), size: size, exists: exists, id: topLayer?.id?.substring(0, 11), created: createdDate, createdStr: createdStr, unixTime: unixTime]
     }
-    tags.sort { it.created }.reverse()
+    tags
   }
 
   private def getLayers(String name, String tag) {

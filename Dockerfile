@@ -29,7 +29,8 @@ RUN     ./grailsw prod clean
 # Building app
 
 ADD . ./
-RUN ./grailsw war ROOT.war && \
+RUN ./grailsw test-app unit: && \
+    ./grailsw war ROOT.war && \
     cp ROOT.war $CATALINA_BASE/webapps/ && \
 # clean up
     rm -rf /usr/local/app && \
