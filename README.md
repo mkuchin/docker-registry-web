@@ -28,6 +28,6 @@ Download example [docker-compose.yml](https://raw.githubusercontent.com/mkuchin/
 * REGISTRY_PORT - port of docker registry
 * REGISTRY_NAME - visible name of registry if it different from `${REGISTRY_HOST}:${REGISTRY_PORT}`
 * REGISTRY_AUTH - base64 encoded token for basic authentication 
-* READONLY = true|false - readonly mode
+* READONLY = true|false - readonly mode (in order to enable deletes you also need to run registry with `-e REGISTRY_STORAGE_DELETE_ENABLED=true`
 * TRUST_ANY_SSL = true|false - set to true, if you are using self signed certificate for registry
-* CONTEXT_PATH - url prefix if you need to host web registry on non-root path.
+* CONTEXT_PATH - url prefix if you need to host web registry on non-root path
