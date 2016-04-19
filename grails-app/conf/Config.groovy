@@ -120,7 +120,7 @@ log4j.main = {
       'net.sf.ehcache.hibernate'
 }
 
-grails.app.context = "/"
+grails.app.context = System.env.CONTEXT_PATH ?: "/"
 grails.sitemesh.default.layout = "main"
 //use 172.17.0.1 inside docker containter
 registry {
