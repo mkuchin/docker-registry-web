@@ -30,3 +30,4 @@ Download example [docker-compose.yml](https://raw.githubusercontent.com/mkuchin/
 * REGISTRY_AUTH - base64 encoded token for basic authentication 
 * READONLY = true|false - readonly mode
 * TRUST_ANY_SSL = true|false - set to true, if you are using self signed certificate for registry
+* CONTEXT_PATH - url prefix if you need to host web registry on non-root path.

@@ -36,13 +36,14 @@ RUN ./grailsw test-app unit: && \
     rm -rf /usr/local/app && \
     rm -rf /root/.grails  && \
     rm -rf /root/.m2
-ENV CONTEXT_PATH=/
-ENV CATALINA_OPTS=" -Djava.security.egd=file:/dev/./urandom -Dcontext.path=${CONTEXT_PATH}"
+
+ENV CATALINA_OPTS=" -Djava.security.egd=file:/dev/./urandom"
 ENV PATH $CATALINA_HOME/bin:$PATH
 ENV REGISTRY_HOST=localhost
 ENV REGISTRY_PORT=5000
 WORKDIR $CATALINA_BASE
-COPY tomcat/context.xml $CATALINA_BASE/conf/
+COPY tomcat/server.xml conf/
+COPY tomcat/start.sh ./
 
 EXPOSE  8080
-CMD ["catalina.sh", "run"]
+CMD ["./start.sh"]
