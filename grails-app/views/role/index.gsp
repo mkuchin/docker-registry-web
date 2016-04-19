@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Tokens</title>
+    <title>Roles</title>
 </head>
 
 <body>
@@ -10,20 +10,16 @@
     <div class="col-md-12">
         <ol class="breadcrumb">
             <li><g:link uri="/">Home</g:link></li>
-            <li class="active">Tokens</li>
+            <li class="active">Roles</li>
         </ol>
 
-        <div class="page-header"><h1>Tokens</h1></div>
+        <div class="page-header"><h1>Roles</h1></div>
         <table class="table table-bordered">
-            <tr><th>Token name</th><th>Permissions</th></tr>
-            <g:each in="${list}" var="token">
+            <tr><th>Role</th></tr>
+            <g:each in="${roles}" var="role">
                 <tr>
                     <td>
-                        <g:link action="show"
-                                id="${token.id}">${token.name}</g:link>
-                    </td>
-                    <td>
-                        ${token.permissions}
+                        <g:link action="show" id="${role.id}">${role.authority}</g:link>
                     </td>
                 </tr>
             </g:each>

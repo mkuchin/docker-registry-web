@@ -35,7 +35,10 @@
 
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <g:link controller="token">Tokens</g:link>
+                    <g:link controller="user">Users</g:link>
+                </li>
+                <li>
+                    <g:link controller="role">Roles</g:link>
                 </li>
             </ul>
 
