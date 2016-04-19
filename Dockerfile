@@ -36,8 +36,8 @@ RUN ./grailsw test-app unit: && \
     rm -rf /usr/local/app && \
     rm -rf /root/.grails  && \
     rm -rf /root/.m2
-
-ENV CATALINA_OPTS=" -Djava.security.egd=file:/dev/./urandom"
+ENV CONTEXT_PATH=/
+ENV CATALINA_OPTS=" -Djava.security.egd=file:/dev/./urandom -Dcontext.path=${CONTEXT_PATH}"
 ENV PATH $CATALINA_HOME/bin:$PATH
 ENV REGISTRY_HOST=localhost
 ENV REGISTRY_PORT=5000
