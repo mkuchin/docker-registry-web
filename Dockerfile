@@ -42,7 +42,8 @@ ENV PATH $CATALINA_HOME/bin:$PATH
 ENV REGISTRY_HOST=localhost
 ENV REGISTRY_PORT=5000
 WORKDIR $CATALINA_BASE
-COPY tomcat/context.xml $CATALINA_BASE/conf/
+COPY tomcat/server.xml conf/
+COPY tomcat/start.sh ./
 
 EXPOSE  8080
-CMD ["/bin/bash", "-c", "set -e && catalina.sh run"]
+CMD ["./start.sh"]

@@ -120,7 +120,6 @@ log4j.main = {
       'net.sf.ehcache.hibernate'
 }
 
-grails.app.context = "/"
 grails.sitemesh.default.layout = "main"
 grails.databinding.convertEmptyStringsToNull = false
 
