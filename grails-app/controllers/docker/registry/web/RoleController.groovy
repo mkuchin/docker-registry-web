@@ -20,13 +20,10 @@ class RoleController {
   }
 
   def deleteAcl() {
-    log.info params
     def role = Role.get(params.roleId)
-    log.info role
     def acl = AccessControl.get(params.id)
-    log.info acl
+    log.info "Deleting acl=${acl} from role.id=${role}"
     def roleAccess = RoleAccess.findByRoleAndAcl(role, acl)
-    log.info roleAccess
     roleAccess.delete()
     acl.delete()
     redirect action: 'show', id: params.roleId
@@ -51,9 +48,11 @@ class RoleController {
 
   def delete() {
     def role = Role.get(params.id)
+    log.info "Deleting role=${role}"
     UserRole.findByRole(role)*.delete()
     def roleAccess = RoleAccess.findAllByRole(role)
     def acls = roleAccess.acl
+    log.info "Deleting acls: ${acls}"
     roleAccess*.delete()
     acls*.delete()
     role.delete()

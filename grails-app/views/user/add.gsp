@@ -15,7 +15,7 @@
 
         <div class="page-header"><h3>Create User</h3>
         </div>
-        <g:form action="create">
+        <g:form action="create" autocomplete="off">
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="username">Username</label> <g:textField name="username" class="form-control"

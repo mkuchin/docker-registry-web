@@ -47,6 +47,7 @@ class UserController {
 
   def delete() {
     def user = User.get(params.id)
+    log.info "Deleting user: ${user}"
     UserRole.findAllByUser(user)*.delete()
     user.delete()
     redirect action: 'index'

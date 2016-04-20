@@ -10,7 +10,7 @@ class AuthController {
   def authService
 
   def index() {
-    log.info("Auth params: $params")
+    //log.info("Auth params: $params")
 
     //todo: anonymous users, no auth
     def authResult = authService.login(request)

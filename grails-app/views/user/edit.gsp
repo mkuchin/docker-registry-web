@@ -15,7 +15,7 @@
         </ol>
 
         <div class="page-header"><h3>User: ${user.username}</h3></div>
-        <g:form action="update">
+        <g:form action="update" autocomplete="off">
             <g:hiddenField name="id" value="${user.id}"/>
             <div class="col-md-6">
                 <div class="form-group">
