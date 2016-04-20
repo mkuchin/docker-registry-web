@@ -44,4 +44,20 @@ class UserController {
     user.properties = params
     redirect action: 'show', id: params.id
   }
+
+  def delete() {
+    def user = User.get(params.id)
+    UserRole.findAllByUser(user)*.delete()
+    user.delete()
+    redirect action: 'index'
+  }
+
+  def add() {
+  }
+
+  def create() {
+    def user = new User(params)
+    user.save()
+    redirect action: 'show', id: user.id
+  }
 }

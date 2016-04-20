@@ -7,7 +7,7 @@
 
 <body>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-8 col-lg-offset-2">
         <ol class="breadcrumb">
             <li><g:link uri="/">Home</g:link></li>
             <li class="active">Roles</li>
@@ -24,9 +24,8 @@
                 </tr>
             </g:each>
         </table>
+        <g:link class="btn btn-primary" action="add">Add</g:link>
     </div>
-
-    <div class="col-md-12"><g:link class="btn btn-default" action="add">Add</g:link></div>
 </div>
 </body>
 </html>

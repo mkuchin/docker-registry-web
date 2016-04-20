@@ -13,26 +13,28 @@ class BootStrap {
 
   def init = { servletContext ->
 
-    //initializing auth
+    //initializing auth if no roles or users exists
+    if (!(Role.list() || User.list())) {
+      def user = new User(username: 'test', password: 'testPassword').save(failOnError: true)
+      def role = new Role('read-all').save(failOnError: true)
+      def write = new Role('write-all').save(failOnError: true)
 
-    def user = new User(username: 'test', password: 'testPassword').save(failOnError: true)
-    def role = new Role('read-all').save(failOnError: true)
-    def write = new Role('write-all').save(failOnError: true)
+      def acl = new AccessControl(name: 'hello', ip: '', level: AccessLevel.PULL).save(failOnError: true)
+      def writeAcl = new AccessControl(name: 'hello', ip: '', level: AccessLevel.PUSH).save(failOnError: true)
 
-    def acl = new AccessControl(name: 'hello', ip: '', level: AccessLevel.PULL).save(failOnError: true)
-    def writeAcl = new AccessControl(name: 'hello', ip: '', level: AccessLevel.PUSH).save(failOnError: true)
+      UserRole.create(user, role, true)
+      RoleAccess.create(role, acl)
+      RoleAccess.create(write, writeAcl)
 
-    UserRole.create(user, role, true)
-    RoleAccess.create(role, acl)
-    RoleAccess.create(write, writeAcl)
-
-    log.info authService.login("test", "testPassword")
+      log.info authService.login("test", "testPassword")
+    }
 
     if (System.env.TRUST_ANY_SSL == 'true') {
       log.info "Trusting any SSL certificate"
       TrustAnySSL.init()
     }
-    //restService.init()
+
+    restService.init()
 
   }
   def destroy = {

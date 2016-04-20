@@ -45,5 +45,6 @@ WORKDIR $CATALINA_BASE
 COPY tomcat/server.xml conf/
 COPY tomcat/start.sh ./
 
+VOLUME /data
 EXPOSE  8080
 CMD ["./start.sh"]
