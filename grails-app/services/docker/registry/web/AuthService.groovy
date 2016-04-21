@@ -15,7 +15,7 @@ class AuthService {
     def authResult = new AuthResult()
     try {
       def auth = request.getHeader('Authorization').split(' ')[1]
-      log.info "Auth: $auth"
+      //log.info "Auth: $auth"
       def userPass = new String(auth.decodeBase64()).split(':')
       authResult = login(userPass[0], userPass[1])
     } catch (e) {
