@@ -9,6 +9,7 @@ class UrlMappings {
     "/$controller/$action/$id?"()
 
     "/api/auth"(controller: 'auth', action: 'index')
+    "/api/notification"(controller: 'notification', action: 'index')
 
     "500"(view: '/error')
   }
