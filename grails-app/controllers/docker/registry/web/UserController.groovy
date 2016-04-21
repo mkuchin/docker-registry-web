@@ -1,5 +1,6 @@
 package docker.registry.web
 
+import docker.registry.Event
 import docker.registry.Role
 import docker.registry.User
 import docker.registry.UserRole
@@ -16,7 +17,8 @@ class UserController {
   def show() {
     def user = User.get(params.id)
     def roles = Role.list() - user.authorities
-    [user: user, roles: roles]
+    def events = Event.findAllByUser(user, [max: 10, sort: 'id', order: 'desc'])
+    [user: user, roles: roles, events: events]
   }
 
   def edit() {

@@ -46,6 +46,11 @@
             </g:if>
         </ul>
     </div>
+
+    <div class="col-md-8 col-lg-offset-2">
+        <h4>Latest events:</h4>
+        <g:render template="/event/events" model="[list: events]"/>
+    </div>
 </div>
 </body>
 </html>

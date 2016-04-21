@@ -1,6 +1,7 @@
 package docker.registry.api
 
 import docker.registry.Event
+import docker.registry.User
 import docker.registry.web.DateConverter
 
 class NotificationController {
@@ -90,6 +91,7 @@ class NotificationController {
 
           log.info eventMap
           eventMap.time = DateConverter.convert(eventMap.time)
+          eventMap.user = User.findByUsername(eventMap.user)
           new Event(eventMap).save(failOnError: true)
         } catch (e) {
           log.warn "Error processing json: $json", e
