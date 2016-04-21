@@ -4,8 +4,6 @@ import docker.registry.web.TrustAnySSL
 import org.springframework.beans.factory.annotation.Value
 
 class BootStrap {
-  def restService
-
   @Value('${ssl.trustAny}')
   boolean trustAny
 
@@ -15,6 +13,11 @@ class BootStrap {
   def yamlConfig
   def init = { servletContext ->
 
+    def yamlConfigProperties = Collections.list(yamlConfig.propertyNames()).collectEntries {
+      key -> [key, yamlConfig.get(key)]
+    }
+    log.info "Yaml config: $yamlConfigProperties"
+
     //initializing auth if no roles or users exists
     if (!(Role.list() || User.list())) {
       def user = new User(username: 'test', password: 'testPassword').save(failOnError: true)
@@ -23,7 +26,6 @@ class BootStrap {
 
       def acl = new AccessControl(name: 'hello', ip: '', level: AccessLevel.PULL).save(failOnError: true)
       def writeAcl = new AccessControl(name: 'hello', ip: '', level: AccessLevel.PUSH).save(failOnError: true)
-
       UserRole.create(user, role, true)
       RoleAccess.create(role, acl)
       RoleAccess.create(write, writeAcl)

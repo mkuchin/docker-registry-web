@@ -2,7 +2,7 @@
 
 registry:
   # Docker registry url
-  url: 'http://localhost:5000'
+  url: 'http://localhost:5000/v2'
   # Docker registry fqdn
   name: 'localhost:5000'
   # Authentication settings

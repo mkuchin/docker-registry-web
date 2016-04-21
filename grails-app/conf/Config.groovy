@@ -160,9 +160,5 @@ grails.plugin.springsecurity.fii.rejectPublicInvocations = false
 
 
 registry {
-  host = System.env.REGISTRY_HOST ?: 'localhost'
-  port = System.env.REGISTRY_PORT ?: '5000'
-  name = System.env.REGISTRY_NAME ?: "${host}${port != 80 ? ":$port".toString() : ''}"
   readonly = System.env.READONLY == 'true'
-  keyFile = System.env.AUTH_KEYFILE
 }
