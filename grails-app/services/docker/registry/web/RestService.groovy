@@ -5,14 +5,11 @@ import grails.plugins.rest.client.RestResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpMethod
 
+import javax.annotation.PostConstruct
+
 class RestService {
-  @Value('${registry.host}')
-  String host
-
-  @Value('${registry.port}')
-  String port
-
-  String registryUrl
+  @Value('${registry.url}')
+  String url
 
   def tokenService
   def headers = [:]
@@ -35,14 +32,15 @@ class RestService {
   }
 
   def get(String path, List access = [], boolean v2 = false) {
-    request(HttpMethod.GET, "${registryUrl}/${path}" as String, v2 ? headers + v2header : headers, access)
+    request(HttpMethod.GET, "${url}/${path}" as String, v2 ? headers + v2header : headers, access)
   }
 
   def delete(String path, List access) {
-    def res = request(HttpMethod.DELETE, "${registryUrl}/${path}", headers, access)
+    def res = request(HttpMethod.DELETE, "${url}/${path}", headers, access)
     log.info res.statusCode
   }
 
+  @PostConstruct
   void init() {
     //set requestCustomizer if REGISTRY_AUTH is set
     String registryAuth = System.env.REGISTRY_AUTH
@@ -50,21 +48,6 @@ class RestService {
       log.info "Setting auth header: $registryAuth"
       headers['auth'] = "Basic ${registryAuth}"
     }
-
-    //auto detect registry protocol
-    def protoList = ['http', 'https']
-    for (proto in protoList) {
-      def url = "$proto://${host}:${port}/v2"
-      log.info "Trying to connect $url"
-      if (check(url)) {
-        registryUrl = url
-        break
-      }
-    }
-    if (!registryUrl)
-      throw new RuntimeException("Can't connect to registry")
-
-    log.info "Registry URL detected: $registryUrl"
   }
 
   def request(HttpMethod method, String url, Map headers, List access = []) {

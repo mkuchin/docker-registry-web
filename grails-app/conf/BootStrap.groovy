@@ -12,6 +12,7 @@ class BootStrap {
   def authService
   def grailsApplication
 
+  def yamlConfig
   def init = { servletContext ->
 
     //initializing auth if no roles or users exists
@@ -34,9 +35,8 @@ class BootStrap {
       log.info "Trusting any SSL certificate"
       TrustAnySSL.init()
     }
-    log.info grailsApplication.config.registry
-    restService.init()
 
+    log.info grailsApplication.config.registry
   }
   def destroy = {
   }

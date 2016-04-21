@@ -1,5 +1,6 @@
 registry:
-  allowAll: true
+# Docker registry url
+  url: 'http://localhost:5000'
   auth:
-    issuer: 'xxx'
+    #issuer: 'xxx'
     other: 23423

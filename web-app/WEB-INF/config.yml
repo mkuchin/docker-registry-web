@@ -1,0 +1,17 @@
+# Default values for yml config
+
+registry:
+  # Docker registry url
+  url: 'http://localhost:5000'
+  # Docker registry fqdn
+  name: 'localhost:5000'
+  # Authentication settings
+  auth:
+    # Enable authentication
+    enabled: false
+    # Token issuer
+    # should equals to auth.token.issuer of docker registry
+    issuer: 'test-issuer'
+    # Private key for token signing
+    # certificate used on auth.token.rootcertbundle should signed by this key
+    key: ssl/key-dec.pem

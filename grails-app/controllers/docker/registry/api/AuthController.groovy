@@ -57,7 +57,6 @@ class AuthController {
       log.info "actions = ${actions}"
       scope.actions = actions
 
-      // actions [[]] not working
       def access = [scope]
       log.info "Access list: ${access}"
       def tokenJson = tokenService.generate(subject, access)

@@ -14,11 +14,15 @@ import java.text.SimpleDateFormat
 
 class TokenService {
 
-  @Value('${registry.keyFile}')
+  @Value('${registry.auth.key}')
   String keyFilename
 
   @Value('${registry.name}')
   String registryName
+
+  @Value('${registry.auth.issuer}')
+  String issuer
+
   private KeyPair keyPair
   private String keyDigest
 
@@ -29,6 +33,7 @@ class TokenService {
     if (file.exists()) {
       this.keyPair = PemUtils.getKeyPair(file)
       this.keyDigest = PemUtils.getKeyDigest(keyPair.public)
+      log.info "Key file loaded, digest: ${keyDigest}"
     } else {
       log.warn "No AUTH_KEYFILE configured"
     }
@@ -61,7 +66,7 @@ class TokenService {
     int time = System.currentTimeMillis() / 1000
     def headerMap = [alg: "RS256", typ: "JWT", kid: keyDigest]
     def payloadMap = [
-        iss   : 'test-issuer',
+        iss   : issuer,
         aud   : registryName, //mirroring auth.token.service from docker registry config
         sub   : subject,
         nbf   : time - 60,

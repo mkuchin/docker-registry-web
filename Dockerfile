@@ -43,6 +43,7 @@ ENV REGISTRY_HOST=localhost
 ENV REGISTRY_PORT=5000
 WORKDIR $CATALINA_BASE
 COPY tomcat/server.xml conf/
+COPY grails-app/conf/config.yml /conf/config.yml
 COPY tomcat/start.sh ./
 
 VOLUME /data

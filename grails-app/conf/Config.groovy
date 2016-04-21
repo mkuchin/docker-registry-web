@@ -88,10 +88,11 @@ grails.hibernate.osiv.readonly = false
 environments {
   development {
     grails.logging.jul.usebridge = true
+    yaml.path = 'grails-app/conf/config.yml'
   }
   production {
     grails.logging.jul.usebridge = false
-    // TODO: grails.serverURL = "http://www.changeme.com"
+    yaml.path = '/conf/config.yml'
   }
 }
 
