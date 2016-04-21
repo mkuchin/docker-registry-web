@@ -87,9 +87,10 @@ class NotificationController {
         try {
           def eventMap = [repo: target.repository, tag: target.tag, action: event.action,
                           user: event.actor.name, ip: event.request.addr.split(':')[0], time: event.timestamp]
+
           log.info eventMap
           eventMap.time = DateConverter.convert(eventMap.time)
-          new Event(event).save(failOnError: true)
+          new Event(eventMap).save(failOnError: true)
         } catch (e) {
           log.warn "Error processing json: $json", e
         }
