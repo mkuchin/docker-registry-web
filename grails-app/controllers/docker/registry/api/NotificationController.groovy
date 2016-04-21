@@ -1,5 +1,8 @@
 package docker.registry.api
 
+import docker.registry.Event
+import docker.registry.web.DateConverter
+
 class NotificationController {
 
   /*
@@ -79,11 +82,14 @@ class NotificationController {
 
     json.events.each { event ->
       def target = event.target
-      if (target.mediaType == 'application/vnd.docker.distribution.manifest.v2+json') {
+      //skip system notifications and binary events
+      if (target.mediaType == 'application/vnd.docker.distribution.manifest.v2+json' && event.actor.name) {
         try {
           def eventMap = [repo: target.repository, tag: target.tag, action: event.action,
-                          user: event.actor.name, ip: event.request.addr, time: event.timestamp]
+                          user: event.actor.name, ip: event.request.addr.split(':')[0], time: event.timestamp]
           log.info eventMap
+          eventMap.time = DateConverter.convert(eventMap.time)
+          new Event(event).save(failOnError: true)
         } catch (e) {
           log.warn "Error processing json: $json", e
         }

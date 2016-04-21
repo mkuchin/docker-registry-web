@@ -40,6 +40,9 @@
                 <li>
                     <g:link controller="role">Roles</g:link>
                 </li>
+                <li>
+                    <g:link controller="event">Events</g:link>
+                </li>
             </ul>
 
         </div>

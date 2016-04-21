@@ -51,7 +51,7 @@ class RestService {
   }
 
   def request(HttpMethod method, String url, Map headers, List access = []) {
-    def token = tokenService.generate('root', access).token
+    def token = tokenService.generate('', access).token
     def authHeaders = token ? ['Authorization': "Bearer $token"] : [:]
     RestResponse result = requestInternal(headers + authHeaders, method, url)
     return result

@@ -13,7 +13,8 @@
             <li class="active">Roles</li>
         </ol>
 
-        <div class="page-header"><h1>Roles</h1></div>
+        <div class="page-header"><h3>Roles</h3></div>
+        <%-- todo: use list group http://getbootstrap.com/components/#list-group-linked --%>
         <table class="table table-bordered">
             <tr><th>Role</th></tr>
             <g:each in="${roles}" var="role">

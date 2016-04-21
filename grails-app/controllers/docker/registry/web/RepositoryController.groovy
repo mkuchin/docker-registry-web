@@ -42,15 +42,9 @@ class RepositoryController {
         size = layers.collect { it.value }.sum()
       }
 
-      // docker uses ISO8601 dates w/ fractional seconds (i.e. yyyy-MM-ddTHH:mm:ss.ssssssssZ),
-      // which seem to confuse the Date parser, so truncate the timestamp and always assume UTC tz.
-      def createdStr = topLayer?.created?.substring(0,19)
-      def createdDate
-      long unixTime = 0
-      if (createdStr) {
-        createdDate = Date.parse("yyyy-MM-dd'T'HH:mm:ss", createdStr)
-        unixTime = createdDate.time
-      }
+      def createdStr = topLayer?.created
+      def createdDate = DateConverter.convert(createdStr)
+      long unixTime = createdDate?.time ?: 0
 
       [name: tag, count: layers?.size(), size: size, exists: exists, id: topLayer?.id?.substring(0, 11), created: createdDate, createdStr: createdStr, unixTime: unixTime]
     }

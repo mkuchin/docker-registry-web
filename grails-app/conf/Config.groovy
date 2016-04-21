@@ -143,6 +143,7 @@ grails.plugin.springsecurity.authority.className = 'docker.registry.Role'
 //permit anybody to do anything
 grails.plugin.springsecurity.rejectIfNoRule = false
 grails.plugin.springsecurity.fii.rejectPublicInvocations = false
+grails.plugins.twitterbootstrap.fixtaglib = true
 
 //todo: create role for ui, deny all
 
