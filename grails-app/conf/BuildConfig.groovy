@@ -62,6 +62,7 @@ grails.project.dependency.resolution = {
     //   test "org.grails:grails-datastore-test-support:1.0.2-grails-2.4"
     runtime 'org.bouncycastle:bcprov-jdk15on:1.52'
     runtime 'org.bouncycastle:bcpkix-jdk15on:1.52'
+    runtime 'org.yaml:snakeyaml:1.8'
   }
 
   plugins {

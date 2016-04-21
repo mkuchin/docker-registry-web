@@ -73,6 +73,10 @@ class NotificationController {
 
   def index() {
     def json = request.JSON
+    if (!json) {
+      log.warn "No events received, json: $json"
+    }
+
     json.events.each { event ->
       def target = event.target
       if (target.mediaType == 'application/vnd.docker.distribution.manifest.v2+json') {
@@ -85,6 +89,6 @@ class NotificationController {
         }
       }
     }
+    render text: 'ok'
   }
-
 }

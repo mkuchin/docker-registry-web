@@ -1,0 +1,5 @@
+registry:
+  allowAll: true
+  auth:
+    issuer: 'xxx'
+    other: 23423

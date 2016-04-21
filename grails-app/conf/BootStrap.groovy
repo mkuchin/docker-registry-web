@@ -9,7 +9,11 @@ class BootStrap {
   @Value('${ssl.trustAny}')
   boolean trustAny
 
+  @Value('${registry.allowAll}')
+  String allowAll
+
   def authService
+  def grailsApplication
 
   def init = { servletContext ->
 
@@ -33,8 +37,9 @@ class BootStrap {
       log.info "Trusting any SSL certificate"
       TrustAnySSL.init()
     }
-
-    restService.init()
+    log.info grailsApplication.config.registry
+    log.info "Allow all: $allowAll"
+    //restService.init()
 
   }
   def destroy = {
