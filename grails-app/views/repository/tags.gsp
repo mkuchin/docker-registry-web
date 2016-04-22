@@ -38,7 +38,7 @@
             <table class="table table-bordered table-hover" id="main">
                 <thead>
                 <tr><th>Id</th><th>Tag</th><th>Created</th><th>Layers</th><th>Size</th>
-                    <g:if test="${!grailsApplication.config.registry.readonly}">
+                    <g:if test="${!readonly}">
                         <th>Delete</th>
                     </g:if>
                 </tr>

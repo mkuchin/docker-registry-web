@@ -6,7 +6,7 @@ RUN echo 'APT::Install-Recommends "false";' > /etc/apt/apt.conf.d/docker-no-reco
     echo 'APT::Install-Suggests "false";' >> /etc/apt/apt.conf.d/docker-no-recommends
 
 # Install java and tomcat
-RUN     apt-get update && apt-get install -y tomcat7 openjdk-7-jdk libyaml-perl && \
+RUN     apt-get update && apt-get install -y tomcat7 openjdk-7-jdk libyaml-perl libfile-slurp-perl && \
         rm -rf /var/lib/tomcat7/webapps/* && \
         rm -rf /var/lib/apt/lists/*
 
