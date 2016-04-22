@@ -8,7 +8,7 @@
 <body>
 <h3>Latest events</h3>
 <g:paginate total="${total}" action="index" max="20"/>
-<g:render template="events" bean="[list: list]"/>
+<g:render template="events" model="[list: list]"/>
 <g:paginate total="${total}" action="index" max="20"/>
 </body>
 </html>

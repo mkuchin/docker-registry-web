@@ -3,12 +3,21 @@
 registry:
   # Docker registry url
   url: 'http://localhost:5000/v2'
+  # web registry context path
+  # empty string for root context, /app to make web registry accessible on http://host/app
+  context_path: ''
+  # Trust any SSL certificate when connecting to registry
+  trust_any_ssl: false
+  # To allow image delete, should be false
+  readonly: true
   # Docker registry fqdn
   name: 'localhost:5000'
   # Authentication settings
   auth:
     # Enable authentication
     enabled: false
+    # Allow web anonymous access
+    allow_anonymous: true
     # Token issuer
     # should equals to auth.token.issuer of docker registry
     issuer: 'test-issuer'

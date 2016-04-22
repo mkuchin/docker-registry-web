@@ -2,12 +2,8 @@ import docker.registry.*
 import docker.registry.acl.AccessLevel
 import docker.registry.web.TrustAnySSL
 import grails.util.Environment
-import org.springframework.beans.factory.annotation.Value
 
 class BootStrap {
-  @Value('${ssl.trustAny}')
-  boolean trustAny
-
   def authService
   def grailsApplication
 
@@ -40,7 +36,7 @@ class BootStrap {
       }
     }
 
-    if (System.env.TRUST_ANY_SSL == 'true') {
+    if (yamlConfig.get('registry.trust_any_ssl')) {
       log.info "Trusting any SSL certificate"
       TrustAnySSL.init()
     }

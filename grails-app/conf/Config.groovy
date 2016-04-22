@@ -157,9 +157,3 @@ grails.plugins.twitterbootstrap.fixtaglib = true
 //    '/**/images/**':    ['permitAll'],
 //    '/**/favicon.ico':  ['permitAll']
 //]
-
-
-
-registry {
-  readonly = System.env.READONLY == 'true'
-}
