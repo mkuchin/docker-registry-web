@@ -63,6 +63,8 @@ grails.project.dependency.resolution = {
     runtime 'org.bouncycastle:bcprov-jdk15on:1.52'
     runtime 'org.bouncycastle:bcpkix-jdk15on:1.52'
     runtime 'org.yaml:snakeyaml:1.8'
+    //to prevent org.h2.jdbc.JdbcSQLException: Feature not supported: "isWrapperFor"
+    runtime 'com.h2database:h2:1.4.187'
   }
 
   plugins {
