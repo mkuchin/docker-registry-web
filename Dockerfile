@@ -16,11 +16,11 @@ ENV     CATALINA_BASE /var/lib/tomcat7
 
 ENV CATALINA_OPTS=" -Djava.security.egd=file:/dev/./urandom"
 ENV PATH $CATALINA_HOME/bin:$PATH
-WORKDIR $CATALINA_BASE
 
-COPY tomcat/server.xml conf/
+COPY tomcat/server.xml $CATALINA_BASE/conf/
 COPY grails-app/conf/config.yml /conf/config.yml
-COPY yml.pl ./
+WORKDIR /usr/local/bin/
+COPY tomcat/yml.pl ./
 COPY tomcat/start.sh ./
 
 # fix missing folders in tomcat
@@ -49,6 +49,4 @@ RUN ./grailsw test-app unit: && \
 
 WORKDIR $CATALINA_BASE
 
-VOLUME /data
-EXPOSE  8080
-CMD ["./start.sh"]
+CMD ["start.sh"]

@@ -17,7 +17,7 @@
         <div class="page-header"><h1>Image history</h1></div>
         <dl>
             <dt>Image</dt>
-            <dd>${grailsApplication.config.registry.name}/${params.id.decodeURL()}:${params.name}</dd>
+            <dd>${registryName}/${params.id.decodeURL()}:${params.name}</dd>
         </dl>
 
         <div class="table-responsive">

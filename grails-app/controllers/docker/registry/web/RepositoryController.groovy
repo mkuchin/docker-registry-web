@@ -7,6 +7,9 @@ class RepositoryController {
   @Value('${registry.readonly}')
   boolean readonly
 
+  @Value('${registry.name}')
+  String registryName
+
   def restService
 
   //{"Type":"registry","Name":"catalog","Action":"*"}
@@ -23,7 +26,7 @@ class RepositoryController {
     def tags = getTags(name)
     if (!tags.count { it.exists })
       redirect action: 'index'
-    [tags: tags]
+    [tags: tags, readonly: readonly]
   }
 
 
@@ -94,7 +97,7 @@ class RepositoryController {
       entry.size = layers[digest] ?: 0
     }
 
-    [history: history, totalSize: history.sum { it.size }]
+    [history: history, totalSize: history.sum { it.size }, registryName: registryName]
   }
 
   def delete() {
