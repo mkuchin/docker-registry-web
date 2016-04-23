@@ -16,7 +16,8 @@
 
         <div class="page-header"><h3>Role: ${role.authority}
             <span class="pull-right">
-                <g:link class="btn btn-danger" action="delete" id="${role.id}">Delete</g:link>
+                <g:link class="btn btn-danger" onclick="return confirm('Are you sure to delete this role?')"
+                        action="delete" id="${role.id}">Delete</g:link>
             </span>
         </h3></div>
         <h4>Access control list</h4>
@@ -29,6 +30,7 @@
                     <td>${acl.level.actions.join(', ')}</td>
                     <td>${acl.comment}</td>
                     <td><g:link action="deleteAcl" id="${acl.id}"
+                                onclick="return confirm('Are you sure to delete this action?')"
                                 params="[roleId: role.id]"><span class="glyphicon glyphicon-remove text-danger"
                                                                  aria-label="remove"></span>
                     </g:link></td>
