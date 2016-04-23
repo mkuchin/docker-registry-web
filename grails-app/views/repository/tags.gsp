@@ -54,7 +54,8 @@
                             <td>${tag.count}</td>
                             <td data-sort="${tag.size}"><g:formatSize value="${tag.size}"/></td>
                             <g:if test="${!readonly}">
-                            <td><g:link action="delete" params="[name: params.id]" id="${tag.name}">Delete</g:link></td>
+                            <td><g:link action="delete" params="[name: params.id]" id="${tag.name}"
+                                        onclick="return confirm('Are you sure to delete this tag?')">Delete</g:link></td>
                             </g:if>
                         </tr>
                     </g:if>

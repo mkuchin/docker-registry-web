@@ -21,12 +21,14 @@
                         <span class="glyphicon glyphicon-ban-circle" aria-label="Locked"></span>
                         Locked</span></g:if>
                 <g:link class="btn btn-primary" action="edit" id="${user.id}">Modify</g:link>
-                <g:link class="btn btn-danger" action="delete" id="${user.id}">Delete</g:link></span></h3>
+                <g:link class="btn btn-danger" onclick="return confirm('Are you sure to delete this user?')"
+                        action="delete" id="${user.id}">Delete</g:link></span></h3>
         </div>
         <h4>Roles:</h4>
         <ul>
             <g:each in="${user.authorities}" var="role">
                 <li>${role.authority} <g:link action="deleteRole" id="${role.id}"
+                                              onclick="return confirm('Are you sure to delete this role?')"
                                               params="[userId: user.id]">
                     <span class="glyphicon glyphicon-remove text-danger" aria-label="remove"></span></g:link></li>
             </g:each>
