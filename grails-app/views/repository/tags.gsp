@@ -13,12 +13,16 @@
                     {orderable: false, targets: -1}
                 ]
             });
-
         });
     </script>
 </head>
 
 <body>
+<g:modal id="deleteTag" title="Confirm Delete" fields="['tag', 'id']">
+    <p>You are about to delete tag <strong id="tag"></strong> and all images with id <strong id="id"></strong>.</p>
+
+    <p>Do you want to proceed?</p>
+</g:modal>
 <div class="row">
     <div class="col-md-12">
         <ol class="breadcrumb">
@@ -54,7 +58,10 @@
                             <td>${tag.count}</td>
                             <td data-sort="${tag.size}"><g:formatSize value="${tag.size}"/></td>
                             <g:if test="${!grailsApplication.config.registry.readonly}">
-                            <td><g:link action="delete" params="[name: params.id]" id="${tag.name}">Delete</g:link></td>
+                                <td>
+                                    <a href="#" data-tag="${tag.name}" data-id="${tag.id}"
+                                       data-href="${g.createLink(action: 'delete', params: [id: tag.name, name: params.id])}"
+                                       data-toggle="modal" data-target="#deleteTag">Delete</a></td>
                             </g:if>
                         </tr>
                     </g:if>
