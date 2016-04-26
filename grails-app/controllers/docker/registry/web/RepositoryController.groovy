@@ -6,18 +6,27 @@ import org.springframework.beans.factory.annotation.Value
 class RepositoryController {
   @Value('${registry.readonly}')
   boolean readonly
+  int recordsPerPage = 100
 
   def restService
 
   def index() {
-    def restResponse = restService.get('_catalog')
-    log.info "Link header: ${restResponse.headers.get('Link')}"
-
-    def repos = restResponse.json.repositories.collect { name ->
-      def tagsCount = getTagCount(name)
-      [name: name, tags: tagsCount ]
+    def url = "_catalog?n=${recordsPerPage}"
+    if (params.start) {
+      url += "&last=${params.start}"
     }
-    [repos: repos]
+    def restResponse = restService.get(url)
+
+    boolean hasNext = restResponse.headers.getFirst('Link') != null
+    def pagination = hasNext || params.prev != null
+    def repos = restResponse.json.repositories
+    def next = repos ? repos.last() : null
+
+    def repoCount = repos.collect { name ->
+      def tagsCount = getTagCount(name)
+      [name: name, tags: tagsCount]
+    }
+    [repos: repoCount, pagination: pagination, next: next, prev: params.start, hasNext: hasNext]
   }
 
   def tags() {
