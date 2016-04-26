@@ -78,9 +78,11 @@ class TokenService {
 
     String header = encodeBase64(headerMap as JSON)
     String payload = encodeBase64(payloadMap as JSON)
-    log.info "Header: $headerMap"
-    log.info "Payload: $payloadMap"
-
+    //skip logging for internal requests
+    if (subject) {
+      log.debug "Header: $headerMap"
+      log.debug "Payload: $payloadMap"
+    }
     def signature = sign(header, payload, keyPair.private)
 
     def dateFormat = new SimpleDateFormat("YYYY-MM-dd'T'HH:mm:ss'Z'")
