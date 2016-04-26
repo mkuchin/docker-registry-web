@@ -8,7 +8,7 @@
 //= require jquery
 //= require bootstrap
 //= require datatables.min
-//= require_tree .
+// require_tree .
 //= require_self
 
 if (typeof jQuery !== 'undefined') {
