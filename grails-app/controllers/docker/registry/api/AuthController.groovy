@@ -30,7 +30,7 @@ class AuthController {
       def list = scope.split(':')
       [type: list[0], name: list[1], actions: list[2].split(',')]
     }
-    log.info "Translates scope list: $scopeList"
+    log.info "Translated scope list: $scopeList"
     def subject = params.account
 
     //access examples:
