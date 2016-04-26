@@ -136,10 +136,25 @@ class RepositoryController {
     }
     */
       log.info "Deleting manifest"
-      restService.delete("${name}/manifests/${digest}")
-      //todo: show error/success
-    } else
+      def result = restService.delete("${name}/manifests/${digest}")
+      if (!result.deleted) {
+        def text = ''
+        try {
+          boolean unsupported = result.response.json.errors[0].code == 'UNSUPPORTED'
+          text = unsupported ? "Deletion disabled in registry, <a href='https://docs.docker.com/registry/configuration/#delete'>more info</a>." : result.text
+        } catch (e) {
+          text = result.text
+        }
+        flash.message = "Error deleting ${name}:${tag}: ${text}"
+      } else {
+        flash.message = "Tag ${name}:${tag} has been deleted"
+        flash.success = true
+      }
+    } else {
       log.warn 'Readonly mode!'
+      flash.message = "Readonly mode!"
+    }
+    flash.deleteAction = true
     redirect action: 'tags', id: params.name
   }
 }

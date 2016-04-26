@@ -40,7 +40,10 @@ class RestService {
   def delete(String path) {
     def rest = new RestBuilder()
     def res = rest.delete("${registryUrl}/${path}", requestCustomizer)
-    log.info res.statusCode
+
+    def statusCode = res.statusCode
+    log.info statusCode
+    [deleted: statusCode.'2xxSuccessful', response: res]
   }
 
   void init() {

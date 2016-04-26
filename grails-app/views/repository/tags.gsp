@@ -30,7 +30,11 @@
             <li><g:link action="index">Home</g:link></li>
             <li class="active">${params.id.decodeURL()}</li>
         </ol>
-
+        <g:if test="${flash.deleteAction}">
+            <div class="alert alert-${flash.success ? 'success' : 'danger'}" role="alert">
+                ${raw(flash.message)}
+            </div>
+        </g:if>
         <div class="page-header">
             <h1>Tags</h1>
         </div>
