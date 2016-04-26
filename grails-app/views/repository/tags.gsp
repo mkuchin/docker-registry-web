@@ -8,6 +8,7 @@
             $('#main').DataTable({
                 "paging": false,
                 "searching": false,
+                "info": false,
                 "order": [[2, "desc"]],
                 "columnDefs": [
                     {orderable: false, targets: -1}
