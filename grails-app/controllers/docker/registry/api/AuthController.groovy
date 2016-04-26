@@ -24,6 +24,7 @@ class AuthController {
     //empty scope for login/ping
 
     def scope = [:]
+    log.info "Scope: ${params.scope}"
     if (params.scope) {
       def scopeList = params.scope.split(':')
       scope = [type: scopeList[0], name: scopeList[1], actions: scopeList[2].split(',')]
