@@ -14,10 +14,17 @@ class AuthService {
   AuthResult login(HttpServletRequest request) {
     def authResult = new AuthResult()
     try {
-      def auth = request.getHeader('Authorization').split(' ')[1]
-      //log.info "Auth: $auth"
-      def userPass = new String(auth.decodeBase64()).split(':')
-      authResult = login(userPass[0], userPass[1])
+
+      def header = request.getHeader('Authorization')
+      if (header) {
+        def auth = header.split(' ')[1]
+        //log.info "Auth: $auth"
+        def userPass = new String(auth.decodeBase64()).split(':')
+        authResult = login(userPass[0], userPass[1])
+      } else {
+        log.info "Anonymous access requested"
+        return new AuthResult()
+      }
     } catch (e) {
       log.warn "Access denied: ${e.message}"
     }
