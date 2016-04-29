@@ -26,7 +26,7 @@ class RepositoryController {
     def tags = getTags(name)
     if (!tags.count { it.exists })
       redirect action: 'index'
-    [tags: tags, readonly: readonly]
+    [tags: tags, readonly: readonly, registryName: registryName]
   }
 
 

@@ -31,7 +31,7 @@
         </div>
         <dl>
             <dt>Repository</dt>
-            <dd>${grailsApplication.config.registry.name}/${params.id.decodeURL()}</dd>
+            <dd>${registryName}/${params.id.decodeURL()}</dd>
         </dl>
 
         <div class="table-responsive">
