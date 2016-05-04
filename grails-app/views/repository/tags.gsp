@@ -62,13 +62,12 @@
                                     date="${tag.created}"/></abbr></td>
                             <td>${tag.count}</td>
                             <td data-sort="${tag.size}"><g:formatSize value="${tag.size}"/></td>
-                            <g:if test="${!grailsApplication.config.registry.readonly}">
+                            <g:if test="${!readonly}">
                                 <td>
                                     <a href="#" data-tag="${tag.name}" data-id="${tag.id}"
                                        data-href="${g.createLink(action: 'delete', params: [id: tag.name, name: params.id])}"
                                        data-toggle="modal" data-target="#deleteTag">Delete</a></td>
-                            <g:if test="${!readonly}">
-                            <td><g:link action="delete" params="[name: params.id]" id="${tag.name}">Delete</g:link></td>
+
                             </g:if>
                         </tr>
                     </g:if>

@@ -15,14 +15,11 @@ class RepositoryController {
 
   //{"Type":"registry","Name":"catalog","Action":"*"}
   def index() {
-    def repos = restService.get('_catalog', restService.generateAccess('catalog', '*', 'registry')).json.repositories.collect { name ->
-      def tagsCount = getTagList(name).size()
-      [name: name, tags: tagsCount]
     def url = "_catalog?n=${recordsPerPage}"
     if (params.start) {
       url += "&last=${params.start}"
     }
-    def restResponse = restService.get(url)
+    def restResponse = restService.get(url, restService.generateAccess('catalog', '*', 'registry'))
 
     boolean hasNext = restResponse.headers.getFirst('Link') != null
     def pagination = hasNext || params.prev != null
@@ -130,10 +127,7 @@ class RepositoryController {
     }
     */
       log.info "Deleting manifest"
-      restService.delete("${name}/manifests/${digest}", restService.generateAccess(name, '*'))
-      //todo: show error/success
-    } else
-      def result = restService.delete("${name}/manifests/${digest}")
+      def result = restService.delete("${name}/manifests/${digest}", restService.generateAccess(name, '*'))
       if (!result.deleted) {
         def text = ''
         try {

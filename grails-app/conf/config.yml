@@ -1,3 +1,5 @@
+#dev config
+
 registry:
 # Docker registry url
   url: 'http://localhost:5000'
