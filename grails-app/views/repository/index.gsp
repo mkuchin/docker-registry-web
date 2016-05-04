@@ -33,6 +33,25 @@
                 </g:if>
             </g:each>
         </table>
+        <g:if test="${pagination}">
+            <nav>
+                <ul class="pager">
+                    <g:set var="prevActive" value="${params.prev != null ? '' : 'disabled'}"/>
+                    <g:set var="nextActive" value="${hasNext ? '' : 'disabled'}"/>
+
+                    <li class="${prevActive}">
+                        <g:link action="index" params="[start: params.prev]" aria-label="Previous">
+                            <span aria-hidden="true">&laquo; Previous</span>
+                        </g:link>
+                    </li>
+                    <li class="${nextActive}">
+                        <g:link action="index" params="[start: next, prev: prev]" aria-label="Next">
+                            <span aria-hidden="true">Next &raquo;</span>
+                        </g:link>
+                    </li>
+                </ul>
+            </nav>
+        </g:if>
     </div>
 </div>
 </body>

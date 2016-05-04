@@ -38,6 +38,7 @@ class RestService {
   def delete(String path, List access) {
     def res = request(HttpMethod.DELETE, "${url}/${path}", headers, access)
     log.info res.statusCode
+    [deleted: res.statusCode.'2xxSuccessful', response: res]
   }
 
   @PostConstruct
