@@ -27,7 +27,7 @@ class RepositoryController {
     def next = repos ? repos.last() : null
 
     def repoCount = repos.collect { name ->
-      def tagsCount = getTagCount(name)
+      def tagsCount = getTagList(name).size()
       [name: name, tags: tagsCount]
     }
     [repos: repoCount, pagination: pagination, next: next, prev: params.start, hasNext: hasNext]
@@ -43,9 +43,7 @@ class RepositoryController {
 
 
   private def getTags(name) {
-    def resp = restService.get("${name}/tags/list", restService.generateAccess(name)).json
-    def tags = resp.tags.findAll { it }.collect { tag ->
-
+    def tags = getTagList(name).findAll { it }.collect { tag ->
       def manifest = restService.get("${name}/manifests/${tag}", restService.generateAccess(name))
       def exists = manifest.statusCode.'2xxSuccessful'
       def topLayer
