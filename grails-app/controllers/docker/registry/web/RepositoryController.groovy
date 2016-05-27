@@ -15,20 +15,29 @@ class RepositoryController {
 
   //{"Type":"registry","Name":"catalog","Action":"*"}
   def index() {
+    def repoCount = []
+    boolean pagination = false
+    def next = null
+    boolean hasNext = false
     def url = "_catalog?n=${recordsPerPage}"
-    if (params.start) {
-      url += "&last=${params.start}"
-    }
-    def restResponse = restService.get(url, restService.generateAccess('catalog', '*', 'registry'))
+    try {
+      if (params.start) {
+        url += "&last=${params.start}"
+      }
+      def restResponse = restService.get(url, restService.generateAccess('catalog', '*', 'registry'))
 
-    boolean hasNext = restResponse.headers.getFirst('Link') != null
-    def pagination = hasNext || params.prev != null
-    def repos = restResponse.json.repositories
-    def next = repos ? repos.last() : null
+      hasNext = restResponse.headers.getFirst('Link') != null
+      pagination = hasNext || params.prev != null
+      def repos = restResponse.json.repositories
+      next = repos ? repos.last() : null
 
-    def repoCount = repos.collect { name ->
-      def tagsCount = getTagList(name).size()
-      [name: name, tags: tagsCount]
+      repoCount = repos.collect { name ->
+        def tagsCount = getTagList(name).size()
+        [name: name, tags: tagsCount]
+      }
+    } catch (e) {
+      log.error "Can't access registry: $url", e
+      flash.message = e.message
     }
     [repos: repoCount, pagination: pagination, next: next, prev: params.start, hasNext: hasNext]
   }

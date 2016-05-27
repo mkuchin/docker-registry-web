@@ -105,7 +105,7 @@ log4j.main = {
   }
 
   root {
-    debug 'stdout'
+    info 'stdout'
   }
 
   error 'org.codehaus.groovy.grails.web.servlet',        // controllers
@@ -141,19 +141,37 @@ grails.plugin.springsecurity.authority.className = 'docker.registry.Role'
 
 //todo: configure anonymous access with config
 //permit anybody to do anything
-grails.plugin.springsecurity.rejectIfNoRule = false
-grails.plugin.springsecurity.fii.rejectPublicInvocations = false
+grails {
+  plugin {
+    springsecurity {
+      successHandler.alwaysUseDefault = true
+      rejectIfNoRule = false
+      fii.rejectPublicInvocations = false
+      controllerAnnotations.staticRules = [
+          '/assets/**': ['permitAll']
+      ]
+
+      roleHierarchy = 'UI_ADMIN > UI_USER'
+
+      securityConfigType = "InterceptUrlMap"
+      interceptUrlMap = [
+          [pattern: '**', access: ['permitAll']]
+      ]
+
+      //todo: implied roles ROLE_ADMIN < ROLE_UI
+    }
+  }
+}
+auth.InterceptUrlMap = [
+    [pattern: '/login/*', access: ['permitAll']],
+    [pattern: '/user/*', access: ["hasRole('UI_ADMIN')"]],
+    [pattern: '/role/*', access: ["hasRole('UI_ADMIN')"]],
+    [pattern: '/api/*', access: ['permitAll']],
+    //special case for context path without /
+    [pattern: '', access: ["hasRole('UI_USER')"]],
+    //should be last as most generic
+    [pattern: '/**', access: ["hasRole('UI_USER')"]]
+]
+
 grails.plugins.twitterbootstrap.fixtaglib = true
 
-//todo: create role for ui, deny all
-
-//grails.plugin.springsecurity.controllerAnnotations.staticRules = [
-//    '/':                ['permitAll'],
-//    '/index':           ['permitAll'],
-//    '/index.gsp':       ['permitAll'],
-//    '/assets/**':       ['permitAll'],
-//    '/**/js/**':        ['permitAll'],
-//    '/**/css/**':       ['permitAll'],
-//    '/**/images/**':    ['permitAll'],
-//    '/**/favicon.ico':  ['permitAll']
-//]

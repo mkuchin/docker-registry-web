@@ -35,12 +35,15 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
             <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <g:link controller="user">Users</g:link>
-                </li>
-                <li>
-                    <g:link controller="role">Roles</g:link>
-                </li>
+
+                <sec:ifAnyGranted roles="UI_ADMIN">
+                    <li>
+                        <g:link controller="user">Users</g:link>
+                    </li>
+                    <li>
+                        <g:link controller="role">Roles</g:link>
+                    </li>
+                </sec:ifAnyGranted>
                 <li>
                     <g:link controller="event">Events</g:link>
                 </li>

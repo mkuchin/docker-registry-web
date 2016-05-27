@@ -31,6 +31,10 @@ class RoleController {
 
   def addAcl() {
     def role = Role.get(params.id)
+    if (role.specialRole) {
+      log.error "Can't add ACL to special role: ${role}"
+      return
+    }
     def acl = new AccessControl(params)
     acl.save()
     def roleAccess = new RoleAccess(role: role, acl: acl)
@@ -48,6 +52,10 @@ class RoleController {
 
   def delete() {
     def role = Role.get(params.id)
+    if (role.specialRole) {
+      log.error "Can't delete special role: ${role}"
+      return
+    }
     log.info "Deleting role=${role}"
     UserRole.findByRole(role)*.delete()
     def roleAccess = RoleAccess.findAllByRole(role)
