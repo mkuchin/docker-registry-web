@@ -1,7 +1,9 @@
 package docker.registry.web
 
+import docker.registry.AccessControl
 import docker.registry.Role
 import docker.registry.RoleAccess
+import docker.registry.acl.AccessLevel
 import docker.registry.acl.AuthResult
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -46,5 +48,27 @@ class AuthService {
       RoleAccess.findAllByRole(role).acl
     }.flatten()
     new AuthResult(roles, acls)
+  }
+
+  List getScopePermissions(Map scope, List<AccessControl> aclList, String ip) {
+    def actions = []
+    def typeValid = scope.type == 'repository'
+    if (aclList && scope && typeValid) {
+      //todo: catalog role for type=catalog request
+      log.info "checking acls: $aclList"
+      String name = scope.name
+
+      log.info("Repo name=${name}, ip=${ip}")
+      //check acls
+      def level = aclList.collect { AccessControl acl ->
+        if (GlobMatcher.check(acl.name, name) && GlobMatcher.check(acl.ip, ip))
+          return acl.level
+        else
+          return AccessLevel.NONE
+      }.max()
+      log.info "Granting permission: $level"
+      actions = level.actions
+    }
+    actions
   }
 }

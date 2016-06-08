@@ -29,29 +29,29 @@ class BootStrap {
       filterDef.reset()
     }
 
-    def user
+    def testUser
     //initializing auth if no roles or users exists
     if (!(Role.list() || User.list())) {
-      user = new User(username: 'test', password: 'test').save(failOnError: true)
+      testUser = new User(username: 'test', password: 'test').save(failOnError: true)
       def admin = new User(username: 'admin', password: 'admin').save(failOnError: true)
       def uiRole = new Role('UI_USER').save()
       def uiAdminRole = new Role('UI_ADMIN').save()
-      def role = new Role('read-all').save(failOnError: true)
+      def readRole = new Role('read-all').save(failOnError: true)
       def write = new Role('write-all').save(failOnError: true)
 
-      def acl = new AccessControl(name: 'hello', ip: '', level: AccessLevel.PULL).save(failOnError: true)
-      def writeAcl = new AccessControl(name: 'hello', ip: '', level: AccessLevel.PUSH).save(failOnError: true)
-      UserRole.create(user, role, true)
-      UserRole.create(user, uiRole, true)
+      def readAll = new AccessControl(name: '*', ip: '*', level: AccessLevel.PULL).save(failOnError: true)
+      def writeAcl = new AccessControl(name: '*', ip: '*', level: AccessLevel.PUSH).save(failOnError: true)
+      UserRole.create(testUser, readRole, true)
+      UserRole.create(testUser, uiRole, true)
       UserRole.create(admin, uiAdminRole, true)
-      RoleAccess.create(role, acl)
+      RoleAccess.create(readRole, readAll)
       RoleAccess.create(write, writeAcl)
 
       //log.info authService.login("test", "testPassword")
     }
     if (Environment.current == Environment.DEVELOPMENT) {
       (1..100).each { i ->
-        new Event(user: user, repo: 'some', ip: "$i.$i.$i.$i", action: 'pull', tag: 'latest', time: new Date()).save()
+        new Event(user: testUser, repo: 'some', ip: "$i.$i.$i.$i", action: 'pull', tag: 'latest', time: new Date()).save()
       }
     }
 

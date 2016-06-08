@@ -1,8 +1,5 @@
 package docker.registry.api
 
-import docker.registry.AccessControl
-import docker.registry.acl.AccessLevel
-
 class AuthController {
 
   def tokenService
@@ -41,7 +38,8 @@ class AuthController {
       def aclList = authResult.acls
       scopeList.collect { scope ->
         log.info "Requested scope: $scope"
-        List actions = getScopePermissions(scope, aclList)
+        String ip = request.getRemoteAddr()
+        List actions = authService.getScopePermissions(scope, aclList, ip)
         scope.actions = actions
         log.info "Granted scope: ${actions}"
         access << scope
@@ -58,32 +56,4 @@ class AuthController {
       render(status: 401, text: 'No auth')
     }
   }
-
-  private List getScopePermissions(Map scope, List aclList) {
-    def actions = []
-    def typeValid = scope.type == 'repository'
-    if (aclList && scope && typeValid) {
-      //todo: catalog role for type=catalog request
-      log.info "checking acls: $aclList"
-      String name = scope.name
-      String ip = request.getRemoteAddr()
-      log.info("Repo name=${name}, ip=${ip}")
-      //check acls
-      def level = aclList.collect { AccessControl acl ->
-        if (name.startsWith(acl.name) && ip.startsWith(acl.ip))
-          return acl.level
-        else
-          return AccessLevel.NONE
-      }.max()
-      log.info "Granting permission: $level"
-      actions = level.actions
-    }
-    actions
-  }
-  //todo tests:
-  /*
-     Scope: null -> Access list: [ [actions:[]] ]
-     Scope: [type:repository, name:hello-world-1, actions:[push, pull]] -> Access list: [[type:repository, name:hello-world-1, actions:[pull, push]]]
-     Scope: [[type:repository, name:hello-world-1, actions:[push, pull]], [type:repository, name:hello-world-2, actions:[pull]]] -> ?
-   */
 }
