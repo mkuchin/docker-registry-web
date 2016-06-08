@@ -145,6 +145,7 @@ grails {
   plugin {
     springsecurity {
       successHandler.alwaysUseDefault = true
+      logout.postOnly = false
       rejectIfNoRule = false
       fii.rejectPublicInvocations = false
       controllerAnnotations.staticRules = [
@@ -164,6 +165,7 @@ grails {
 }
 auth.InterceptUrlMap = [
     [pattern: '/login/*', access: ['permitAll']],
+    [pattern: '/logout/*', access: ['isAuthenticated()']],
     [pattern: '/user/*', access: ["hasRole('UI_ADMIN')"]],
     [pattern: '/role/*', access: ["hasRole('UI_ADMIN')"]],
     [pattern: '/api/*', access: ['permitAll']],
