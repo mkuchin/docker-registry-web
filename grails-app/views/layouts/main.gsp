@@ -52,7 +52,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false"><strong><sec:username/><span class="caret"></span></strong></a>
                         <ul class="dropdown-menu">
-                            <li><g:link controller="account" action="index">My Profile</g:link></li>
+                            <li><g:link controller="account" action="index">My Account</g:link></li>
                             <li role="separator" class="divider"></li>
                             <li><g:link controller="logout" action="index">Log Out</g:link></li>
                         </ul>

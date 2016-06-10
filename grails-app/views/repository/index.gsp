@@ -12,8 +12,8 @@
             <li class="active">Home</li>
         </ol>
 
-        <g:if test="${flash.message}">
-            <div class="alert alert-danger" role="alert">${flash.message}</div>
+        <g:if test="${message}">
+            <div class="alert alert-danger" role="alert">${message}</div>
         </g:if>
         <div class="page-header"><h1>Repositories</h1></div>
         <dl>

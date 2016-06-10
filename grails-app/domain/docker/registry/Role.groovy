@@ -25,6 +25,10 @@ class Role implements Serializable {
     this.authority = authority
   }
 
+  List<AccessControl> getAcls() {
+    RoleAccess.findAllByRole(this).acl
+  }
+
   static constraints = {
     authority blank: false, unique: true
   }

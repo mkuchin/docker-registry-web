@@ -19,6 +19,7 @@ class RepositoryController {
     boolean pagination = false
     def next = null
     boolean hasNext = false
+    def message
     def url = "_catalog?n=${recordsPerPage}"
     try {
       if (params.start) {
@@ -37,9 +38,9 @@ class RepositoryController {
       }
     } catch (e) {
       log.error "Can't access registry: $url", e
-      flash.message = e.message
+      message = e.message
     }
-    [repos: repoCount, pagination: pagination, next: next, prev: params.start, hasNext: hasNext]
+    [repos: repoCount, pagination: pagination, next: next, prev: params.start, hasNext: hasNext, message: message]
   }
 
   def tags() {

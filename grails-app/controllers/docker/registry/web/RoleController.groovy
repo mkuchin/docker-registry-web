@@ -15,8 +15,7 @@ class RoleController {
 
   def show() {
     def role = Role.get(params.id)
-    def acls = RoleAccess.findAllByRole(role).acl
-    [role: role, acls: acls]
+    [role: role]
   }
 
   def deleteAcl() {
