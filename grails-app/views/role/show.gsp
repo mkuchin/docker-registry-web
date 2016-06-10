@@ -7,25 +7,25 @@
 
 <body>
 <div class="row">
+    <ol class="breadcrumb">
+        <li><g:link uri="/">Home</g:link></li>
+        <li><g:link action="index">Roles</g:link></li>
+        <li class="active">${role.authority}</li>
+    </ol>
+
+    <div class="page-header"><h3>Role: ${role.authority}
+        <g:if test="${role.specialRole}">
+            </h3><div class="alert alert-warning" role="alert">Special Role: ${role.specialRoleDescription}</div>
+        </g:if>
+        <g:else>
+            <span class="pull-right">
+                <g:link class="btn btn-danger" action="delete" id="${role.id}">Delete</g:link>
+            </span></h3>
+        </g:else>
+    </div>
+
     <div class="col-md-8 col-lg-offset-2">
-        <ol class="breadcrumb">
-            <li><g:link uri="/">Home</g:link></li>
-            <li><g:link action="index">Roles</g:link></li>
-            <li class="active">${role.authority}</li>
-        </ol>
-
-        <div class="page-header"><h3>Role: ${role.authority}
-            <g:if test="${role.specialRole}">
-                </h3><div class="alert alert-warning" role="alert">Special Role: ${role.specialRoleDescription}</div>
-            </g:if>
-            <g:else>
-                <span class="pull-right">
-                    <g:link class="btn btn-danger" action="delete" id="${role.id}">Delete</g:link>
-                </span></h3>
-            </g:else>
-
-            <g:render template="role" model="[role: role]"/>
-        </div>
+        <g:render template="role" model="[role: role]"/>
     </div>
 </body>
 </html>
