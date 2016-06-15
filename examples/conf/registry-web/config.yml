@@ -4,4 +4,5 @@ registry:
    readonly: false
    auth:
      enabled: true
-     key: /etc/docker/registry/auth.key
+     key: /conf/auth.key
+     issuer: test

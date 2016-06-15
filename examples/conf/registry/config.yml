@@ -11,7 +11,7 @@ http:
 
 auth:
   token:
-    realm: http://registry-web:8080/api/auth
+    realm: http://localhost:8080/api/auth
     service: localhost:5000
     issuer: test
     rootcertbundle: /etc/docker/registry/auth.crt
@@ -22,7 +22,7 @@ log:
 notifications:
   endpoints:
     - name: listener
-      url: https://registry-web:8080/api/notification
+      url: http://registry-web:8080/api/notification
       timeout: 500ms
       threshold: 5
       backoff: 1s  
