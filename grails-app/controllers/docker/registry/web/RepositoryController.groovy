@@ -26,7 +26,12 @@ class RepositoryController {
         url += "&last=${params.start}"
       }
       def restResponse = restService.get(url, restService.generateAccess('catalog', '*', 'registry'))
+      if (!restResponse.statusCode.'2xxSuccessful') {
+        def statusCode = restResponse.statusCode
+        log.warn "URI: '$url' responseCode: ${statusCode}"
+        message = "status=${statusCode} ${statusCode.name()} ${restResponse.text}"
 
+      }
       hasNext = restResponse.headers.getFirst('Link') != null
       pagination = hasNext || params.prev != null
       def repos = restResponse.json.repositories
@@ -40,7 +45,7 @@ class RepositoryController {
       log.error "Can't access registry: $url", e
       message = e.message
     }
-    [repos: repoCount, pagination: pagination, next: next, prev: params.start, hasNext: hasNext, message: message]
+    [repos: repoCount, pagination: pagination, next: next, prev: params.start, hasNext: hasNext, registryName: registryName, message: message]
   }
 
   def tags() {

@@ -9,6 +9,8 @@ import grails.transaction.Transactional
 @Transactional
 class UserController {
 
+  def springSecurityService
+
   def index() {
     def users = User.list()
     [list: users]
@@ -17,12 +19,14 @@ class UserController {
   def show() {
     def user = User.get(params.id)
     def roles = Role.list() - user.authorities
-    def events = Event.findAllByUser(user, [max: 10, sort: 'id', order: 'desc'])
-    [user: user, roles: roles, events: events]
+    def events = Event.findAllByUsername(user.username, [max: 10, sort: 'id', order: 'desc'])
+    [user: user, roles: roles, events: events, current: user == springSecurityService.currentUser]
   }
 
   def edit() {
     def user = User.get(params.id)
+    if (user == springSecurityService.currentUser)
+      redirect(controller: 'account', action: 'index')
     [user: user]
   }
 
@@ -37,6 +41,7 @@ class UserController {
     def user = User.get(params.userId)
     def role = Role.get(params.id)
     def userRole = UserRole.findByUserAndRole(user, role)
+    //todo: prevent deletion of last admin
     userRole.delete()
     redirect(action: 'show', id: params.userId)
   }
@@ -49,10 +54,15 @@ class UserController {
 
   def delete() {
     def user = User.get(params.id)
-    log.info "Deleting user: ${user}"
-    UserRole.findAllByUser(user)*.delete()
-    user.delete()
-    redirect action: 'index'
+    if (user == springSecurityService.currentUser) {
+      log.error("Can't delete current user!")
+      redirect action: 'show', id: params.id
+    } else {
+      log.info "Deleting user: ${user}"
+      UserRole.findAllByUser(user)*.delete()
+      user.delete()
+      redirect action: 'index'
+    }
   }
 
   def add() {

@@ -7,25 +7,24 @@
 
 <body>
 <div class="row">
-    <ol class="breadcrumb">
+    <g:set var="buttons">
+        <span class="pull-right">
+            <g:if test="${role.specialRole}">
+                <small class="alert-warning">Special Role: ${role.specialRoleDescription}</small>
+            </g:if>
+            <g:else>
+                <g:link class="btn btn-danger" action="delete" id="${role.id}">Delete Role</g:link>
+            </g:else>
+        </span>
+    </g:set>
+    <g:header title='Role: ${role.authority}${raw(buttons)}'>
         <li><g:link uri="/">Home</g:link></li>
         <li><g:link action="index">Roles</g:link></li>
         <li class="active">${role.authority}</li>
-    </ol>
-
-    <div class="page-header"><h3>Role: ${role.authority}
-        <g:if test="${role.specialRole}">
-            </h3><div class="alert alert-warning" role="alert">Special Role: ${role.specialRoleDescription}</div>
-        </g:if>
-        <g:else>
-            <span class="pull-right">
-                <g:link class="btn btn-danger" action="delete" id="${role.id}">Delete</g:link>
-            </span></h3>
-        </g:else>
-    </div>
-
-    <div class="col-md-8 col-lg-offset-2">
+    </g:header>
+    <div class="col-md-8">
         <g:render template="role" model="[role: role]"/>
+
     </div>
 </body>
 </html>

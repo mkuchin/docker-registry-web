@@ -7,19 +7,17 @@
 
 <body>
 <div class="row">
-    <div class="col-md-12">
-        <ol class="breadcrumb">
-            <li class="active">Home</li>
-        </ol>
-
+    <g:header title='Repositories'>
+        <li class="active">Home</li>
+    </g:header>
+    <div class="col-md-8">
+        <dl>
+            <dt>Registry</dt>
+            <dd>${registryName}</dd>
+        </dl>
         <g:if test="${message}">
             <div class="alert alert-danger" role="alert">${message}</div>
         </g:if>
-        <div class="page-header"><h1>Repositories</h1></div>
-        <dl>
-            <dt>Registry</dt>
-            <dd>${grailsApplication.config.registry.name}</dd>
-        </dl>
         <table class="table table-bordered">
             <tr><th>Repository</th><th>Tags</th></tr>
             <g:each in="${repos}" var="repo">

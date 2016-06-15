@@ -25,22 +25,19 @@
     <p>Do you want to proceed?</p>
 </g:modal>
 <div class="row">
+    <g:header title='Tags'>
+        <li><g:link action="index">Home</g:link></li>
+        <li class="active">${params.id.decodeURL()}</li>
+    </g:header>
     <div class="col-md-12">
-        <ol class="breadcrumb">
-            <li><g:link action="index">Home</g:link></li>
-            <li class="active">${params.id.decodeURL()}</li>
-        </ol>
         <g:if test="${flash.deleteAction}">
             <div class="alert alert-${flash.success ? 'success' : 'danger'}" role="alert">
                 ${raw(flash.message)}
             </div>
         </g:if>
-        <div class="page-header">
-            <h1>Tags</h1>
-        </div>
         <dl>
             <dt>Repository</dt>
-            <dd>${grailsApplication.config.registry.name}/${params.id.decodeURL()}</dd>
+            <dd>${registryName}/${params.id.decodeURL()}</dd>
         </dl>
 
         <div class="table-responsive">

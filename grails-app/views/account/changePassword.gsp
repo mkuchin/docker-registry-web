@@ -7,13 +7,12 @@
 
 <body>
 <div class="row">
-    <ol class="breadcrumb">
+    <g:header title='User: ${user.username}'>
         <li><g:link uri="/">Home</g:link></li>
         <li><g:link action="index">My Account</g:link></li>
         <li class="active">Change Password</li>
-    </ol>
-
-    <div class='col-md-6 col-md-offset-3'>
+    </g:header>
+    <div class='col-md-6'>
         <g:if test='${flash.message}'>
             <p class="alert bg-danger">${flash.message}</p>
         </g:if>
@@ -22,7 +21,7 @@
                 <label for='oldPassword' class="col-sm-4 control-label">Current Password</label>
 
                 <div class="col-sm-8">
-                    <input type='text' class='form-control' name='oldPassword' id='oldPassword'/>
+                    <input type='password' class='form-control' name='oldPassword' id='oldPassword'/>
                 </div>
             </div>
 

@@ -7,13 +7,11 @@
 
 <body>
 <div class="row">
-    <div class="col-md-8 col-lg-offset-2">
-        <ol class="breadcrumb">
-            <li><g:link uri="/">Home</g:link></li>
-            <li class="active">Users</li>
-        </ol>
-
-        <div class="page-header"><h3>Users</h3></div>
+    <g:header title='Users'>
+        <li><g:link uri="/">Home</g:link></li>
+        <li class="active">Users</li>
+    </g:header>
+    <div class="col-md-6">
         <table class="table table-bordered">
             <tr><th>Username</th><th>Roles</th></tr>
             <g:each in="${list}" var="user">

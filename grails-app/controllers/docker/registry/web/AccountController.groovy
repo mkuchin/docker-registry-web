@@ -1,5 +1,6 @@
 package docker.registry.web
 
+import docker.registry.Event
 import docker.registry.User
 import grails.transaction.Transactional
 
@@ -10,7 +11,8 @@ class AccountController {
 
   def index() {
     def user = springSecurityService.currentUser
-    [user: user]
+    def events = Event.findAllByUsername(user.username, [max: 20, order: 'desc', sort: 'id'])
+    [user: user, events: events]
   }
 
 

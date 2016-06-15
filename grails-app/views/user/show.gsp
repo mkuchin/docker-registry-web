@@ -6,23 +6,27 @@
 </head>
 
 <body>
+<g:set var="buttons">
+    <span class="pull-right">
+        <g:if test="${user.accountLocked}">
+            <span class="label label-default">
+                <span class="glyphicon glyphicon-ban-circle" aria-label="Locked"></span>
+                Locked</span></g:if>
+        <g:link class="btn btn-primary" action="edit" id="${user.id}">Modify</g:link>
+        <a class="btn btn-danger"
+           href="${g.createLink(action: 'delete', id: user.id)}" ${current ? 'disabled' : ''}>Delete</a>
+    </span>
+</g:set>
 <div class="row">
-    <div class="col-md-8 col-lg-offset-2">
-        <ol class="breadcrumb">
-            <li><g:link uri="/">Home</g:link></li>
-            <li><g:link action="index">Users</g:link></li>
-            <li class="active">User ${user.username}</li>
-        </ol>
+    <g:header title='User: ${user.username}${raw(buttons)}'>
+        <li><g:link uri="/">Home</g:link></li>
+        <li><g:link action="index">Users</g:link></li>
+        <li class="active">${user.username}</li>
+    </g:header>
 
-        <div class="page-header"><h3>User: ${user.username}
-            <span class="pull-right">
-                <g:if test="${user.accountLocked}">
-                    <span class="label label-default">
-                        <span class="glyphicon glyphicon-ban-circle" aria-label="Locked"></span>
-                        Locked</span></g:if>
-                <g:link class="btn btn-primary" action="edit" id="${user.id}">Modify</g:link>
-                <g:link class="btn btn-danger" action="delete" id="${user.id}">Delete</g:link></span></h3>
-        </div>
+
+    <div class="col-md-6">
+
         <h4>Roles:</h4>
         <ul>
             <g:each in="${user.authorities}" var="role">
@@ -47,9 +51,8 @@
         </ul>
     </div>
     <g:if test="${events}">
-        <hr/>
-
-        <div class="col-md-8 col-lg-offset-2">
+        <div class="col-md-8">
+            <hr/>
             <h4>Latest events:</h4>
             <g:render template="/event/events" model="[list: events]"/>
         </div>

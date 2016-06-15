@@ -2,7 +2,8 @@
 <g:if test="${!role.specialRole}">
     <h4>Access control list</h4>
     <table class="table-bordered table table-hover">
-        <tr><th>IP</th><th>Repository</th><th>Permissions</th><th>Comments</th>
+        <tr><th class="text-center">IP</th><th class="text-center">Repository</th><th
+                class="text-center">Permissions</th><th class="text-center">Comments</th>
             <g:if test="${!readonly}">
                 <th></th>
             </g:if>

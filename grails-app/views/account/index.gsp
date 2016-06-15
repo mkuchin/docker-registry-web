@@ -7,24 +7,21 @@
 
 <body>
 <div class="row">
-    <ol class="breadcrumb">
+    <g:set var="buttons">
+        <span class="pull-right"><g:link class="btn btn-primary" action="changePassword">Change password</g:link></span>
+    </g:set>
+    <g:header title='User: ${user.username}${raw(buttons)}'>
         <li><g:link uri="/">Home</g:link></li>
         <li class="active">My Account</li>
-    </ol>
+    </g:header>
 
-    <div class="col-md-8 col-lg-offset-2">
+    <div class="col-md-8">
         <g:if test='${flash.message}'>
             <p class="alert bg-info">${flash.message}</p>
         </g:if>
-        <div class="page-header"><h3>User: ${user.username}
-            <span class="pull-right">
-                <g:if test="${user.accountLocked}">
-                    <span class="label label-default">
-                        <span class="glyphicon glyphicon-ban-circle" aria-label="Locked"></span>
-                        Locked</span></g:if>
-                <g:link class="btn btn-primary" action="changePassword">Change password</g:link>
-        </div>
-        <h4>Roles:</h4>
+
+        <h3>Roles:</h3>
+
         <ul>
             <g:each in="${user.authorities}" var="role">
                 <li>${role.authority}
@@ -34,10 +31,8 @@
         </ul>
     </div>
     <g:if test="${events}">
-        <hr/>
-
-        <div class="col-md-8 col-lg-offset-2">
-            <h4>Latest events:</h4>
+        <div class="col-md-8">
+            <h3>Latest events:</h3>
             <g:render template="/event/events" model="[list: events]"/>
         </div>
     </g:if>
