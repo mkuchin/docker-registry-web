@@ -17,7 +17,7 @@
 
     <div class="col-md-8">
         <g:if test='${flash.message}'>
-            <p class="alert bg-info">${flash.message}</p>
+            <p class="alert bg-success">${flash.message}</p>
         </g:if>
 
         <h3>Roles:</h3>
