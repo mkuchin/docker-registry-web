@@ -1,0 +1,28 @@
+version: 0.1
+
+storage:
+  filesystem:
+    rootdirectory: /registry
+  delete:
+    enabled: true
+    
+http:
+  addr: 0.0.0.0:5000    
+
+auth:
+  token:
+    realm: http://registry-web:8080/api/auth
+    service: localhost:5000
+    issuer: test
+    rootcertbundle: /etc/docker/registry/auth.crt
+
+log:
+  level: debug
+  
+notifications:
+  endpoints:
+    - name: listener
+      url: https://registry-web:8080/api/notification
+      timeout: 500ms
+      threshold: 5
+      backoff: 1s  

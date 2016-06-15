@@ -1,0 +1,7 @@
+registry:
+   url: http://registry:5000/v2
+   name: localhost:5000
+   readonly: false
+   auth:
+     enabled: true
+     key: /etc/docker/registry/auth.key
