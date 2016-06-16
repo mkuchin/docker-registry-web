@@ -14,7 +14,7 @@ It will run docker registry `localhost:5000` and web ui on `http://localhost:808
 
 ### How to check if it working:
   
-1. Login into http://localhost:8080/ with admin/admin username/password
+1. Login into `http://localhost:8080/` with *admin/admin* username/password
 2. Create test user and grant 'write-all' role to that user.
 3. On the shell:
 
