@@ -15,12 +15,14 @@
         <g:form action="create" autocomplete="off">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="username">Username</label> <g:textField name="username" class="form-control"
+                    <label for="username">Username</label> <g:textField name="username" autocomplete="off"
+                                                                        class="form-control"
                                                                         required=""/>
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Password</label> <g:passwordField name="password" class="form-control"
+                    <label for="password">Password</label> <g:passwordField name="password" autocomplete="off"
+                                                                            class="form-control"
                                                                             required=""/>
                 </div>
 
