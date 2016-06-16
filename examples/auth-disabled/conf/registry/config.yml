@@ -9,16 +9,6 @@ storage:
 http:
   addr: 0.0.0.0:5000    
 
-auth:
-  token:
-    realm: http://localhost:8080/api/auth
-    service: localhost:5000
-    issuer: test
-    rootcertbundle: /etc/docker/registry/auth.crt
-
-log:
-  level: debug
-  
 notifications:
   endpoints:
     - name: listener
