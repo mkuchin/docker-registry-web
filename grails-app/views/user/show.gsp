@@ -9,9 +9,9 @@
 <g:set var="buttons">
     <span class="pull-right">
         <g:if test="${user.accountLocked}">
-            <span class="label label-default">
-                <span class="glyphicon glyphicon-ban-circle" aria-label="Locked"></span>
-                Locked</span></g:if>
+            <span class="label label-warning">
+                <span class="glyphicon glyphicon-lock" aria-label="Locked" title="Account Locked"></span></span>
+        </g:if>
         <g:link class="btn btn-primary" action="edit" id="${user.id}">Modify</g:link>
         <a class="btn btn-danger"
            href="${g.createLink(action: 'delete', id: user.id)}" ${current ? 'disabled' : ''}>Delete</a>
@@ -23,10 +23,10 @@
         <li><g:link action="index">Users</g:link></li>
         <li class="active">${user.username}</li>
     </g:header>
-
-
+    <g:if test='${flash.message}'>
+        <p class="alert bg-success">${flash.message}</p>
+    </g:if>
     <div class="col-md-6">
-
         <h4>Roles:</h4>
         <ul>
             <g:each in="${user.authorities}" var="role">

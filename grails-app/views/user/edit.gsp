@@ -16,12 +16,13 @@
     <div class="col-md-6">
         <g:form action="update" autocomplete="off">
             <g:hiddenField name="id" value="${user.id}"/>
+            <g:passwordField name="password" class="hidden"/>
             <div class="form-group">
-                <label for="password">Password</label> <g:passwordField name="password" class="form-control"
-                                                                        placeholder="new password"
-                                                                        onfocus=""/>
+                <label for="password">Password</label>
+                <!-- readonly workaround to prevent save password -->
+                <g:passwordField autocomplete="off" readonly="" name="password" class="form-control enabled"
+                                 placeholder="new password" onfocus="\$(this).removeAttr('readonly');"/>
             </div>
-
             <div class="checkbox">
                 <label>
                     <g:checkBox name="accountLocked" value="${user.accountLocked}"/>

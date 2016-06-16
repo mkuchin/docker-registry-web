@@ -48,7 +48,15 @@ class UserController {
 
   def update() {
     def user = User.get(params.id)
-    user.properties = params
+    user.accountLocked = params.accountLocked as boolean
+    //update password only if it entered
+    if (params.password) {
+      user.password = params.password
+    }
+
+    if (user.isDirty()) {
+      flash.message = "User '${user.username}' have been updated"
+    }
     redirect action: 'show', id: params.id
   }
 
