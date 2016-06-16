@@ -12,6 +12,11 @@
         <li><g:link action="index">Roles</g:link></li>
         <li class="active">Add Role</li>
     </g:header>
+    <g:if test='${flash.errors}'>
+        <g:each in="${flash.errors.allErrors}" var="error">
+            <p class="alert bg-danger"><g:message error="${error}"/></p>
+        </g:each>
+    </g:if>
     <div class="col-md-6">
         <g:form action="create">
                 <div class="form-group">

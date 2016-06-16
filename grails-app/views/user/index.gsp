@@ -29,7 +29,7 @@
                 </tr>
             </g:each>
         </table>
-        <g:link class="btn btn-primary" action="add">Add</g:link>
+        <g:link class="btn btn-primary" action="add">Create new user</g:link>
     </div>
 </div>
 </body>

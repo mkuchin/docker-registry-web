@@ -45,7 +45,12 @@ class RoleController {
 
   def create() {
     def role = new Role(authority: params.role)
-    role.save(failOnError: true)
+    role.save()
+    if (role.hasErrors()) {
+      log.warn "Error saving role: ${role.errors}"
+      flash.errors = role.errors
+      redirect action: 'add'
+    } else
     redirect action: 'show', id: role.id
   }
 

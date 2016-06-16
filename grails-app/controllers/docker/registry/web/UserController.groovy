@@ -70,7 +70,13 @@ class UserController {
 
   def create() {
     def user = new User(params)
+    log.info "Creating user: ${user.username}"
     user.save()
+    if (user.hasErrors()) {
+      log.warn "Error saving user: ${user.errors}"
+      flash.errors = user.errors
+      redirect action: 'add'
+    } else
     redirect action: 'show', id: user.id
   }
 }
