@@ -10,14 +10,14 @@
     <g:header title='Repositories'>
         <li class="active">Home</li>
     </g:header>
+    <g:if test="${message}">
+        <div class="alert alert-danger" role="alert">${message}</div>
+    </g:if>
     <div class="col-md-8">
         <dl>
             <dt>Registry</dt>
             <dd>${registryName}</dd>
         </dl>
-        <g:if test="${message}">
-            <div class="alert alert-danger" role="alert">${message}</div>
-        </g:if>
         <table class="table table-bordered">
             <tr><th>Repository</th><th>Tags</th></tr>
             <g:each in="${repos}" var="repo">
