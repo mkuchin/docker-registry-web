@@ -24,22 +24,22 @@ class AccountController {
     User user = springSecurityService.currentUser
     //validates raw password against hashed
     if (!passwordEncoder.isPasswordValid(user.password, oldPassword, null)) {
-      flash.message = "Current password is incorrect"
+      flash.message = 'password.incorrect'
       log.warn flash.message
       redirect(action: 'changePassword')
     } else {
       if (newPassword.length() == 0) {
-        flash.message = "New password is empty"
+        flash.message = 'password.empty'
         log.warn flash.message
         redirect(action: 'changePassword')
       } else if (newPassword != newPasswordRepeat) {
-        flash.message = "Password does not match the confirm password"
+        flash.message = 'password.notmatch'
         log.warn flash.message
         redirect(action: 'changePassword')
       } else {
         log.warn "Updating password for user=${user}"
         user.password = newPassword
-        flash.message = "Password updated"
+        flash.message = 'password.updated'
         redirect(action: 'index')
       }
     }

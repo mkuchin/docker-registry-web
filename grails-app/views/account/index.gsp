@@ -14,12 +14,10 @@
         <li><g:link uri="/">Home</g:link></li>
         <li class="active">My Account</li>
     </g:header>
-
+    <g:if test='${flash.message}'>
+        <p class="alert bg-success"><g:message code="${flash.message}"/></p>
+    </g:if>
     <div class="col-md-8">
-        <g:if test='${flash.message}'>
-            <p class="alert bg-success">${flash.message}</p>
-        </g:if>
-
         <h3>Roles:</h3>
 
         <ul>
