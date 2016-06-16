@@ -17,6 +17,9 @@ class TokenService {
   @Value('${registry.auth.key}')
   String keyFilename
 
+  @Value('${registry.auth.enabled}')
+  boolean authEnabled
+
   @Value('${registry.name}')
   String registryName
 
@@ -35,7 +38,10 @@ class TokenService {
       this.keyDigest = PemUtils.getKeyDigest(keyPair.public)
       log.info "Key file loaded, digest: ${keyDigest}"
     } else {
-      log.warn "No AUTH_KEYFILE configured"
+      if (authEnabled)
+        log.warn "Key file not found: ${keyFilename}"
+      else
+        log.warn "Authorization disabled"
     }
   }
 
@@ -63,6 +69,8 @@ class TokenService {
 
   @Cacheable("tokens")
   Map generate(String subject, List access) {
+    if (!authEnabled)
+      return null
     int time = System.currentTimeMillis() / 1000
     def headerMap = [alg: "RS256", typ: "JWT", kid: keyDigest]
     def payloadMap = [
