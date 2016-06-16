@@ -10,7 +10,7 @@
     <g:set var="buttons">
         <span class="pull-right">
             <g:if test="${role.specialRole}">
-                <small class="alert-warning">Special Role: ${role.specialRoleDescription}</small>
+                <small class="alert-warning">Special Role: <g:message code="${role.code}"/></small>
             </g:if>
             <g:else>
                 <g:link class="btn btn-danger" action="delete" id="${role.id}">Delete Role</g:link>

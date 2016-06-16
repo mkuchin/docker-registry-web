@@ -8,16 +8,16 @@ import groovy.transform.ToString
 class Role implements Serializable {
 
   private static final long serialVersionUID = 1
-  private static specialRoles = ['UI_USER': 'Allows UI access', 'UI_ADMIN': 'Allows UI admin access']
+  private static specialRoles = ['UI_USER', 'UI_ADMIN'] as Set
 
   String authority
 
   boolean isSpecialRole() {
-    specialRoles.keySet().contains(authority)
+    specialRoles.contains(authority)
   }
 
-  String getSpecialRoleDescription() {
-    specialRoles[authority]
+  String getCode() {
+    "role.${authority}"
   }
 
   Role(String authority) {
