@@ -4,6 +4,7 @@
 <head>
     <title>Add User</title>
 </head>
+
 <body>
 <div class="row">
     <g:header title='Create User'>
@@ -18,27 +19,28 @@
     </g:if>
     <div class="col-md-6">
         <g:form action="create">
-                <div class="form-group">
-                    <label for="username">Username</label> <g:textField name="username" autocomplete="off"
-                                                                        class="form-control"
-                                                                        required=""/>
-                </div>
-            <input type="password" name="password" class="hidden"/>
-
+            <div class="form-group">
+                <label for="username">Username</label> <g:textField name="username" autocomplete="off"
+                                                                    class="form-control"
+                                                                    required=""/>
+            </div>
 
             <div class="form-group">
-                    <label for="password">Password</label> <g:passwordField name="password" autocomplete="off"
-                                                                            class="form-control"
-                                                                            required=""/>
-                </div>
+                <label for="password">Password</label> <g:passwordField name="password" autocomplete="off"
+                                                                        class="form-control"
+                                                                        required=""/>
+            </div>
 
-                <div class="checkbox">
-                    <label>
-                        <g:checkBox name="accountLocked"/>
-                        Locked
-                    </label>
-                </div>
-                <g:submitButton name="Create" class="btn btn-primary"/>
+            <!-- Disable autocomplete workaround -->
+            <input type="password" name="password" class="hidden"/>
+
+            <div class="checkbox">
+                <label>
+                    <g:checkBox name="accountLocked"/>
+                    Locked
+                </label>
+            </div>
+            <g:submitButton name="Create" class="btn btn-primary"/>
         </g:form>
     </div>
 </div>

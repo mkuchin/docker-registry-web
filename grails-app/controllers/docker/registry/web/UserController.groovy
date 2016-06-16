@@ -70,6 +70,7 @@ class UserController {
 
   def create() {
     def user = new User(params)
+    user.password = params.list('password')[0]
     log.info "Creating user: ${user.username}"
     user.save()
     if (user.hasErrors()) {
