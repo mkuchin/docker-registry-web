@@ -92,7 +92,7 @@ environments {
   }
   production {
     grails.logging.jul.usebridge = false
-    yaml.path = '/conf/config.yml'
+    yaml.path = System.env.CONFIG_PATH ?: '/conf/config.yml'
   }
 }
 
