@@ -6,6 +6,11 @@
 </head>
 
 <body>
+<g:modal id="deleteUser" title="Confirm Delete" fields="['user']">
+    <p>You are about to delete user <strong id="user"></strong>.</p>
+
+    <p>Do you want to proceed?</p>
+</g:modal>
 <g:set var="buttons">
     <span class="pull-right">
         <g:if test="${user.accountLocked}">
@@ -13,8 +18,9 @@
                 <span class="glyphicon glyphicon-lock" aria-label="Locked" title="Account Locked"></span></span>
         </g:if>
         <g:link class="btn btn-primary" action="edit" id="${user.id}">Modify</g:link>
-        <a class="btn btn-danger"
-           href="${g.createLink(action: 'delete', id: user.id)}" ${current ? 'disabled' : ''}>Delete</a>
+    <a href="#" data-user="${user.username}" class="btn btn-danger"
+       data-href="${g.createLink(action: 'delete', params: [id: user.id])}"
+       data-toggle="modal" data-target="#deleteUser" ${current ? 'disabled' : ''}>Delete</a></td>
     </span>
 </g:set>
 <div class="row">
@@ -24,7 +30,7 @@
         <li class="active">${user.username}</li>
     </g:header>
     <g:if test='${flash.message}'>
-        <p class="alert bg-success">${flash.message}</p>
+        <p class="alert bg-success"><g:message code="${flash.message}" args="[user.username, flash.role]"/></p>
     </g:if>
     <div class="col-md-6">
         <h4>Roles:</h4>

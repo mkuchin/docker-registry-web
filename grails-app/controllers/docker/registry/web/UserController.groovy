@@ -34,6 +34,8 @@ class UserController {
     def user = User.get(params.userId)
     def role = Role.get(params.roleId)
     new UserRole(user: user, role: role).save(failOnError: true)
+    flash.message = 'user.role.added'
+    flash.role = role.authority
     redirect(action: 'show', id: params.userId)
   }
 
@@ -42,6 +44,8 @@ class UserController {
     def role = Role.get(params.id)
     def userRole = UserRole.findByUserAndRole(user, role)
     //todo: prevent deletion of last admin
+    flash.message = 'user.role.deleted'
+    flash.role = role.authority
     userRole.delete()
     redirect(action: 'show', id: params.userId)
   }
@@ -55,7 +59,7 @@ class UserController {
     }
 
     if (user.isDirty()) {
-      flash.message = "User '${user.username}' have been updated"
+      flash.message = "user.updated"
     }
     redirect action: 'show', id: params.id
   }
@@ -69,6 +73,9 @@ class UserController {
       log.info "Deleting user: ${user}"
       UserRole.findAllByUser(user)*.delete()
       user.delete()
+      flash.username = user.username
+      log.info flash.username
+      flash.message = 'user.deleted'
       redirect action: 'index'
     }
   }
@@ -85,7 +92,9 @@ class UserController {
       log.warn "Error saving user: ${user.errors}"
       flash.errors = user.errors
       redirect action: 'add'
-    } else
-    redirect action: 'show', id: user.id
+    } else {
+      flash.message = 'user.created'
+      redirect action: 'show', id: user.id
+    }
   }
 }

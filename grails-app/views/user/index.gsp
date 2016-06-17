@@ -11,6 +11,9 @@
         <li><g:link uri="/">Home</g:link></li>
         <li class="active">Users</li>
     </g:header>
+    <g:if test='${flash.message}'>
+        <p class="alert bg-success"><g:message code="${flash.message}" args="[flash.username]"/></p>
+    </g:if>
     <div class="col-md-6">
         <table class="table table-bordered">
             <tr><th>Username</th><th>Roles</th></tr>
