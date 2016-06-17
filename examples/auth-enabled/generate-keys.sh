@@ -6,5 +6,8 @@ openssl req \
     -subj "/CN=localhost" \
     -nodes \
     -x509 \
-    -keyout conf/registry-web/auth.key \
+    -keyout auth.key \
     -out conf/registry/auth.cert
+
+openssl rsa -in auth.key -out conf/registry-web/auth.key
+rm auth.key

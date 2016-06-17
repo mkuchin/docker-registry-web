@@ -8,6 +8,9 @@ services:
        - ./conf/nginx:/etc/nginx/conf.d/:ro
     networks:
       - registry-net
+    depends_on:
+      - registry
+      - registry-web
   registry-web:
     image: hyper/docker-registry-web:auth-experimental
     ports:
@@ -25,6 +28,7 @@ services:
       - 5000:5000
     volumes:
       - ./conf/registry:/etc/docker/registry:ro
+      - ./registry:/var/lib/registry
     networks:
       - registry-net
 

@@ -12,7 +12,7 @@ http:
 auth:
   token:
     realm: http://localhost:8080/api/auth
-    service: localhost:5000
+    service: localhost
     issuer: test
     rootcertbundle: /etc/docker/registry/auth.cert
 
