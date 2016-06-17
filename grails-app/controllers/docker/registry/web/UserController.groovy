@@ -33,10 +33,16 @@ class UserController {
   def addRole() {
     def user = User.get(params.userId)
     def role = Role.get(params.roleId)
-    new UserRole(user: user, role: role).save(failOnError: true)
-    flash.message = 'user.role.added'
-    flash.role = role.authority
-    redirect(action: 'show', id: params.userId)
+    if (!role) {
+      flash.message = 'user.role.invalid'
+      flash.error = true
+      redirect(action: 'show', id: params.userId)
+    } else {
+      new UserRole(user: user, role: role).save(failOnError: true)
+      flash.message = 'user.role.added'
+      flash.role = role.authority
+      redirect(action: 'show', id: params.userId)
+    }
   }
 
   def deleteRole() {

@@ -30,14 +30,16 @@
         <li class="active">${user.username}</li>
     </g:header>
     <g:if test='${flash.message}'>
-        <p class="alert bg-success"><g:message code="${flash.message}" args="[user.username, flash.role]"/></p>
+        <p class="alert bg-${flash.error ? 'danger' : 'success'}"><g:message code="${flash.message}"
+                                                                             args="[user.username, flash.role]"/></p>
     </g:if>
     <div class="col-md-6">
         <h4>Roles:</h4>
         <ul>
             <g:each in="${user.authorities}" var="role">
-                <li>${role.authority} <g:link action="deleteRole" id="${role.id}"
-                                              params="[userId: user.id]">
+                <li><g:link controller="role" action="show" id="${role.id}">${role.authority}</g:link> <g:link
+                        action="deleteRole" id="${role.id}"
+                        params="[userId: user.id]">
                     <span class="glyphicon glyphicon-remove text-danger" aria-label="remove"></span></g:link></li>
             </g:each>
 
@@ -47,7 +49,7 @@
                     <g:hiddenField name="userId" value="${user.id}"/>
                     <li>
                         <g:select class="form-control" from="${roles}" name="roleId" optionKey="id"
-                                  optionValue="authority"/>
+                                  optionValue="authority" noSelection="['': '']"/>
 
                         <g:submitButton name="Add" class="btn btn-primary"/>
                     </li>
