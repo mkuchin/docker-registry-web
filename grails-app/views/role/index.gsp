@@ -11,6 +11,9 @@
         <li><g:link uri="/">Home</g:link></li>
         <li class="active">Roles</li>
     </g:header>
+    <g:if test='${flash.message}'>
+        <p class="alert bg-success"><g:message code="${flash.message}" args="[flash.role]"/></p>
+    </g:if>
     <div class="col-md-6">
         <div class="list-group">
             <g:each in="${roles}" var="role">

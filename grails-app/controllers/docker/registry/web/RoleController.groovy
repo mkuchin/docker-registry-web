@@ -15,7 +15,10 @@ class RoleController {
 
   def show() {
     def role = Role.get(params.id)
-    [role: role]
+    def users = UserRole.findAllByRole(role).user
+    log.info users
+    log.info users.size()
+    [role: role, users: users]
   }
 
   def deleteAcl() {
@@ -45,13 +48,16 @@ class RoleController {
 
   def create() {
     def role = new Role(authority: params.role)
+    log.info "Creating role ${role.authority}"
     role.save()
     if (role.hasErrors()) {
       log.warn "Error saving role: ${role.errors}"
       flash.errors = role.errors
       redirect action: 'add'
-    } else
-    redirect action: 'show', id: role.id
+    } else {
+      flash.message = 'role.created'
+      redirect action: 'show', id: role.id
+    }
   }
 
   def delete() {
@@ -68,6 +74,8 @@ class RoleController {
     roleAccess*.delete()
     acls*.delete()
     role.delete()
+    flash.role = role.authority
+    flash.message = 'role.deleted'
     redirect action: 'index'
   }
 }
