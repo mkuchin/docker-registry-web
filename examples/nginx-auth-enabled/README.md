@@ -1,10 +1,18 @@
 ## Example configuration of docker registry, docker-registry-web and nginx
 
-Docker registry and registry-web will be available on localhost on port 80.
+### How to run:
 
-git clone -b auth https://github.com/mkuchin/docker-registry-web.git
-cd docker-registry-web/examples/nginx-auth-enabled/
-docker-compose up
+1. Copy this directory to your host
+2. Generate private key and self signed certificate with script:
+    
+        ./generate-keys.sh
+    
+3. Start containers with docker-compose    
+    
+        docker-compose up
+     
+It will run docker registry on `localhost` and web ui on `http://localhost/`.
+To enable access to registry from other hosts please change docker registry config property `auth.token.realm` to externally accessible url of `registry-web`.
 
 ### How to check if it working:
   
