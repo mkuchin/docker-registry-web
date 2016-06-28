@@ -5,7 +5,7 @@ Web UI, authentication service and event recorder for private docker registry v2
 ## Features:
 
   * Browsing repositories, tags and images in docker registry v2
-  * Optional token based authentication provider with role based permissions
+  * Optional token based authentication provider with role-based permissions
   * Docker registry notification recording and audit
 
 ### Docker pull command
@@ -45,7 +45,7 @@ Web UI, authentication service and event recorder for private docker registry v2
         openssl req -new -newkey rsa:4096 -days 365 -subj "/CN=localhost" \
                 -nodes -x509 -keyout conf/auth.key -out conf/auth.cert
  
- 2. Mount `conf/auth.cert` file to docker registry container. 
+ 2. Mount `conf/auth.cert` file to docker registry container path `/etc/docker/registry/auth.cert`. 
  
  3. Add following fragment to your registry configuration file:
             
@@ -93,9 +93,9 @@ After first start you will have following roles:
 - read-all
 - write-all
 
-You can't delete or modify UI_ADMIN and UI_USER role, they are special roles and allows admin or user access to UI respectivetly.  
-User access allows to browse and delete registry, admin access allows to create, delete and modify users and roles in addition to user access.
-Every non-special role have a list of ACLs, each of ACL grants permission grants permission to `pull`, `pull+push` or `pull+push+delete` 
+You can't delete or modify UI_ADMIN and UI_USER role, they are special roles and allows admin or user access to UI respectively.  
+User access allows to browse registry and delete images, admin access allows to create, delete and modify users and roles in addition to user access.
+Every non-special role has a list of ACLs, each of ACL grants permission grants permission to `pull`, `pull+push` or `pull+push+delete` 
 based on IP and image name [glob matching](https://docs.oracle.com/javase/7/docs/api/java/nio/file/FileSystem.html#getPathMatcher(java.lang.String)).
 For example **read-all** role matches any IP and any image name with glob `*` and grants `pull` permission and
 **write-all** role grants `pull+push` permission for any IP and any image name. 
