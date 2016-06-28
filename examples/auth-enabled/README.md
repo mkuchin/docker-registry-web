@@ -1,7 +1,11 @@
 ## Example configuration of docker registry and docker-registry-web with token authorization
 ### How to run:
 
-1. Copy this directory to your host
+1. Download and extract example files
+        
+        curl -Ls https://github.com/mkuchin/docker-registry-web/releases/download/v0.1.0/examples.tar.gz | tar -xzv
+        cd examples/auth-enabled/
+        
 2. Generate private key and self signed certificate with script:
     
         ./generate-keys.sh

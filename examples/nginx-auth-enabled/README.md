@@ -2,7 +2,11 @@
 
 ### How to run:
 
-1. Copy this directory to your host
+1. Download and extract example files
+        
+        curl -Ls https://github.com/mkuchin/docker-registry-web/releases/download/v0.1.0/examples.tar.gz | tar -xzv
+        cd examples/nginx-auth-enabled/
+        
 2. Generate private key and self signed certificate with script:
     
         ./generate-keys.sh
@@ -12,7 +16,7 @@
         docker-compose up
      
 It will run docker registry on `localhost` and web ui on `http://localhost/`.
-To enable access to registry from other hosts please change docker registry config property `auth.token.realm` to externally accessible url of `registry-web`.
+To enable access to the registry from other hosts please change docker registry config property `auth.token.realm` to externally accessible URL of `registry-web`.
 
 ### How to check if it working:
   
