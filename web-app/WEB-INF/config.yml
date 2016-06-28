@@ -15,7 +15,7 @@ registry:
   # Authentication settings
   auth:
     # Enable authentication
-    enabled: false # not implemented
+    enabled: false
     # Allow web anonymous access
     allow_anonymous: true # not implemented
     # Token issuer
@@ -23,4 +23,4 @@ registry:
     issuer: 'test-issuer'
     # Private key for token signing
     # certificate used on auth.token.rootcertbundle should signed by this key
-    key: ssl/key-dec.pem
+    key: /config/auth.key

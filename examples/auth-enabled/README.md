@@ -16,10 +16,11 @@ It will run docker registry `localhost:5000` and web ui on `http://localhost:808
   
 1. Login into `http://localhost:8080/` with *admin/admin* username/password
 2. Create test user and grant 'write-all' role to that user.
-3. On the shell:
+3. On the local shell:
          
          docker login localhost:5000
          docker pull hello-world
          docker tag hello-world localhost:5000/hello-world:latest
          docker push localhost:5000/hello-world:latest
-
+         docker rmi localhost:5000/hello-world:latest
+		 docker run localhost:5000/hello-world:latest

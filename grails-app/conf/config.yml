@@ -2,8 +2,9 @@
 
 registry:
 # Docker registry url
-  url: 'http://localhost:5000'
+  url: 'http://localhost:5001/v2/'
+  name: 'hub.devspire.com.au'
   auth:
     enabled: true
     #issuer: 'xxx'
-    other: 23423
+    key: ssl/key-dec.pem
