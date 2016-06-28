@@ -11,3 +11,7 @@
 *= require bootstrap
 *= require datatables.min
 */
+
+.form-control.enabled {
+    background-color: #fff !important;
+}

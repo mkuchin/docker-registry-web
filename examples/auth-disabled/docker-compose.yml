@@ -1,0 +1,25 @@
+version: '2'
+services:
+  registry-web:
+    image: hyper/docker-registry-web:auth-experimental
+    ports:
+      - 8080:8080
+    volumes:
+       - ./conf/registry-web:/conf:ro
+       - ./db:/data
+    networks:
+      - registry-net
+    depends_on:
+       - registry
+  registry:
+    image: registry:2.4.1
+    ports:
+      - 5000:5000
+    volumes:
+      - ./conf/registry:/etc/docker/registry:ro
+    networks:
+      - registry-net
+
+networks:
+  registry-net:
+#    driver: default

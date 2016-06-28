@@ -31,6 +31,7 @@
 *.ipr
 *.iml
 *.iws
+*.iml
 
 
 ## Plugin-specific files:
@@ -84,3 +85,4 @@ crashlytics-build.properties
 /target
 
 /registry
+/.slcache

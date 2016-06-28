@@ -88,10 +88,11 @@ grails.hibernate.osiv.readonly = false
 environments {
   development {
     grails.logging.jul.usebridge = true
+    yaml.path = 'grails-app/conf/config.yml'
   }
   production {
     grails.logging.jul.usebridge = false
-    // TODO: grails.serverURL = "http://www.changeme.com"
+    yaml.path = System.env.CONFIG_PATH ?: '/conf/config.yml'
   }
 }
 
@@ -121,10 +122,58 @@ log4j.main = {
 }
 
 grails.sitemesh.default.layout = "main"
-//use 172.17.0.1 inside docker containter
-registry {
-  host = System.env.REGISTRY_HOST ?: 'localhost'
-  port = System.env.REGISTRY_PORT ?: '5000'
-  name = System.env.REGISTRY_NAME ?: "${host}${port != 80 ? ":$port".toString() : ''}"
-  readonly = System.env.READONLY == 'true'
+grails.databinding.convertEmptyStringsToNull = false
+
+
+grails.cache.config = {
+  cache {
+    name 'tokens'
+    eternal false
+    maxElementsInMemory 10000
+    timeToLiveSeconds 3600
+  }
 }
+
+// Added by the Spring Security Core plugin:
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'docker.registry.User'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'docker.registry.UserRole'
+grails.plugin.springsecurity.authority.className = 'docker.registry.Role'
+
+//todo: configure anonymous access with config
+//permit anybody to do anything
+grails {
+  plugin {
+    springsecurity {
+      successHandler.alwaysUseDefault = true
+      logout.postOnly = false
+      rejectIfNoRule = false
+      fii.rejectPublicInvocations = false
+      controllerAnnotations.staticRules = [
+          '/assets/**': ['permitAll']
+      ]
+
+      roleHierarchy = 'UI_ADMIN > UI_USER'
+
+      securityConfigType = "InterceptUrlMap"
+      interceptUrlMap = [
+          [pattern: '**', access: ['permitAll']]
+      ]
+
+      //todo: implied roles ROLE_ADMIN < ROLE_UI
+    }
+  }
+}
+auth.InterceptUrlMap = [
+    [pattern: '/login/*', access: ['permitAll']],
+    [pattern: '/logout/*', access: ['isAuthenticated()']],
+    [pattern: '/user/*', access: ["hasRole('UI_ADMIN')"]],
+    [pattern: '/role/*', access: ["hasRole('UI_ADMIN')"]],
+    [pattern: '/api/*', access: ['permitAll']],
+    //special case for context path without /
+    [pattern: '', access: ["hasRole('UI_USER')"]],
+    //should be last as most generic
+    [pattern: '/**', access: ["hasRole('UI_USER')"]]
+]
+
+grails.plugins.twitterbootstrap.fixtaglib = true
+

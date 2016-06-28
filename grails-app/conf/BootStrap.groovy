@@ -1,18 +1,64 @@
+import docker.registry.*
+import docker.registry.acl.AccessLevel
 import docker.registry.web.TrustAnySSL
-import org.springframework.beans.factory.annotation.Value
+import grails.plugin.springsecurity.web.access.intercept.InterceptUrlMapFilterInvocationDefinition
+import grails.util.Environment
 
 class BootStrap {
-  def restService
+  def authService
+  def grailsApplication
 
-  @Value('${ssl.trustAny}')
-  boolean trustAny
+  def yamlConfig
+  def filterInvocationInterceptor
 
   def init = { servletContext ->
-    if (System.env.TRUST_ANY_SSL == 'true') {
+
+    def yamlConfigProperties = Collections.list(yamlConfig.propertyNames()).collectEntries {
+      key -> [key, yamlConfig.get(key)]
+    }
+
+    log.info "Yaml config: $yamlConfigProperties"
+
+    def authEnabled = yamlConfig.get('registry.auth.enabled')
+    log.info "auth enabled: ${authEnabled}"
+    if (authEnabled) {
+      filterInvocationInterceptor.rejectPublicInvocations = true
+      def config = grailsApplication.config
+      config.grails.plugin.springsecurity.interceptUrlMap = config.auth.InterceptUrlMap
+      def filterDef = (InterceptUrlMapFilterInvocationDefinition) filterInvocationInterceptor.securityMetadataSource
+      filterDef.reset()
+    }
+
+    //initializing auth if no roles or users exists
+    if (!(Role.list() || User.list())) {
+      def admin = new User(username: 'admin', password: 'admin').save(failOnError: true)
+      def uiRole = new Role('UI_USER').save()
+      def uiAdminRole = new Role('UI_ADMIN').save()
+      def readRole = new Role('read-all').save(failOnError: true)
+      def writeRole = new Role('write-all').save(failOnError: true)
+
+      def readAll = new AccessControl(name: '*', ip: '*', level: AccessLevel.PULL).save(failOnError: true)
+      def writeAcl = new AccessControl(name: '*', ip: '*', level: AccessLevel.PUSH).save(failOnError: true)
+
+      UserRole.create(admin, uiAdminRole, true)
+      RoleAccess.create(readRole, readAll)
+      RoleAccess.create(writeRole, writeAcl)
+
+      //log.info authService.login("test", "testPassword")
+    }
+    if (Environment.current == Environment.DEVELOPMENT) {
+      def uiRole = Role.findByAuthority('UI_USER')
+      def testUser = new User(username: 'test', password: 'test').save(failOnError: true)
+      UserRole.create(testUser, uiRole, true)
+      (1..100).each { i ->
+        new Event(username: 'test', repo: 'some', ip: "$i.$i.$i.$i", action: 'pull', tag: 'latest', time: new Date()).save()
+      }
+    }
+
+    if (yamlConfig.get('registry.trust_any_ssl')) {
       log.info "Trusting any SSL certificate"
       TrustAnySSL.init()
     }
-    restService.init()
   }
   def destroy = {
   }

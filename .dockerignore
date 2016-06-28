@@ -8,3 +8,4 @@ web-app/WEB-INF/tld
 Dockerfile
 docker-compose.yml
 README.md
+docs

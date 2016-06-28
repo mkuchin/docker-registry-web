@@ -1,24 +1,28 @@
 package docker.registry.web
 
-import grails.plugins.rest.client.RestBuilder
+import grails.plugins.rest.client.RequestCustomizer
+import grails.plugins.rest.client.RestResponse
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpMethod
+
+import javax.annotation.PostConstruct
 
 class RestService {
-  @Value('${registry.host}')
-  String host
+  @Value('${registry.url}')
+  String url
 
-  @Value('${registry.port}')
-  String port
+  def tokenService
+  def headers = [:]
+  //v2 manifest header to get correct digest for docker 1.10
+  def v2header = ['Accept': 'application/vnd.docker.distribution.manifest.v2+json']
 
-  String registryUrl
-
-  Closure requestCustomizer
-  Closure v2header
+  List generateAccess(String name, String action = 'pull', String type = 'repository') {
+    [[type: type, name: name, actions: [action]]]
+  }
 
   def check(String url) {
-    def rest = new RestBuilder()
     try {
-      def status = rest.get(url, requestCustomizer).status
+      def status = request(HttpMethod.GET, url, headers).status
       log.info "HTTP status: $status"
       return status == 200
     } catch (e) {
@@ -27,52 +31,37 @@ class RestService {
     }
   }
 
-  def get(String path, boolean v2 = false) {
-    def rest = new RestBuilder()
-
-    def customizer = requestCustomizer
-    if (v2)
-      customizer >>= v2header
-
-    rest.get("${registryUrl}/${path}" as String, customizer)
+  def get(String path, List access = [], boolean v2 = false) {
+    request(HttpMethod.GET, "${url}/${path}" as String, v2 ? headers + v2header : headers, access)
   }
 
-  def delete(String path) {
-    def rest = new RestBuilder()
-    def res = rest.delete("${registryUrl}/${path}", requestCustomizer)
-
-    def statusCode = res.statusCode
-    log.info statusCode
-    [deleted: statusCode.'2xxSuccessful', response: res]
+  def delete(String path, List access) {
+    def res = request(HttpMethod.DELETE, "${url}/${path}", headers, access)
+    log.info res.statusCode
+    [deleted: res.statusCode.'2xxSuccessful', response: res]
   }
 
+  @PostConstruct
   void init() {
-    //v2 manifest header to get correct digest for docker 1.10
-    v2header = { header 'Accept', 'application/vnd.docker.distribution.manifest.v2+json' }
-
     //set requestCustomizer if REGISTRY_AUTH is set
     String registryAuth = System.env.REGISTRY_AUTH
     if (registryAuth) {
-      log.info "Setting auth token: $registryAuth"
-      requestCustomizer = {
-        auth("Basic ${registryAuth}")
-      }
-    } else
-      requestCustomizer = {}
-
-    //auto detect registry protocol
-    def protoList = ['http', 'https']
-    for (proto in protoList) {
-      def url = "$proto://${host}:${port}/v2"
-      log.info "Trying to connect $url"
-      if (check(url)) {
-        registryUrl = url
-        break
-      }
+      log.info "Setting auth header: $registryAuth"
+      headers['auth'] = "Basic ${registryAuth}"
     }
-    if (!registryUrl)
-      throw new RuntimeException("Can't connect to registry")
+  }
 
-    log.info "Registry URL detected: $registryUrl"
+  def request(HttpMethod method, String url, Map headers, List access = []) {
+    def token = tokenService.generate('', access)?.token
+    def authHeaders = token ? ['Authorization': "Bearer $token"] : [:]
+    RestResponse result = requestInternal(headers + authHeaders, method, url)
+    return result
+  }
+
+  private RestResponse requestInternal(Map headers, HttpMethod method, String url) {
+    def customizer = new RequestCustomizer()
+    headers.each { k, v -> customizer.header(k, v) }
+    def result = new CustomRestBuilder().request(method, url, customizer)
+    result
   }
 }

@@ -8,25 +8,44 @@ class RepositoryController {
   boolean readonly
   int recordsPerPage = 100
 
+  @Value('${registry.name}')
+  String registryName
+
   def restService
 
+  //{"Type":"registry","Name":"catalog","Action":"*"}
   def index() {
+    def repoCount = []
+    boolean pagination = false
+    def next = null
+    boolean hasNext = false
+    def message
     def url = "_catalog?n=${recordsPerPage}"
-    if (params.start) {
-      url += "&last=${params.start}"
-    }
-    def restResponse = restService.get(url)
+    try {
+      if (params.start) {
+        url += "&last=${params.start}"
+      }
+      def restResponse = restService.get(url, restService.generateAccess('catalog', '*', 'registry'))
+      if (!restResponse.statusCode.'2xxSuccessful') {
+        def statusCode = restResponse.statusCode
+        log.warn "URI: '$url' responseCode: ${statusCode}"
+        message = "status=${statusCode} ${statusCode.name()} ${restResponse.text}"
 
-    boolean hasNext = restResponse.headers.getFirst('Link') != null
-    def pagination = hasNext || params.prev != null
-    def repos = restResponse.json.repositories
-    def next = repos ? repos.last() : null
+      }
+      hasNext = restResponse.headers.getFirst('Link') != null
+      pagination = hasNext || params.prev != null
+      def repos = restResponse.json.repositories
+      next = repos ? repos.last() : null
 
-    def repoCount = repos.collect { name ->
-      def tagsCount = getTagCount(name)
-      [name: name, tags: tagsCount]
+      repoCount = repos.collect { name ->
+        def tagsCount = getTagList(name).size()
+        [name: name, tags: tagsCount]
+      }
+    } catch (e) {
+      log.error "Can't access registry: $url", e
+      message = e.message
     }
-    [repos: repoCount, pagination: pagination, next: next, prev: params.start, hasNext: hasNext]
+    [repos: repoCount, pagination: pagination, next: next, prev: params.start, hasNext: hasNext, registryName: registryName, message: message]
   }
 
   def tags() {
@@ -34,24 +53,13 @@ class RepositoryController {
     def tags = getTags(name)
     if (!tags.count { it.exists })
       redirect action: 'index'
-    [tags: tags]
-  }
-
-  private def getTagCount(name) {
-    def resp = restService.get("${name}/tags/list").json
-    def tagsCount = 0
-    try {
-        tagsCount = resp.tags.size()
-    } catch(e) {}
-    tagsCount
+    [tags: tags, readonly: readonly, registryName: registryName]
   }
 
 
   private def getTags(name) {
-    def resp = restService.get("${name}/tags/list").json
-    def tags = resp.tags.findAll { it }.collect { tag ->
-
-      def manifest = restService.get("${name}/manifests/${tag}")
+    def tags = getTagList(name).findAll { it }.collect { tag ->
+      def manifest = restService.get("${name}/manifests/${tag}", restService.generateAccess(name))
       def exists = manifest.statusCode.'2xxSuccessful'
       def topLayer
       def size = 0
@@ -62,15 +70,9 @@ class RepositoryController {
         size = layers.collect { it.value }.sum()
       }
 
-      // docker uses ISO8601 dates w/ fractional seconds (i.e. yyyy-MM-ddTHH:mm:ss.ssssssssZ),
-      // which seem to confuse the Date parser, so truncate the timestamp and always assume UTC tz.
-      def createdStr = topLayer?.created?.substring(0,19)
-      def createdDate
-      long unixTime = 0
-      if (createdStr) {
-        createdDate = Date.parse("yyyy-MM-dd'T'HH:mm:ss", createdStr)
-        unixTime = createdDate.time
-      }
+      def createdStr = topLayer?.created
+      def createdDate = DateConverter.convert(createdStr)
+      long unixTime = createdDate?.time ?: 0
 
       [name: tag, count: layers?.size(), size: size, exists: exists, id: topLayer?.id?.substring(0, 11), created: createdDate, createdStr: createdStr, unixTime: unixTime]
     }
@@ -78,7 +80,7 @@ class RepositoryController {
   }
 
   private def getLayers(String name, String tag) {
-    def json = restService.get("${name}/manifests/${tag}", true).json
+    def json = restService.get("${name}/manifests/${tag}", restService.generateAccess(name), true).json
 
     if (json.schemaVersion == 2)
       return json.layers.collectEntries { [it.digest, it.size as BigInteger] }
@@ -98,14 +100,16 @@ class RepositoryController {
         [it.digest, it.size as BigInteger]
       }
     }
+  }
 
+  private List getTagList(name) {
+    restService.get("${name}/tags/list", restService.generateAccess(name)).json?.tags ?: []
   }
 
   def tag() {
     def name = params.id.decodeURL()
-
     def tag = params.name
-    def res = restService.get("${name}/manifests/${tag}").json
+    def res = restService.get("${name}/manifests/${tag}", restService.generateAccess(name)).json
     def history = res.history.v1Compatibility.collect { jsonValue ->
       def json = new JsonSlurper().parseText(jsonValue)
       [id: json.id.substring(0, 11), cmd: json.container_config.Cmd.last().replaceAll('&&', '&&\n')]
@@ -118,14 +122,14 @@ class RepositoryController {
       entry.size = layers[digest] ?: 0
     }
 
-    [history: history, totalSize: history.sum { it.size }]
+    [history: history, totalSize: history.sum { it.size }, registryName: registryName]
   }
 
   def delete() {
     def name = params.name.decodeURL()
     def tag = params.id
     if (!readonly) {
-      def manifest = restService.get("${name}/manifests/${tag}", true)
+      def manifest = restService.get("${name}/manifests/${tag}", restService.generateAccess(name, 'pull'), true)
       def digest = manifest.responseEntity.headers.getFirst('Docker-Content-Digest')
       log.info "Manifest digest: $digest"
       /*
@@ -136,7 +140,7 @@ class RepositoryController {
     }
     */
       log.info "Deleting manifest"
-      def result = restService.delete("${name}/manifests/${digest}")
+      def result = restService.delete("${name}/manifests/${digest}", restService.generateAccess(name, '*'))
       if (!result.deleted) {
         def text = ''
         try {

@@ -7,17 +7,15 @@
 
 <body>
 <div class="row">
+    <g:header title='Image history'>
+        <li><g:link action="index">Home</g:link></li>
+        <li><g:link action="tags" id="${params.id}">${params.id.decodeURL()}</g:link></li>
+        <li class="active">${params.name}</li>
+    </g:header>
     <div class="col-md-12">
-        <ol class="breadcrumb">
-            <li><g:link action="index">Home</g:link></li>
-            <li><g:link action="tags" id="${params.id}">${params.id.decodeURL()}</g:link></li>
-            <li class="active">${params.name}</li>
-        </ol>
-
-        <div class="page-header"><h1>Image history</h1></div>
         <dl>
             <dt>Image</dt>
-            <dd>${grailsApplication.config.registry.name}/${params.id.decodeURL()}:${params.name}</dd>
+            <dd>${registryName}/${params.id.decodeURL()}:${params.name}</dd>
         </dl>
 
         <div class="table-responsive">

@@ -1,0 +1,10 @@
+#dev config
+
+registry:
+# Docker registry url
+  url: 'http://localhost:5001/v2/'
+  name: 'hub.devspire.com.au'
+  auth:
+    enabled: true
+    #issuer: 'xxx'
+    key: ssl/key-dec.pem
