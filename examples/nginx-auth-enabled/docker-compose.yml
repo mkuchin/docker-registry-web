@@ -12,7 +12,7 @@ services:
       - registry
       - registry-web
   registry-web:
-    image: hyper/docker-registry-web:auth-experimental
+    image: hyper/docker-registry-web:v0.1.0
     ports:
       - 8080:8080
     volumes:
