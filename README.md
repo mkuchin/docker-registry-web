@@ -31,7 +31,7 @@ Web UI, authentication service and event recorder for private docker registry v2
       
  2. Run with docker
 
-        docker run -i -t -p 8080:8080 --link registry -v ./config.yml:/config/config.yml hyper/docker-registry-web
+        docker run -i -t -p 8080:8080 --link registry -v $(pwd)/config.yml:/config/config.yml:ro hyper/docker-registry-web
 
  3. Web UI will be available on `http://localhost:8080`
   
@@ -80,7 +80,7 @@ Web UI, authentication service and event recorder for private docker registry v2
             key: /config/auth.key
      
  5. Run with docker
- 		docker run -i -t -p 8080:8080 --link registry -v ./conf:/config/ -v ./db:/data hyper/docker-registry-web
+ 		docker run -i -t -p 8080:8080 --link registry -v $(pwd)/conf:/config/:ro -v $(pwd)/db:/data hyper/docker-registry-web
  
  6. Web UI will be available on `http://localhost:8080` with default admin user/password `admin/admin`.
  
