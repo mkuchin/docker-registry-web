@@ -8,7 +8,7 @@ Web UI, authentication service and event recorder for private docker registry v2
   * Optional token based authentication provider with role-based permissions
   * Docker registry notification recording and audit
 
-## Warning: this version config is not compatible with configuration of versions prior 0.1.0
+## Warning: [this version config](web-app/WEB-INF/config.yml) is not compatible with configuration of versions prior v0.1.0
 
 ### Docker pull command
     
@@ -17,17 +17,22 @@ Web UI, authentication service and event recorder for private docker registry v2
 ### How to run
 
 #### Quick start (config with environment variables, no authentication)
-     
-    docker run -p 5000:5000 --name registry-server -d registry:2
-    docker run -i -t -p 8080:8080 --name registry-web --link registry-server -e REGISTRY_URL:http://registry:5000/v2 -e REGISTRY_NAME:localhost:5000 hyper/docker-registry-web 
 
-#### Without authentication, with config file
+Do not use _registry_ as registry container name, it will break `REGISTRY_NAME` environment variable.
+     
+    docker run -d -p 5000:5000 --name registry-srv registry:2
+    docker run -it -p 8080:8080 --name registry-web --link registry-srv -e REGISTRY_URL=http://registry-srv:5000/v2 -e REGISTRY_NAME=localhost:5000 hyper/docker-registry-web 
+
+#### No authentication, with config file
  
  1. Create configuration file `config.yml`
-        
+    
+    (Any property in this config may be overridden with environment variable, for example
+     property `registry.auth.enabled` will become `REGISTRY_AUTH_ENABLED`)   
+      
         registry:
           # Docker registry url
-          url: http://registry:5000/v2
+          url: http://registry-srv:5000/v2
           # Docker registry fqdn
           name: localhost:5000
           # To allow image delete, should be false
@@ -38,8 +43,8 @@ Web UI, authentication service and event recorder for private docker registry v2
       
  2. Run with docker
         
-        docker run -p 5000:5000 --name registry-server -d registry:2
-        docker run -i -t -p 8080:8080 --name registry-web --link registry-server -v $(pwd)/config.yml:/config/config.yml:ro hyper/docker-registry-web
+        docker run -p 5000:5000 --name registry-srv -d registry:2
+        docker run -it -p 8080:8080 --name registry-web --link registry-srv -v $(pwd)/config.yml:/conf/config.yml:ro hyper/docker-registry-web
 
  3. Web UI will be available on `http://localhost:8080` 
   
@@ -53,7 +58,7 @@ Web UI, authentication service and event recorder for private docker registry v2
         openssl req -new -newkey rsa:4096 -days 365 -subj "/CN=localhost" \
                 -nodes -x509 -keyout conf/auth.key -out conf/auth.cert
  
- 2. Create registry config `conf/registry.yml`
+ 2. Create registry config `conf/registry-srv.yml`
         
         version: 0.1    
         
@@ -77,14 +82,14 @@ Web UI, authentication service and event recorder for private docker registry v2
             
  3. Start docker registry
          
-        docker run -v $(pwd)/conf/registry.yml:/etc/docker/registry/config.yml:ro \
-                    -v $(pwd)/conf/auth.cert:/etc/docker/registry/auth.cert:ro -p 5000:5000  --name registry_server -d registry:2    
+        docker run -v $(pwd)/conf/registry-srv.yml:/etc/docker/registry/config.yml:ro \
+                    -v $(pwd)/conf/auth.cert:/etc/docker/registry/auth.cert:ro -p 5000:5000  --name registry-srv -d registry:2    
                          
  4. Create configuration file `conf/registry-web.yml`
         
         registry:
           # Docker registry url
-          url: http://registry-server:5000/v2
+          url: http://registry-srv:5000/v2
           # Docker registry fqdn
           name: localhost:5000
           # To allow image delete, should be false
@@ -103,7 +108,7 @@ Web UI, authentication service and event recorder for private docker registry v2
  
         docker run -v $(pwd)/conf/registry-web.yml:/conf/config.yml:ro \
                    -v $(pwd)/conf/auth.key:/conf/auth.key -v $(pwd)/db:/data \
-                   -it -p 8080:8080 --link registry-server -name registry-web hyper/docker-registry-web
+                   -it -p 8080:8080 --link registry-srv --name registry-web hyper/docker-registry-web
  
  6. Web UI will be available on `http://localhost:8080` with default admin user/password `admin/admin`.
  
