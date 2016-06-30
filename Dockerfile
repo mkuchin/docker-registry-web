@@ -18,7 +18,7 @@ ENV CATALINA_OPTS=" -Djava.security.egd=file:/dev/./urandom"
 ENV PATH $CATALINA_HOME/bin:$PATH
 
 COPY tomcat/server.xml $CATALINA_BASE/conf/
-COPY grails-app/conf/config.yml /conf/config.yml
+COPY web-app/WEB-INF/config.yml /conf/config.yml
 WORKDIR /usr/local/bin/
 COPY tomcat/yml.pl ./
 COPY tomcat/start.sh ./
