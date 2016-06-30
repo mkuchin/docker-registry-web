@@ -11,6 +11,9 @@ class RestService {
   @Value('${registry.url}')
   String url
 
+  @Value('${registry.basic_auth}')
+  String basicAuth
+
   def tokenService
   def headers = [:]
   //v2 manifest header to get correct digest for docker 1.10
@@ -43,11 +46,10 @@ class RestService {
 
   @PostConstruct
   void init() {
-    //set requestCustomizer if REGISTRY_AUTH is set
-    String registryAuth = System.env.REGISTRY_AUTH
-    if (registryAuth) {
-      log.info "Setting auth header: $registryAuth"
-      headers['auth'] = "Basic ${registryAuth}"
+    //set auth header if REGISTRY_BASIC_AUTH is set
+    if (basicAuth) {
+      log.info "Setting auth header: ${basicAuth}"
+      headers['auth'] = "Basic ${basicAuth}"
     }
   }
 

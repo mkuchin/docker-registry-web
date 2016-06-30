@@ -8,6 +8,8 @@ registry:
   context_path: ''
   # Trust any SSL certificate when connecting to registry
   trust_any_ssl: false
+  #  base64 encoded token for basic authentication
+  basic_auth: ''
   # To allow image delete, should be false
   readonly: true
   # Docker registry fqdn

@@ -5,22 +5,18 @@ import grails.plugin.springsecurity.web.access.intercept.InterceptUrlMapFilterIn
 import grails.util.Environment
 
 class BootStrap {
-  def authService
   def grailsApplication
-
-  def yamlConfig
+  def configService
   def filterInvocationInterceptor
 
   def init = { servletContext ->
 
-    def yamlConfigProperties = Collections.list(yamlConfig.propertyNames()).collectEntries {
-      key -> [key, yamlConfig.get(key)]
-    }
+    log.info "Starting registry-web"
+    configService.dump()
 
-    log.info "Yaml config: $yamlConfigProperties"
-
-    def authEnabled = yamlConfig.get('registry.auth.enabled')
+    def authEnabled = configService.authEnabled
     log.info "auth enabled: ${authEnabled}"
+
     if (authEnabled) {
       filterInvocationInterceptor.rejectPublicInvocations = true
       def config = grailsApplication.config
@@ -55,7 +51,7 @@ class BootStrap {
       }
     }
 
-    if (yamlConfig.get('registry.trust_any_ssl')) {
+    if (configService.trustAnySsl) {
       log.info "Trusting any SSL certificate"
       TrustAnySSL.init()
     }
