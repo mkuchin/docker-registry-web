@@ -48,8 +48,8 @@ class RestService {
   void init() {
     //set auth header if REGISTRY_BASIC_AUTH is set
     if (basicAuth) {
-      log.info "Setting auth header: ${basicAuth}"
-      headers['auth'] = "Basic ${basicAuth}"
+      log.info "Setting basic auth header: ${basicAuth}"
+      headers['Authorization'] = "Basic ${basicAuth}"
     }
   }
 
