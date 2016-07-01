@@ -48,5 +48,6 @@ RUN ./grailsw test-app unit: -echoOut && \
     rm -rf /root/.m2
 
 WORKDIR $CATALINA_BASE
+VOLUME /data
 
 CMD ["start.sh"]
