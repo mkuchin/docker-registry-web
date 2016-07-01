@@ -8,7 +8,7 @@ Web UI, authentication service and event recorder for private docker registry v2
   * Optional token based authentication provider with role-based permissions
   * Docker registry notification recording and audit
 
-## Warning: [this version config](web-app/WEB-INF/config.yml) is not compatible with configuration of versions prior 0.1.0
+### Warning: [this version config](web-app/WEB-INF/config.yml) is not compatible with configuration of versions prior 0.1.0
    [Migrating configuration from 0.0.4 to 0.1.x](https://github.com/mkuchin/docker-registry-web/wiki/Migrating-configuration) 
 
 ### Docker pull command
@@ -23,6 +23,14 @@ Do not use _registry_ as registry container name, it will break `REGISTRY_NAME` 
      
     docker run -d -p 5000:5000 --name registry-srv registry:2
     docker run -it -p 8080:8080 --name registry-web --link registry-srv -e REGISTRY_URL=http://registry-srv:5000/v2 -e REGISTRY_NAME=localhost:5000 hyper/docker-registry-web 
+
+#### Connecting to docker registry with basic authentication and self-signed certificate
+    docker run -it -p 8080:8080 --name registry-web --link registry-srv \
+               -e REGISTRY_URL=https://registry-srv:5000/v2 \
+               -e REGISTRY_TRUST_ANY_SSL=true \
+               -e REGISTRY_BASIC_AUTH="YWRtaW46Y2hhbmdlbWU=" \
+               -e REGISTRY_NAME=localhost:5000 hyper/docker-registry-web
+    
 
 #### No authentication, with config file
  
