@@ -33,8 +33,8 @@ class BootStrap {
       def readRole = new Role('read-all').save(failOnError: true)
       def writeRole = new Role('write-all').save(failOnError: true)
 
-      def readAll = new AccessControl(name: '*', ip: '*', level: AccessLevel.PULL).save(failOnError: true)
-      def writeAcl = new AccessControl(name: '*', ip: '*', level: AccessLevel.PUSH).save(failOnError: true)
+      def readAll = new AccessControl(name: '**', ip: '*', level: AccessLevel.PULL).save(failOnError: true)
+      def writeAcl = new AccessControl(name: '**', ip: '*', level: AccessLevel.PUSH).save(failOnError: true)
 
       UserRole.create(admin, uiAdminRole, true)
       RoleAccess.create(readRole, readAll)
