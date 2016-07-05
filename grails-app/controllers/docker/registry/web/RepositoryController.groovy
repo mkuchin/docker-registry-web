@@ -112,7 +112,7 @@ class RepositoryController {
     def res = restService.get("${name}/manifests/${tag}", restService.generateAccess(name)).json
     def history = res.history.v1Compatibility.collect { jsonValue ->
       def json = new JsonSlurper().parseText(jsonValue)
-      [id: json.id.substring(0, 11), cmd: json.container_config.Cmd.last().replaceAll('&&', '&&\n')]
+      [id: json.id.substring(0, 11), cmd: (json.container_config.Cmd?.last() ?: '').replaceAll('&&', '&&\n')]
     }
 
     def blobs = res.fsLayers.collect { it.blobSum }
