@@ -45,7 +45,7 @@ RUN cat version >> application.properties
 
 RUN ./grailsw test-app unit: -echoOut && \
     ./grailsw war ROOT.war && \
-    cp application.properties $CATALINA_BASE/
+    cp application.properties $CATALINA_BASE/ && \
     cp ROOT.war $CATALINA_BASE/webapps/ && \
 # clean up
     rm -rf /usr/local/app && \
