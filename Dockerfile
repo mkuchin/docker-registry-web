@@ -34,13 +34,18 @@ WORKDIR /usr/local/app
 COPY     grailsw application.properties ./
 COPY     wrapper ./wrapper
 COPY     grails-app/conf/BuildConfig.groovy ./grails-app/conf/
-RUN     ./grailsw prod clean
+RUN     ./grailsw refresh-dependencies
 
 # Building app
 
 ADD . ./
+# adding commit hash
+ADD .git/refs/heads/master version
+RUN cat version >> application.properties
+
 RUN ./grailsw test-app unit: -echoOut && \
     ./grailsw war ROOT.war && \
+    cp application.properties $CATALINA_BASE/
     cp ROOT.war $CATALINA_BASE/webapps/ && \
 # clean up
     rm -rf /usr/local/app && \

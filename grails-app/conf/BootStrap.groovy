@@ -11,7 +11,8 @@ class BootStrap {
 
   def init = { servletContext ->
 
-    log.info "Starting registry-web"
+    def meta = grailsApplication.metadata
+    log.info "Starting registry-web ver. ${meta['app.version']}-${meta['app.commit']}"
     configService.dump()
 
     def authEnabled = configService.authEnabled
