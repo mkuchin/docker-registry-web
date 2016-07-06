@@ -16,8 +16,6 @@ class RoleController {
   def show() {
     def role = Role.get(params.id)
     def users = UserRole.findAllByRole(role).user
-    log.info users
-    log.info users.size()
     [role: role, users: users]
   }
 
