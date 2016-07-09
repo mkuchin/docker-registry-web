@@ -14,7 +14,7 @@ services:
   registry-web:
     image: hyper/docker-registry-web:latest
     ports:
-      - 8080:8080
+      - 127.0.0.1:8080:8080
     volumes:
        - ./conf/registry-web:/conf:ro
        - ./db:/data
@@ -25,7 +25,7 @@ services:
   registry:
     image: registry:2.4.1
     ports:
-      - 5000:5000
+      - 127.0.0.1:5000:5000
     volumes:
       - ./conf/registry:/etc/docker/registry:ro
       - ./registry:/var/lib/registry
