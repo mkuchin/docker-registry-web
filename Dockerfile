@@ -40,7 +40,7 @@ RUN     ./grailsw refresh-dependencies
 
 ADD . ./
 # adding commit hash
-ADD .git/refs/heads/master version
+ADD .git/HEAD version
 RUN cat version >> application.properties
 
 RUN ./grailsw test-app unit: -echoOut && \
