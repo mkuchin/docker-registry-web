@@ -17,6 +17,7 @@ services:
       - 5000:5000
     volumes:
       - ./conf/registry:/etc/docker/registry:ro
+      - ./registry:/var/lib/registry
     networks:
       - registry-net
 
