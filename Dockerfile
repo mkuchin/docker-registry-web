@@ -39,8 +39,9 @@ RUN     ./grailsw refresh-dependencies
 # Building app
 
 ADD . ./
+# copy master in case of master branch and HEAD in case of tag
+RUN if [ -f .git/refs/heads/master ]; then  cat .git/refs/heads/master; else cat .git/HEAD; fi > version
 # adding commit hash
-ADD .git/HEAD version
 RUN cat version >> application.properties
 
 RUN ./grailsw test-app unit: -echoOut && \
