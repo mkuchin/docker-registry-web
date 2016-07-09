@@ -1,7 +1,7 @@
 version: '2'
 services:
   registry-web:
-    image: hyper/docker-registry-web:v0.1.0
+    image: hyper/docker-registry-web:latest
     ports:
       - 8080:8080
     volumes:

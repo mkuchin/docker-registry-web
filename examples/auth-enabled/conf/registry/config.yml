@@ -17,7 +17,7 @@ auth:
     rootcertbundle: /etc/docker/registry/auth.cert
 
 log:
-  level: debug
+  level: info
   
 notifications:
   endpoints:
