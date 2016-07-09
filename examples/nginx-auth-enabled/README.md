@@ -4,7 +4,7 @@
 
 1. Download and extract example files
         
-        curl -Ls https://github.com/mkuchin/docker-registry-web/releases/download/v0.1.0/examples.tar.gz | tar -xzv
+        curl -Ls https://github.com/mkuchin/docker-registry-web/releases/download/v0.1.2/examples.tar.gz | tar -xzv
         cd examples/nginx-auth-enabled/
         
 2. Generate private key and self signed certificate with script:
