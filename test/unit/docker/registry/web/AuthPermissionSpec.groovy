@@ -59,6 +59,15 @@ class AuthPermissionSpec extends Specification {
     service.getScopePermissions(generateScope('test/test'), acls, ip) == AccessLevel.PUSH.actions
   }
 
+  void testUiDelete() {
+    given:
+    def acls = [new AccessControl(ip: '*', name: 'max/*', level: AccessLevel.UI_DELETE)]
+    def ip = '127.0.0.1'
+    expect:
+    service.getScopePermissions(generateScope('max/ubuntu'), acls, ip) == AccessLevel.UI_DELETE.actions
+    service.getScopePermissions(generateScope('test/test'), acls, ip).empty
+  }
+
   def generateScope(String name) {
     [type: 'repository', name: name, actions: ['push', 'pull']]
   }

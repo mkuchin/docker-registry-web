@@ -1,4 +1,12 @@
 <%@ page import="docker.registry.acl.AccessLevel" %>
+<script>
+    function onLevelChange(val) {
+        if (val == 'UI_DELETE')
+            $('#ipInput').val('local').prop('disabled', true);
+        else
+            $('#ipInput').prop('disabled', false);
+    }
+</script>
 <g:if test="${!role.specialRole}">
     <h4>Access control list</h4>
     <table class="table-bordered table table-hover">
@@ -26,10 +34,11 @@
             <g:form action="addAcl">
                 <g:hiddenField name="id" value="${role.id}"/>
                 <tr>
-                    <td><g:textField class="form-control" name="ip"/></td>
+                    <td><g:textField id="ipInput" class="form-control" name="ip"/></td>
                     <td><g:textField class="form-control" name="name"/></td>
                     <td><g:select class="form-control" from="${AccessLevel.values()}"
-                                  optionValue="${{ it.actions.join(', ') }}" name="level"/></td>
+                                  optionValue="${{ it.actions.join(', ') }}" name="level"
+                                  onchange="onLevelChange(this.value)"/></td>
                     <td><g:textField class="form-control" name="comment"/></td>
                     <td><g:submitButton name="Add" class="btn btn-primary"/></td>
                 </tr>

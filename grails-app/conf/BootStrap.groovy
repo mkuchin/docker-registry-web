@@ -31,15 +31,18 @@ class BootStrap {
       def admin = new User(username: 'admin', password: 'admin').save(failOnError: true)
       def uiRole = new Role('UI_USER').save()
       def uiAdminRole = new Role('UI_ADMIN').save()
+      def uiDeleteRole = new Role('UI_DELETE').save()
       def readRole = new Role('read-all').save(failOnError: true)
       def writeRole = new Role('write-all').save(failOnError: true)
 
       def readAll = new AccessControl(name: '**', ip: '*', level: AccessLevel.PULL).save(failOnError: true)
       def writeAcl = new AccessControl(name: '**', ip: '*', level: AccessLevel.PUSH).save(failOnError: true)
+      def deleteAcl = new AccessControl(name: '**', ip: 'local', level: AccessLevel.UI_DELETE, comment: 'Allows deletes over UI ').save(failOnError: true)
 
       UserRole.create(admin, uiAdminRole, true)
       RoleAccess.create(readRole, readAll)
       RoleAccess.create(writeRole, writeAcl)
+      RoleAccess.create(uiDeleteRole, deleteAcl)
 
       //log.info authService.login("test", "testPassword")
     }

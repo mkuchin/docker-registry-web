@@ -23,6 +23,10 @@ class RestService {
     [[type: type, name: name, actions: [action]]]
   }
 
+  List generateAccess(String name, List actions) {
+    [[type: 'repository', name: name, actions: actions]]
+  }
+
   def check(String url) {
     try {
       def status = request(HttpMethod.GET, url, headers).status

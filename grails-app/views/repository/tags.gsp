@@ -62,7 +62,7 @@
                             <g:if test="${!readonly}">
                                 <td>
                                     <a href="#" data-tag="${tag.name}" data-id="${tag.id}"
-                                       data-href="${g.createLink(action: 'delete', params: [id: tag.name, name: params.id])}"
+                                       data-href="${g.createLink(action: 'delete', params: [id: params.id, name: tag.name])}"
                                        data-toggle="modal" data-target="#deleteTag">Delete</a></td>
 
                             </g:if>

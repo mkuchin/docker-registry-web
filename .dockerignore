@@ -1,4 +1,5 @@
 target
+out
 web-app/WEB-INF/tld
 
 *.ipr
@@ -6,6 +7,6 @@ web-app/WEB-INF/tld
 *.iws
 
 Dockerfile
-docker-compose.yml
 README.md
 docs
+examples

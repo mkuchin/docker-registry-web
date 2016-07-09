@@ -90,6 +90,10 @@ environments {
     grails.logging.jul.usebridge = true
     yaml.path = 'grails-app/conf/config.yml'
   }
+  test {
+    //only for AuthPermissionSpec test
+    registry.auth.enabled = false
+  }
   production {
     grails.logging.jul.usebridge = false
     yaml.path = System.env.CONFIG_PATH ?: '/conf/config.yml'

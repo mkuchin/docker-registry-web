@@ -12,6 +12,7 @@ class RepositoryController {
   String registryName
 
   def restService
+  def authService
 
   //{"Type":"registry","Name":"catalog","Action":"*"}
   def index() {
@@ -49,11 +50,15 @@ class RepositoryController {
   }
 
   def tags() {
-    def name = params.id.decodeURL()
+    String name = params.id.decodeURL()
     def tags = getTags(name)
-    if (!tags.count { it.exists })
+    if (!tags.count { it.exists }) {
+      log.warn "Repo name: ${name} is empty, redirecting to home page"
       redirect action: 'index'
-    [tags: tags, readonly: readonly, registryName: registryName]
+    } else {
+      def deletePermitted = authService.checkLocalDeletePermissions(name)
+      [tags: tags, readonly: readonly || !deletePermitted, registryName: registryName]
+    }
   }
 
 
@@ -126,8 +131,8 @@ class RepositoryController {
   }
 
   def delete() {
-    def name = params.name.decodeURL()
-    def tag = params.id
+    String name = params.id.decodeURL()
+    def tag = params.name
     if (!readonly) {
       def manifest = restService.get("${name}/manifests/${tag}", restService.generateAccess(name, 'pull'), true)
       def digest = manifest.responseEntity.headers.getFirst('Docker-Content-Digest')
@@ -139,26 +144,29 @@ class RepositoryController {
       restService.delete("${name}/blobs/${digest}")
     }
     */
-      log.info "Deleting manifest"
-      def result = restService.delete("${name}/manifests/${digest}", restService.generateAccess(name, '*'))
-      if (!result.deleted) {
-        def text = ''
-        try {
-          boolean unsupported = result.response.json.errors[0].code == 'UNSUPPORTED'
-          text = unsupported ? "Deletion disabled in registry, <a href='https://docs.docker.com/registry/configuration/#delete'>more info</a>." : result.text
-        } catch (e) {
-          text = result.text
+      if (authService.checkLocalDeletePermissions(name)) {
+        log.info "Deleting manifest"
+        def result = restService.delete("${name}/manifests/${digest}", restService.generateAccess(name, '*'))
+        if (!result.deleted) {
+          def text = ''
+          try {
+            boolean unsupported = result.response.json.errors[0].code == 'UNSUPPORTED'
+            text = unsupported ? "Deletion disabled in registry, <a href='https://docs.docker.com/registry/configuration/#delete'>more info</a>." : result.text
+          } catch (e) {
+            log.warn "Error deleting", e
+            text = result.text
+          }
+          flash.message = "Error deleting ${name}:${tag}: ${text}"
         }
-        flash.message = "Error deleting ${name}:${tag}: ${text}"
       } else {
-        flash.message = "Tag ${name}:${tag} has been deleted"
-        flash.success = true
+        log.warn 'Delete not allowed!'
+        flash.message = "Delete not allowed!"
       }
     } else {
       log.warn 'Readonly mode!'
       flash.message = "Readonly mode!"
     }
     flash.deleteAction = true
-    redirect action: 'tags', id: params.name
+    redirect action: 'tags', id: params.id
   }
 }

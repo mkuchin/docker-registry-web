@@ -3,8 +3,10 @@ package docker.registry.web
 import docker.registry.AccessControl
 import docker.registry.Role
 import docker.registry.RoleAccess
+import docker.registry.User
 import docker.registry.acl.AccessLevel
 import docker.registry.acl.AuthResult
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 
@@ -12,6 +14,10 @@ import javax.servlet.http.HttpServletRequest
 
 class AuthService {
   AuthenticationManager authenticationManager
+  def springSecurityService
+
+  @Value('${registry.auth.enabled}')
+  boolean authEnabled
 
   AuthResult login(HttpServletRequest request) {
     def authResult = new AuthResult()
@@ -50,7 +56,7 @@ class AuthService {
     new AuthResult(roles, acls)
   }
 
-  List getScopePermissions(Map scope, List<AccessControl> aclList, String ip) {
+  List getScopePermissions(Map scope, Collection aclList, String ip) {
     def actions = []
     def typeValid = scope.type == 'repository'
     if (aclList && scope && typeValid) {
@@ -60,15 +66,29 @@ class AuthService {
 
       log.info("Repo name=${name}, ip=${ip}")
       //check acls
-      def level = aclList.collect { AccessControl acl ->
+      actions = aclList.collect { AccessControl acl ->
         if (GlobMatcher.check(acl.name, name) && GlobMatcher.check(acl.ip, ip))
           return acl.level
         else
           return AccessLevel.NONE
-      }.max()
-      log.info "Granting permission: $level"
-      actions = level.actions
+      }.actions.flatten().unique()
+      log.info "Granting permissions: $actions"
     }
     actions
+  }
+
+  List getCurrentUserPermissions(String name) {
+    User user = springSecurityService.currentUser
+    log.info "Checking current user permissions for user=${user.username}, repo=${name}"
+    def aclList = user.authorities.acls.flatten()
+    getScopePermissions([type: 'repository', name: name], aclList, 'local')
+  }
+
+  //returns true if delete allowed to current user
+  boolean checkLocalDeletePermissions(String name) {
+    if (authEnabled)
+      return getCurrentUserPermissions(name).contains('ui-delete')
+    else
+      return true
   }
 }
