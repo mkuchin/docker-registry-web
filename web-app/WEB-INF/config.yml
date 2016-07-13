@@ -18,8 +18,8 @@ registry:
   auth:
     # Enable authentication
     enabled: false
-    # Allow web anonymous access
-    allow_anonymous: true # not implemented
+    # Allow registry anonymous access
+    # allow_anonymous: true # not implemented
     # Token issuer
     # should equals to auth.token.issuer of docker registry
     issuer: 'test-issuer'

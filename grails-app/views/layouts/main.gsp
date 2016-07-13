@@ -42,11 +42,13 @@
                     </li>
                     <li>
                         <g:link controller="role">Roles</g:link>
-                    </li>
-                </sec:ifAnyGranted>
+                    </li></sec:ifAnyGranted>
                 <sec:ifLoggedIn>
                     <li>
                         <g:link controller="event">Events</g:link>
+                    </li>
+                    <li>
+                        <g:link controller="status">Status</g:link>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"

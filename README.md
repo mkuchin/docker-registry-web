@@ -134,8 +134,9 @@ After first start you will have following roles:
 - write-all
 
 You can't delete or modify UI_ADMIN and UI_USER role, they are special roles and allows admin or user access to UI respectively.  
-User access allows to browse registry and delete images, admin access allows to create, delete and modify users and roles in addition to user access.
-UI_DELETE role allows to delete images in UI. 
+User access allows to browse registry, admin access allows to create, delete and modify users and roles in addition to user access.
+
+UI_DELETE role allows deleting images in the UI based on ACLs. 
 
 Every non-special role has a list of ACLs, each of ACL grants permission grants permission to `pull`, `pull+push` or `pull+push+delete` 
 based on IP and image name [glob matching](https://github.com/mkuchin/docker-registry-web/wiki/Glob-matching).

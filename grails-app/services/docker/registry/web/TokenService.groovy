@@ -49,6 +49,9 @@ class TokenService {
     keyPair != null
   }
 
+  String getKeyDigest() {
+    keyDigest
+  }
   String sign(String header, String payload, PrivateKey key) {
     def signature = Signature.getInstance("SHA256withRSA", "BC")
     signature.initSign(key)

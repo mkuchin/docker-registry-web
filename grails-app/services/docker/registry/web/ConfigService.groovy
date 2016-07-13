@@ -15,16 +15,21 @@ class ConfigService {
   boolean trustAnySsl
 
   def dump() {
-    def configResolver = new PropertySourcesPropertyResolver(propertyConfig.appliedPropertySources)
-    log.info propertyConfig.appliedPropertySources*.name
-    def configProperties = Collections.list(yamlConfig.keys()).collectEntries {
-      key -> [key, configResolver.getProperty(key)]
-    }
+    Map configProperties = configMap()
 
     log.info "resolved config:"
     configProperties.each { key, value ->
       log.info "${key}: ${value}"
     }
+  }
+
+  Map configMap() {
+    def configResolver = new PropertySourcesPropertyResolver(propertyConfig.appliedPropertySources)
+    log.info propertyConfig.appliedPropertySources*.name
+    def configProperties = Collections.list(yamlConfig.keys()).collectEntries {
+      key -> [key, configResolver.getProperty(key)]
+    }
+    configProperties
   }
 
 }
