@@ -1,5 +1,7 @@
 # docker-registry-web
 
+[![Join the chat at https://gitter.im/mkuchin/docker-registry-web](https://badges.gitter.im/mkuchin/docker-registry-web.svg)](https://gitter.im/mkuchin/docker-registry-web?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Web UI, authentication service and event recorder for private docker registry v2.
 
 [![Docker Stars](https://img.shields.io/docker/stars/hyper/docker-registry-web.svg?maxAge=86400)](https://hub.docker.com/r/hyper/docker-registry-web/) [![Docker Pulls](https://img.shields.io/docker/pulls/hyper/docker-registry-web.svg?maxAge=86400)](https://hub.docker.com/r/hyper/docker-registry-web/)
