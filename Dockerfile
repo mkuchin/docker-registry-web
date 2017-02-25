@@ -1,4 +1,4 @@
-FROM    ubuntu
+FROM    ubuntu:15.10
 
 ENV DEBIAN_FRONTEND noninteractive
 #prevent apt from installing recommended packages
@@ -6,11 +6,11 @@ RUN echo 'APT::Install-Recommends "false";' > /etc/apt/apt.conf.d/docker-no-reco
     echo 'APT::Install-Suggests "false";' >> /etc/apt/apt.conf.d/docker-no-recommends
 
 # Install java and tomcat
-RUN     apt-get update && apt-get install -y tomcat7 git libyaml-perl libfile-slurp-perl && \
+RUN     apt-get update && apt-get install -y tomcat7 openjdk-7-jdk libyaml-perl libfile-slurp-perl && \
         rm -rf /var/lib/tomcat7/webapps/* && \
         rm -rf /var/lib/apt/lists/*
 
-ENV     JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+ENV     JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 ENV     CATALINA_HOME /usr/share/tomcat7
 ENV     CATALINA_BASE /var/lib/tomcat7
 
@@ -40,7 +40,9 @@ RUN     ./grailsw refresh-dependencies
 
 ADD . ./
 # copy master in case of master branch and HEAD in case of tag
-
+RUN if [ -f .git/refs/heads/master ]; then  cat .git/refs/heads/master; else cat .git/HEAD; fi > version
+# adding commit hash
+RUN cat version >> application.properties
 
 RUN ./grailsw test-app unit: -echoOut && \
     ./grailsw war ROOT.war && \
@@ -53,6 +55,5 @@ RUN ./grailsw test-app unit: -echoOut && \
 
 WORKDIR $CATALINA_BASE
 VOLUME /data
-EXPOSE 8080
 
 CMD ["start.sh"]
