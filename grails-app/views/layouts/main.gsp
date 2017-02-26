@@ -29,7 +29,7 @@
                     data-target="#bs-example-navbar-collapse-1">
                 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
                     class="icon-bar"></span><span class="icon-bar"></span>
-            </button>  <g:link class="navbar-brand" controller="repository" action="index">Web Registry</g:link>
+            </button>  <g:link class="navbar-brand" controller="repository" action="index">汇耳Docker私有镜像仓库</g:link>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -38,25 +38,26 @@
 
                 <sec:ifAnyGranted roles="UI_ADMIN">
                     <li>
-                        <g:link controller="user">Users</g:link>
+                        <g:link controller="user">用户</g:link>
                     </li>
                     <li>
-                        <g:link controller="role">Roles</g:link>
+                        <g:link controller="role">角色</g:link>
                     </li></sec:ifAnyGranted>
+
                 <sec:ifLoggedIn>
                     <li>
-                        <g:link controller="event">Events</g:link>
+                        <g:link controller="event">事件</g:link>
                     </li>
                     <li>
-                        <g:link controller="status">Status</g:link>
+                        <g:link controller="status">状态</g:link>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false"><strong><sec:username/><span class="caret"></span></strong></a>
                         <ul class="dropdown-menu">
-                            <li><g:link controller="account" action="index">My Account</g:link></li>
+                            <li><g:link controller="account" action="index">个人中心</g:link></li>
                             <li role="separator" class="divider"></li>
-                            <li><g:link controller="logout" action="index">Log Out</g:link></li>
+                            <li><g:link controller="logout" action="index">注销</g:link></li>
                         </ul>
                     </li>
                 </sec:ifLoggedIn>
