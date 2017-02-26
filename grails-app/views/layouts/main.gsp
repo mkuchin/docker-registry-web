@@ -43,6 +43,7 @@
                     <li>
                         <g:link controller="role">角色</g:link>
                     </li></sec:ifAnyGranted>
+
                 <sec:ifLoggedIn>
                     <li>
                         <g:link controller="event">事件</g:link>
