@@ -1,4 +1,4 @@
-FROM    ubuntu:14.04
+FROM    ubuntu:15.10
 
 ENV DEBIAN_FRONTEND noninteractive
 #prevent apt from installing recommended packages
@@ -40,9 +40,9 @@ RUN     ./grailsw refresh-dependencies
 
 ADD . ./
 # copy master in case of master branch and HEAD in case of tag
-RUN if [ -f .git/refs/heads/master ]; then  cat .git/refs/heads/master; else cat .git/HEAD; fi > version
+#RUN if [ -f .git/refs/heads/master ]; then  cat .git/refs/heads/master; else cat .git/HEAD; fi > version
 # adding commit hash
-RUN cat version >> application.properties
+#RUN cat version >> application.properties
 
 RUN ./grailsw test-app unit: -echoOut && \
     ./grailsw war ROOT.war && \
@@ -55,6 +55,5 @@ RUN ./grailsw test-app unit: -echoOut && \
 
 WORKDIR $CATALINA_BASE
 VOLUME /data
-EXPOSE 8080
 
 CMD ["start.sh"]
