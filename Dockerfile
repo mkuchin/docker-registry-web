@@ -34,7 +34,8 @@ WORKDIR /usr/local/app
 COPY     grailsw application.properties ./
 COPY     wrapper ./wrapper
 COPY     grails-app/conf/BuildConfig.groovy ./grails-app/conf/
-RUN     ./grailsw refresh-dependencies
+RUN      chmod +x grailsw && \
+         ./grailsw refresh-dependencies
 
 # Building app
 
@@ -44,11 +45,11 @@ RUN if [ -f .git/refs/heads/master ]; then  cat .git/refs/heads/master; else cat
 # adding commit hash
 RUN cat version >> application.properties
 
-RUN ./grailsw test-app unit: -echoOut && \
+RUN chmod +x grailsw && \
+    ./grailsw test-app unit: -echoOut && \
     ./grailsw war ROOT.war && \
     cp application.properties $CATALINA_BASE/ && \
     cp ROOT.war $CATALINA_BASE/webapps/ && \
-# clean up
     rm -rf /usr/local/app && \
     rm -rf /root/.grails  && \
     rm -rf /root/.m2
