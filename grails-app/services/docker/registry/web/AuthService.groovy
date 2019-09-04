@@ -59,6 +59,7 @@ class AuthService {
   List getScopePermissions(Map scope, Collection aclList, String ip) {
     def actions = []
     def typeValid = scope.type == 'repository'
+    def typeRegistry = scope.type == 'registry'
     if (aclList && scope && typeValid) {
       //todo: catalog role for type=catalog request
       log.info "checking acls: $aclList"
@@ -73,6 +74,8 @@ class AuthService {
           return AccessLevel.NONE
       }.actions.flatten().unique()
       log.info "Granting permissions: $actions"
+    }else if(aclList && scope && typeRegistry){
+      actions = ['*']
     }
     actions
   }
