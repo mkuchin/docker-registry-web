@@ -1,5 +1,8 @@
 package docker.registry.web
 
+import docker.registry.AccessControl
+import docker.registry.Role
+import docker.registry.RoleAccess
 import groovy.json.JsonSlurper
 import org.springframework.beans.factory.annotation.Value
 
@@ -11,8 +14,12 @@ class RepositoryController {
   @Value('${registry.name}')
   String registryName
 
+  @Value('${registry.show-permitted-repo-only:#{false}}')
+  boolean enableShowPermittedRepoOnly
+
   def restService
   def authService
+  def springSecurityService;
 
   //{"Type":"registry","Name":"catalog","Action":"*"}
   def index() {
@@ -22,6 +29,8 @@ class RepositoryController {
     boolean hasNext = false
     def message
     def url = "_catalog?n=${recordsPerPage}"
+
+
     try {
       if (params.start) {
         url += "&last=${params.start}"
@@ -37,8 +46,12 @@ class RepositoryController {
       pagination = hasNext || params.prev != null
       def repos = restResponse.json.repositories
       next = repos ? repos.last() : null
+      def permittedRepos = repos
+      if (enableShowPermittedRepoOnly == true) {
+        permittedRepos = filterPermittedRepoOnly(repos)
+      }
 
-      repoCount = repos.collect { name ->
+      repoCount = permittedRepos.collect { name ->
         def tagsCount = getTagList(name).size()
         [name: name, tags: tagsCount]
       }
@@ -49,6 +62,26 @@ class RepositoryController {
     [repos: repoCount, pagination: pagination, next: next, prev: params.start, hasNext: hasNext, registryName: registryName, message: message]
   }
 
+  private List<String> filterPermittedRepoOnly(repos) {
+    def currentUser = springSecurityService.currentUser
+    def roles = currentUser.authorities.collect { role ->
+      Role.findByAuthority(role.authority)
+    }.findAll { it }
+    def acls = roles.collect { role ->
+      RoleAccess.findAllByRole(role).acl
+    }.flatten()
+    repos.findAll { name -> hasPermission(acls, name) }
+  }
+
+  def hasPermission(acls,name){
+
+    for (AccessControl element : acls) {
+      if (GlobMatcher.check(element.name, name)) {
+        return true;
+      }
+    }
+    return false
+  }
   def tags() {
     String name = params.id.decodeURL()
     def tags = getTags(name)
