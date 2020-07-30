@@ -74,6 +74,18 @@ class AuthService {
       }.actions.flatten().unique()
       log.info "Granting permissions: $actions"
     }
+    //scope: registry:catalog:*
+    if(aclList && scope && scope.type == 'registry' && scope.name == 'catalog' ){
+      actions = aclList.collect { AccessControl acl ->
+        def scopeActions = scope.actions;
+        if(scopeActions.size()>0){
+          if (GlobMatcher.check(acl.name, scopeActions[0])){
+            return scopeActions[0]
+          }else
+            return AccessLevel.NONE.actions;
+        }
+      }.flatten().unique()
+    }
     actions
   }
 
