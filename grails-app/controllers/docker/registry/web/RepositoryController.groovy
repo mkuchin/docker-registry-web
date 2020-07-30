@@ -14,7 +14,7 @@ class RepositoryController {
   @Value('${registry.name}')
   String registryName
 
-  @Value('${registry.show-permitted-repo-only:#{false}}')
+  @Value('${registry.show-permitted-repo-only}')
   boolean enableShowPermittedRepoOnly
 
   def restService
