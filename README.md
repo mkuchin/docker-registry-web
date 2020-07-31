@@ -1,8 +1,10 @@
+# This repo is a fork version with some enhancement of this awesome repo https://github.com/mkuchin/docker-registry-web 
+
 # docker-registry-web
 
 Web UI, authentication service and event recorder for private docker registry v2.
 
-[![Docker Stars](https://img.shields.io/docker/stars/hyper/docker-registry-web.svg?maxAge=86400)](https://hub.docker.com/r/hyper/docker-registry-web/) [![Docker Pulls](https://img.shields.io/docker/pulls/hyper/docker-registry-web.svg?maxAge=86400)](https://hub.docker.com/r/hyper/docker-registry-web/)
+[![Docker Stars](https://img.shields.io/docker/stars/lukenvn/docker-registry-web.svg?maxAge=86400)](https://hub.docker.com/r/lukenvn/docker-registry-web/) [![Docker Pulls](https://img.shields.io/docker/pulls/lukenvn/docker-registry-web.svg?maxAge=86400)](https://hub.docker.com/r/lukenvn/docker-registry-web/)
 
 ## Features:
 
@@ -15,7 +17,7 @@ Web UI, authentication service and event recorder for private docker registry v2
 
 ### Docker pull command
     
-    docker pull hyper/docker-registry-web
+    docker pull lukenvn/docker-registry-web
         
 ### How to run
 
@@ -24,14 +26,14 @@ Web UI, authentication service and event recorder for private docker registry v2
 Do not use _registry_ as registry container name, it will break `REGISTRY_NAME` environment variable.
      
     docker run -d -p 5000:5000 --name registry-srv registry:2
-    docker run -it -p 8080:8080 --name registry-web --link registry-srv -e REGISTRY_URL=http://registry-srv:5000/v2 -e REGISTRY_NAME=localhost:5000 hyper/docker-registry-web 
+    docker run -it -p 8080:8080 --name registry-web --link registry-srv -e REGISTRY_URL=http://registry-srv:5000/v2 -e REGISTRY_NAME=localhost:5000 lukenvn/docker-registry-web 
 
 #### Connecting to docker registry with basic authentication and self-signed certificate
     docker run -it -p 8080:8080 --name registry-web --link registry-srv \
                -e REGISTRY_URL=https://registry-srv:5000/v2 \
                -e REGISTRY_TRUST_ANY_SSL=true \
                -e REGISTRY_BASIC_AUTH="YWRtaW46Y2hhbmdlbWU=" \
-               -e REGISTRY_NAME=localhost:5000 hyper/docker-registry-web
+               -e REGISTRY_NAME=localhost:5000 lukenvn/docker-registry-web
     
 
 #### No authentication, with config file
@@ -55,7 +57,7 @@ Do not use _registry_ as registry container name, it will break `REGISTRY_NAME` 
  2. Run with docker
         
         docker run -p 5000:5000 --name registry-srv -d registry:2
-        docker run -it -p 8080:8080 --name registry-web --link registry-srv -v $(pwd)/config.yml:/conf/config.yml:ro hyper/docker-registry-web
+        docker run -it -p 8080:8080 --name registry-web --link registry-srv -v $(pwd)/config.yml:/conf/config.yml:ro lukenvn/docker-registry-web
 
  3. Web UI will be available on `http://localhost:8080` 
   
@@ -119,7 +121,7 @@ Do not use _registry_ as registry container name, it will break `REGISTRY_NAME` 
  
         docker run -v $(pwd)/conf/registry-web.yml:/conf/config.yml:ro \
                    -v $(pwd)/conf/auth.key:/conf/auth.key -v $(pwd)/db:/data \
-                   -it -p 8080:8080 --link registry-srv --name registry-web hyper/docker-registry-web
+                   -it -p 8080:8080 --link registry-srv --name registry-web lukenvn/docker-registry-web
  
  6. Web UI will be available on `http://localhost:8080` with default admin user/password `admin/admin`.
  
