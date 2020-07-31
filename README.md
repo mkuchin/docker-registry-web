@@ -12,8 +12,8 @@ Web UI, authentication service and event recorder for private docker registry v2
   * Optional token based authentication provider with role-based permissions
   * Docker registry notification recording and audit
 
-### Warning: [this version config](https://github.com/mkuchin/docker-registry-web/blob/master/web-app/WEB-INF/config.yml) is not compatible with configuration of versions prior 0.1.0
-   [Migrating configuration from 0.0.4 to 0.1.x](https://github.com/mkuchin/docker-registry-web/wiki/Migrating-configuration) 
+### Warning: [this version config](https://github.com/lukenvn/docker-registry-web/blob/master/web-app/WEB-INF/config.yml) is not compatible with configuration of versions prior 0.1.0
+   [Migrating configuration from 0.0.4 to 0.1.x](https://github.com/lukenvn/docker-registry-web/wiki/Migrating-configuration) 
 
 ### Docker pull command
     
@@ -141,10 +141,10 @@ User access allows to browse registry, admin access allows to create, delete and
 UI_DELETE role allows deleting images in the UI based on ACLs. 
 
 Every non-special role has a list of ACLs, each of ACL grants permission grants permission to `pull`, `pull+push` or `pull+push+delete` 
-based on IP and image name [glob matching](https://github.com/mkuchin/docker-registry-web/wiki/Glob-matching).
+based on IP and image name [glob matching](https://github.com/lukenvn/docker-registry-web/wiki/Glob-matching).
 For example **read-all** role matches any IP and any image name with glob `*` and grants `pull` permission and
 **write-all** role grants `pull+push` permission for any IP and any image name. 
 
-### [Configuration reference](https://github.com/mkuchin/docker-registry-web/blob/master/web-app/WEB-INF/config.yml)
+### [Configuration reference](https://github.com/lukenvn/docker-registry-web/blob/master/web-app/WEB-INF/config.yml)
 
-### [Docker Compose configuration examples](https://github.com/mkuchin/docker-registry-web/tree/master/examples)
+### [Docker Compose configuration examples](https://github.com/lukenvn/docker-registry-web/tree/master/examples)
