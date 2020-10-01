@@ -14,6 +14,8 @@ registry:
   readonly: true
   # Docker registry fqdn
   name: 'localhost:5000'
+  # enable showing permitted repo only on docker registry web
+  show-permitted-repo-only: true
   # Authentication settings
   auth:
     # Enable authentication
