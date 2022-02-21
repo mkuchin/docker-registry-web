@@ -61,7 +61,7 @@ class UserController {
     user.accountLocked = params.accountLocked as boolean
     //update password only if it entered
     if (params.password) {
-      user.password = params.password
+      user.password = params.password[1]
     }
 
     if (user.isDirty()) {

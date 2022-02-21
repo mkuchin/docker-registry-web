@@ -42,14 +42,15 @@
                     </li>
                     <li>
                         <g:link controller="role">Roles</g:link>
-                    </li></sec:ifAnyGranted>
-                <sec:ifLoggedIn>
+                    </li>
                     <li>
                         <g:link controller="event">Events</g:link>
                     </li>
                     <li>
                         <g:link controller="status">Status</g:link>
                     </li>
+                </sec:ifAnyGranted>
+                <sec:ifLoggedIn>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false"><strong><sec:username/><span class="caret"></span></strong></a>

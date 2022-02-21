@@ -2,6 +2,8 @@ registry:
    url: http://registry:5000/v2
    name: localhost:5000
    readonly: false
+  # with this config the user will not see all the available repos in docker-registry-web
+   show-permitted-repo-only: true
    auth:
      enabled: true
      key: /conf/auth.key

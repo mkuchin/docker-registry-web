@@ -1,10 +1,12 @@
 #dev config
 
 registry:
-# Docker registry url
-  url: 'http://localhost:5001/v2/'
-  name: 'hub.devspire.com.au'
+  # Docker registry url
+  url: http://localhost:5000/v2/
+  name: localhost:5000
+  # enable showing permitted repo only on docker registry web
+  show-permitted-repo-only: true
   auth:
     enabled: true
-    #issuer: 'xxx'
-    key: ssl/key-dec.pem
+    issuer: test
+    key: /Users/ngovannhung/Downloads/docker-registry-web-master/grails-app/conf/auth.key
